@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:finwise/core/styles/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,18 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme,
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+      builder: (context, child) {
+        return SafeArea(
+          top: false,
+          bottom: Platform.isAndroid,
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
+      home: const Scaffold(
+        body: Center(
+          child: Text('Hello World!'),
+        ),
+      ),
     );
   }
 }
