@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:finwise/core/styles/themes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,14 +13,15 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: AppThemes.lightTheme,
       builder: (context, child) {
         return SafeArea(
           top: false,
           bottom: Platform.isAndroid,
-          child: child ?? SizedBox.shrink(),
+          child: child ?? const SizedBox.shrink(),
         );
       },
-      home: Scaffold(
+      home: const Scaffold(
         body: Center(
           child: Text('Hello World!'),
         ),
