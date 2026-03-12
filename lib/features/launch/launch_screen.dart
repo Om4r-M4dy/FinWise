@@ -1,19 +1,18 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/features/launch/build_auth_u_i.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class LaunchScreen extends StatefulWidget {
+  const LaunchScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<LaunchScreen> createState() => _LaunchScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _LaunchScreenState extends State<LaunchScreen>
     with TickerProviderStateMixin {
   late final AnimationController _textController;
   late final AnimationController _slideController;
@@ -103,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen>
                       alignment: const Alignment(0, 0.35),
                       child: FadeTransition(
                         opacity: _buttonsFade,
-                        child: _buildAuthUI(),
+                        child: BuildAuthUI(),
                       ),
                     ),
                   ],
@@ -144,39 +143,6 @@ class _SplashScreenState extends State<SplashScreen>
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildAuthUI() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          'Personalized financial insights\nat your fingertips.',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.caption1_14.copyWith(
-            color: AppColors.darkModeIcon,
-          ),
-        ),
-        const Gap(42),
-        MainButton(text: 'Log In', onPress: () {}),
-        const Gap(12),
-        MainButton(
-          text: 'Sign Up',
-          onPress: () {},
-          backgroundColor: AppColors.lightGreen,
-        ),
-        const Gap(12),
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            "Forgot Password?",
-            style: AppTextStyles.caption1_14.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

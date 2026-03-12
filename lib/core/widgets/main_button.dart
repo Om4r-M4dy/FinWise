@@ -23,7 +23,7 @@ class MainButton extends StatelessWidget {
   });
 
   final String text;
-  final VoidCallback onPress;
+  final VoidCallback? onPress;
   final Color backgroundColor;
   final ButtonSize size;
 
@@ -41,7 +41,7 @@ class MainButton extends StatelessWidget {
       onPressed: onPress,
       child: Text(
         text,
-        style: AppTextStyles.title_20,
+        style: TextStyles.title_20,
       ),
     );
   }
