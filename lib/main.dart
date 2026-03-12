@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
         );
       },
       home: Scaffold(
-        appBar: DefaultAppbar(title: "Transactions"),
+        appBar: DefaultAppbar(title: "Title"),
 
         body: Center(child: Text('Hello World!')),
       ),
