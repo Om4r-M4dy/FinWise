@@ -2,9 +2,9 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
- class DefaultAppbar extends StatelessWidget
+ class DefaultAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const DefaultAppbar({
+  const DefaultAppBar({
     super.key,
     required this.title,
     this.titleColor = const Color(0xff093030),
@@ -28,7 +28,7 @@ Size get preferredSize => const Size.fromHeight(kToolbarHeight);
       title: Center(
         child: Text(
           title,
-          style: AppTextStyles.title20.copyWith(
+          style: AppTextStyles.title_20.copyWith(
             fontFamily: "Poppins",
             color: titleColor,
           ),
@@ -38,7 +38,7 @@ Size get preferredSize => const Size.fromHeight(kToolbarHeight);
         IconButton(
           onPressed: () {},
 
-          icon: Image.asset(AppAssets.abbbarNotification),
+          icon: Image.asset(AppAssets.appBarNotification),
         ),
       ],
     );

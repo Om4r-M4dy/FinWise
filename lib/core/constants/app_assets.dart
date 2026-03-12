@@ -1,7 +1,7 @@
 class AppAssets {
   // icons
    static const String back = "assets/icons/bring back (1).png";
-   static const String abbbarNotification = "assets/icons/Icon-Notification.png";
+   static const String appBarNotification = "assets/icons/Icon-Notification.png";
   static const String analysis = "assets/icons/Analysis.svg";
   static const String arrowDown = "assets/icons/arrow-down.svg";
   static const String botInstagram = "assets/icons/Bot-Instagram.svg";
@@ -51,4 +51,8 @@ class AppAssets {
   // imgs
   static const String controlMoney = "assets/imgs/controlMoney.svg";
   static const String expenseManager = "assets/imgs/expenseManager.svg";
+
+  //lottie
+  static const String logoJson = "assets/lottie/logo.json";
+  static const String finwiseJson = "assets/lottie/finwise.json";
 }

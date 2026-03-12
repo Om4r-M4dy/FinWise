@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Central repository for all text styles used across the FinWise app.
-/// Each style follows the naming convention: [purpose]_[fontSize], making it easy to identify at a glance.
 class AppTextStyles {
   static const TextStyle headline_24 = TextStyle(
     fontSize: 24,

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/themes.dart';
-import 'package:finwise/features/Appbar/default_appbar.dart';
 import 'package:flutter/material.dart';
 
 void main() {

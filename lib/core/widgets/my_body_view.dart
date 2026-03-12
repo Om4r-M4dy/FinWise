@@ -27,7 +27,7 @@ class MyBodyView extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: AppColors.lightGreen,
+                color: AppColors.background,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),
               ),
               child: SingleChildScrollView(
