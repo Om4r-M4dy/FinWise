@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: Routes.routes,
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme,
       builder: (context, child) {
@@ -21,11 +23,6 @@ class MainApp extends StatelessWidget {
           child: child ?? const SizedBox.shrink(),
         );
       },
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
     );
   }
 }
