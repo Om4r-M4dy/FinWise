@@ -1,5 +1,7 @@
 class AppAssets {
   // icons
+   static const String back = "assets/icons/bring back (1).png";
+   static const String abbbarNotification = "assets/icons/Icon-Notification.png";
   static const String analysis = "assets/icons/Analysis.svg";
   static const String arrowDown = "assets/icons/arrow-down.svg";
   static const String botInstagram = "assets/icons/Bot-Instagram.svg";
