@@ -1,22 +1,18 @@
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-void pushTo(BuildContext context, Widget destination) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => destination));
+void pushTo(BuildContext context, String location, {Object? extra}) {
+  context.push(location, extra: extra);
 }
 
-void replaceWith(BuildContext context, Widget destination) {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => destination),
-  );
+void replaceWith(BuildContext context, String location, {Object? extra}) {
+  context.replace(location, extra: extra);
 }
 
+void removeUntil(BuildContext context, String location, {Object? extra}) {
+  context.go(location, extra: extra);
+}
 
-void removeUntil(BuildContext context, Widget destination) {
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => destination),
-    (route) => false,
-  );
+void pop(BuildContext context){
+  context.pop();
 }
