@@ -49,8 +49,8 @@ class AppAssets {
   static const String wedding = "assets/icons/Wedding.svg";
 
   // imgs
-  static const String controlMoney = "assets/imgs/controlMoney.svg";
-  static const String expenseManager = "assets/imgs/expenseManager.svg";
+  static const String controlMoney = "assets/imgs/controlMoney.png";
+  static const String expenseManager = "assets/imgs/expenseManager.png";
 
   //lottie
   static const String logoJson = "assets/lottie/logo.json";
