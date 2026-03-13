@@ -28,7 +28,7 @@ Size get preferredSize => const Size.fromHeight(kToolbarHeight);
       title: Center(
         child: Text(
           title,
-          style: AppTextStyles.title20.copyWith(
+          style: AppTextStyles.title_20.copyWith(
             fontFamily: "Poppins",
             color: titleColor,
           ),
