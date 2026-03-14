@@ -32,7 +32,7 @@ class BuildAuthUI extends StatelessWidget {
           backgroundColor: AppColors.lightGreen,
         ),
         TextButton(
-          onPressed: () {pushTo(context, Routes.helpCenter);},
+          onPressed: () {},
           child: Text(
             "Forgot Password?",
             style: TextStyles.caption1_14.copyWith(
