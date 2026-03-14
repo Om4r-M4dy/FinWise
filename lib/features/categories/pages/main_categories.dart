@@ -1,13 +1,9 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/features/categories/widgets/PngCategoryItem.dart';
-import 'package:finwise/features/categories/widgets/categoryItem.dart';
+import 'package:finwise/features/categories/widgets/category_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 class MainCategories extends StatelessWidget {
@@ -18,22 +14,22 @@ class MainCategories extends StatelessWidget {
     return Scaffold(
       appBar: DefaultAppBar(title: "Categories"),
       body: MyBodyView(
-        topSection: Container(),
+        topSection: Container(height: MediaQuery.of(context).size.height * 0.1,),
         bottomSection: Column(
           children: [
+            Gap(13),
             Row(
               children: [
-                CategotyItem(image: AppAssets.food, label: "Food"),
+                CategoryItem(icon: AppAssets.food, label: "Food"),
                 Gap(21),
-
-                CategotyItem(
-                  image: AppAssets.transport,
+                CategoryItem(
+                  icon: AppAssets.transport,
                   label: "Transport",
                   bgColor: AppColors.lightBlueButton,
                 ),
                 Gap(21),
-                CategotyItem(
-                  image: AppAssets.medicine,
+                CategoryItem(
+                  icon: AppAssets.medicine,
                   label: "Medicine",
                   bgColor: AppColors.lightBlueButton,
                 ),
@@ -42,21 +38,21 @@ class MainCategories extends StatelessWidget {
             Gap(38),
             Row(
               children: [
-                CategotyItem(
-                  image: AppAssets.groceries,
+                CategoryItem(
+                  icon: AppAssets.groceries,
                   label: "Groceries",
                   bgColor: AppColors.lightBlueButton,
                 ),
                 Gap(21),
 
-                CategotyItem(
-                  image: AppAssets.rent,
+                CategoryItem(
+                  icon: AppAssets.rent,
                   label: "Rent",
                   bgColor: AppColors.lightBlueButton,
                 ),
                 Gap(21),
-                CategotyItem(
-                  image: AppAssets.gift,
+                CategoryItem(
+                  icon: AppAssets.gift,
                   label: "Gifts",
                   bgColor: AppColors.lightBlueButton,
                 ),
@@ -65,25 +61,25 @@ class MainCategories extends StatelessWidget {
             Gap(38),
             Row(
               children: [
-                CategotyItem(
-                  image: AppAssets.saving,
+                CategoryItem(
+                  icon: AppAssets.saving,
                   label: "Savings",
                   bgColor: AppColors.lightBlueButton,
                 ),
                 Gap(21),
 
-                CategotyItem(
-                  image: AppAssets.entertainment,
+                CategoryItem(
+                  icon: AppAssets.entertainment,
                   label: "Leisure",
                   bgColor: AppColors.lightBlueButton,
                 ),
                 Gap(21),
-                PngCategotyItem(
-                  image: AppAssets.more,
+                CategoryItem(
+                  icon: AppAssets.more,
                   label: "More",
                   bgColor: AppColors.lightBlueButton,
                 ),
-              ],
+              ]
             ),
           ],
         ),

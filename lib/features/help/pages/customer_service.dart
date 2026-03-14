@@ -19,10 +19,9 @@ class CustomerService extends StatelessWidget {
     onPressed: () {
       pushTo(context, Routes.chatScreen);
     },
-    
-    label: const Text(
+    label: Text(
       'Start Another Chat',
-      style: TextStyles.body_15
+      style: TextStyles.body_15.copyWith(fontWeight: FontWeight.w500)
     ),
     backgroundColor: AppColors.mainGreen,
     shape: RoundedRectangleBorder(
