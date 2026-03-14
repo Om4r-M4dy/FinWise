@@ -98,7 +98,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(" • ", style: TextStyles.body_15),
+          Text(" • ", style: TextStyles.body_15),
           Expanded(child: Text(text)),
         ],
       ),
