@@ -1,4 +1,6 @@
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ class BuildAuthUI extends StatelessWidget {
           backgroundColor: AppColors.lightGreen,
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {pushTo(context, Routes.helpCenter);},
           child: Text(
             "Forgot Password?",
             style: TextStyles.caption1_14.copyWith(
