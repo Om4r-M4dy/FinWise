@@ -1,5 +1,7 @@
 class AppAssets {
   // icons
+     static const String more = "assets/icons/more.png";
+
    static const String back = "assets/icons/bring back (1).png";
    static const String appBarNotification = "assets/icons/Icon-Notification.png";
   static const String analysis = "assets/icons/Analysis.svg";
@@ -30,7 +32,7 @@ class AppAssets {
   static const String help = "assets/icons/help.svg";
   static const String home = "assets/icons/Home.svg";
   static const String income = "assets/icons/Income.svg";
-  static const String medicines = "assets/icons/Medicines.svg";
+  static const String medicine = "assets/icons/Medicine.svg";
   static const String newHome = "assets/icons/NewHome.svg";
   static const String notification = "assets/icons/notification.svg";
   static const String passSettings = "assets/icons/passSettings.svg";

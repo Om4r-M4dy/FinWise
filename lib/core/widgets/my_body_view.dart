@@ -19,7 +19,10 @@ class MyBodyView extends StatelessWidget {
                 horizontal: 37.0,
                 vertical: 20,
               ),
-              child: topSection,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: topSection,
+              ),
             ),
           ] else
             const Gap(20),
@@ -34,7 +37,7 @@ class MyBodyView extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 37.0,
-                    vertical: 20,
+                    vertical: 30,
                   ),
                   child: bottomSection,
                 ),
