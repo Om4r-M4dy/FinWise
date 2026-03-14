@@ -1,4 +1,5 @@
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
+import 'package:finwise/features/categories/pages/main_categories.dart';
 import 'package:finwise/features/help/pages/help_center.dart';
 import 'package:finwise/features/launch/launch_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
@@ -9,6 +10,8 @@ class Routes {
   static const String launch = '/';
   static const String onBoarding = '/on_boarding';
   static const String termsAndConditions = '/terms_and_conditions';
+  static const String onBoarding = '/OnBoarding';
+  static const String categories = '/main_categories';
   static const String helpCenter = '/help_center';
 
   // config

@@ -1,5 +1,9 @@
 class AppAssets {
   // icons
+     static const String more = "assets/icons/more.png";
+
+   static const String back = "assets/icons/bring back (1).png";
+   static const String appBarNotification = "assets/icons/Icon-Notification.png";
    static const String back = "assets/icons/bring_back.svg";
    static const String appBarNotification = "assets/icons/icon_notification.svg";
   static const String analysis = "assets/icons/Analysis.svg";
