@@ -1,3 +1,4 @@
+import 'package:finwise/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundCard extends StatelessWidget {
@@ -12,7 +13,7 @@ class BackgroundCard extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.65,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),
         ),
       ),

@@ -33,14 +33,12 @@ class MyBodyView extends StatelessWidget {
                 color: AppColors.background,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),
               ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 37.0,
-                    vertical: 30,
-                  ),
-                  child: bottomSection,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 37.0,
+                  vertical: 20,
                 ),
+                child: bottomSection,
               ),
             ),
           ),

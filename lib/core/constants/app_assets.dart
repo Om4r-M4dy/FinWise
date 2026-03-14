@@ -4,10 +4,10 @@ class AppAssets {
 
    static const String back = "assets/icons/bring back (1).png";
    static const String appBarNotification = "assets/icons/Icon-Notification.png";
+   static const String back = "assets/icons/bring_back.svg";
+   static const String appBarNotification = "assets/icons/icon_notification.svg";
   static const String analysis = "assets/icons/Analysis.svg";
   static const String arrowDown = "assets/icons/arrow-down.svg";
-  static const String botInstagram = "assets/icons/Bot-Instagram.svg";
-  static const String botWhatsapp = "assets/icons/Bot-Whatsapp.svg";
   static const String calender = "assets/icons/Calender.svg";
   static const String cam = "assets/icons/cam.svg";
   static const String car = "assets/icons/Car.svg";
@@ -15,7 +15,7 @@ class AppAssets {
   static const String chatCam = "assets/icons/chat-cam.svg";
   static const String chatMic = "assets/icons/chat-mic.svg";
   static const String chatShare = "assets/icons/chat-share.svg";
-  static const String checkProgress = "assets/icons/Check Progress.svg";
+  static const String checkProgress = "assets/icons/check_progress.svg";
   static const String check = "assets/icons/check.svg";
   static const String dollar = "assets/icons/Dollar.svg";
   static const String entertainment = "assets/icons/Entertainment.svg";
@@ -29,7 +29,6 @@ class AppAssets {
   static const String gift = "assets/icons/Gift.svg";
   static const String google = "assets/icons/Google.svg";
   static const String groceries = "assets/icons/Groceries.svg";
-  static const String help = "assets/icons/help.svg";
   static const String home = "assets/icons/Home.svg";
   static const String income = "assets/icons/Income.svg";
   static const String medicine = "assets/icons/Medicine.svg";
@@ -47,8 +46,12 @@ class AppAssets {
   static const String transactions = "assets/icons/Transactions.svg";
   static const String transport = "assets/icons/Transport.svg";
   static const String travel = "assets/icons/Travel.svg";
-  static const String website = "assets/icons/Website.svg";
   static const String wedding = "assets/icons/Wedding.svg";
+  static const String botWebsite = "assets/icons/bot_website.svg";
+  static const String botFacebook = "assets/icons/bot_facebook.svg";
+  static const String botInstagram = "assets/icons/bot_instagram.svg";
+  static const String botSupport = "assets/icons/bot_support.svg";
+  static const String botWhatsapp = "assets/icons/bot_whatsapp.svg";
 
   // imgs
   static const String controlMoney = "assets/imgs/controlMoney.png";

@@ -1,6 +1,7 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/on_boarding/Widget/background_card.dart';
+import 'package:finwise/features/on_boarding/Widget/build_page_content.dart';
 import 'package:finwise/features/on_boarding/data/on_boarding_data.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -17,7 +18,7 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   /// Controller to handle page navigation within the [PageView].
   final PageController _pageController = PageController();
-  
+
   /// Tracks the index of the currently displayed page to update UI accordingly.
   int _currentIndex = 0;
 
@@ -41,38 +42,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             children: [
               // Scrollable area containing the image and text for each onboarding page
               Expanded(
-                child: PageView.builder(
+                child: PageView(
                   controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  itemCount: onBoardingPages.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        const Spacer(flex: 4),
-                        Text(
-                          onBoardingPages[index].title,
-                          textAlign: TextAlign.center,
-                          style: TextStyles.size_30,
-                        ),
-                        const Spacer(flex: 5),
-                        Image.asset(
-                          onBoardingPages[index].imagePath,
-                          height: 250,
-                        ),
-                        const Spacer(flex: 2), 
-                      ],
-                    );
-                  },
+                  onPageChanged: (index) =>
+                      setState(() => _currentIndex = index),
+                  children: [buildPageContent(0), buildPageContent(1)],
                 ),
               ),
 
               // Fixed bottom area containing the navigation button and page indicators
               Padding(
-                padding: const EdgeInsets.only(bottom: 40.0), 
+                padding: const EdgeInsets.only(bottom: 40.0),
                 child: Column(
                   children: [
                     TextButton(
@@ -89,19 +69,19 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             curve: Curves.easeInOut,
                           );
                         } else {
-                          //TODO: Implement navigation logic to the next screen (e.g., Login or Home)
+                          //navigate to home
                         }
                       },
                       // Dynamically change button text on the last page
                       child: Text(
-                        _currentIndex == onBoardingPages.length - 1 
-                            ? 'Get Started' 
+                        _currentIndex == onBoardingPages.length - 1
+                            ? 'Get Started'
                             : 'Next',
                         style: TextStyles.size_30,
                       ),
                     ),
                     const Gap(27),
-                    
+
                     // Page indicator dots
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +102,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   /// Builds an animated dot indicator for the [PageView].
   /// Highlights the dot corresponding to the [_currentIndex].
-  /// 
+  ///
   /// [index] is the position of the dot in the list.
   Widget _buildDot(int index) {
     return AnimatedContainer(
