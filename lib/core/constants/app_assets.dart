@@ -15,6 +15,9 @@ class AppAssets {
   static const String chatCam = "assets/icons/chat-cam.svg";
   static const String chatMic = "assets/icons/chat-mic.svg";
   static const String chatShare = "assets/icons/chat-share.svg";
+    static const String camFiled = "assets/icons/cam_filed.svg";
+  static const String mic = "assets/icons/mic.svg";
+  static const String share = "assets/icons/share.svg";
   static const String checkProgress = "assets/icons/check_progress.svg";
   static const String check = "assets/icons/check.svg";
   static const String dollar = "assets/icons/Dollar.svg";
