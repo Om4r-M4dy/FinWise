@@ -1,0 +1,55 @@
+import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/styles/text_styles.dart';
+import 'package:flutter/material.dart';
+
+class PngCategotyItem extends StatelessWidget {
+  const PngCategotyItem({
+    super.key,
+    this.bgColor = AppColors.oceanBlueButton,
+    required this.image,
+    required this.label,
+    this.ontap,
+  });
+
+  final Color bgColor;
+  final String image;
+  final String label;
+  final Function()? ontap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: ontap,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+              height: 98,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Image.asset(
+                color: AppColors.background,
+                height: 54,
+                width: 30,
+                image,
+              ),
+            ),
+            SizedBox(height: 3),
+            Text(
+              label,
+              
+              style: TextStyles.body_15.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColors.lettersAndIcons,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
