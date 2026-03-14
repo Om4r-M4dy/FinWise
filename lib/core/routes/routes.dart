@@ -22,6 +22,7 @@ class Routes {
     routes: [
       GoRoute(path: launch, builder: (context, state) => const LaunchScreen()),
       GoRoute(path: onBoarding, builder: (context, state) => const OnBoardingScreen()),
+      GoRoute(path: categories, builder: (context, state) => const MainCategories()),
       GoRoute(path: termsAndConditions, builder: (context, state) => const TermsAndConditions()),
       GoRoute(path: helpCenter, builder: (context, state) => const HelpCenter()),
       GoRoute(path: customerService, builder: (context, state) => const CustomerService()),

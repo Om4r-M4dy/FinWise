@@ -25,7 +25,8 @@ class AppAssets {
   static const String facebook = "assets/icons/Facebook.svg";
   static const String fingerprint = "assets/icons/fingerPrint.svg";
   static const String finwiseLogo = "assets/icons/finwiseLogo.svg";
-  static const String food = "assets/icons/Food.svg";
+  static const String food = "assets/icons/food.svg";
+  static const String foodBlack = "assets/icons/food_black.svg";
   static const String gift = "assets/icons/Gift.svg";
   static const String google = "assets/icons/Google.svg";
   static const String groceries = "assets/icons/Groceries.svg";
