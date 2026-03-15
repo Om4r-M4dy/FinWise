@@ -23,7 +23,7 @@ class TextStyles {
 
   static const TextStyle body_15 = TextStyle(
     fontSize: 15,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
   );
 
   static const TextStyle caption1_14 = TextStyle( 
