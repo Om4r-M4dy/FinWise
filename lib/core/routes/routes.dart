@@ -1,4 +1,5 @@
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
+import 'package:finwise/features/categories/pages/foodScreen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
 import 'package:finwise/features/help/pages/chat_screen.dart';
 import 'package:finwise/features/help/pages/customer_service.dart';
@@ -17,6 +18,7 @@ class Routes {
   static const String helpCenter = '/help_center';
   static const String customerService = '/customer_service';
   static const String chatScreen = '/chat_screen';
+  static const String foodScreen = '/foodScreen';
 
   // config
   static final routes = GoRouter(
@@ -28,6 +30,8 @@ class Routes {
       GoRoute(path: helpCenter, builder: (context, state) => const HelpCenter()),
       GoRoute(path: customerService, builder: (context, state) => const CustomerService()),
       GoRoute(path: chatScreen, builder: (context, state) => const ChatScreen()),
+            GoRoute(path: foodScreen, builder: (context, state) => const FoodScreen()),
+
     ],
   );
 }

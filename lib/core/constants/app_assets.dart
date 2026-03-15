@@ -1,6 +1,6 @@
 class AppAssets {
   // icons
-     static const String more = "assets/icons/more.png";
+     static const String more = "assets/icons/more.svg";
 
   //  static const String back = "assets/icons/bring back (1).png";
   //  static const String appBarNotification = "assets/icons/Icon-Notification.png";
@@ -28,7 +28,7 @@ class AppAssets {
   static const String facebook = "assets/icons/Facebook.svg";
   static const String fingerprint = "assets/icons/fingerPrint.svg";
   static const String finwiseLogo = "assets/icons/finwiseLogo.svg";
-  static const String food = "assets/icons/food.svg";
+  static const String food = "assets/icons/Food.svg";
   static const String foodBlack = "assets/icons/food_black.svg";
   static const String gift = "assets/icons/Gift.svg";
   static const String google = "assets/icons/Google.svg";
