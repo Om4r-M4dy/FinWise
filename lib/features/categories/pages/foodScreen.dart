@@ -1,5 +1,7 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
@@ -92,7 +94,9 @@ class FoodScreen extends StatelessWidget {
               Center(
                 child: MainButton(
                   text: "Add Expenses",
-                  onPress: () {},
+                  onPress: () {
+                    pushTo(context, Routes.addExpenses);
+                  },
                   textStyle: TextStyles.body_15.copyWith(
                     color: AppColors.lettersAndIcons,
                   ),
