@@ -6,14 +6,16 @@ class CategoryContainer extends StatelessWidget {
   const CategoryContainer({
     super.key,
     this.bgColor = AppColors.oceanBlueButton,
-    required this.icon,
+    required this.icon,  this.verticalPadding = 13,  this.horizontalPadding = 21,
   });
   final Color bgColor;
   final String icon;
+  final double verticalPadding;
+  final double horizontalPadding;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 21, vertical: 13),
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
       height: 53,
       width: 57,
       decoration: BoxDecoration(

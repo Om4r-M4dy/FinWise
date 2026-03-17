@@ -41,6 +41,9 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.transport,
                   label: "Transport",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.transportScreen);
+                  },
                 ),
                 Gap(21),
                 CategoryItem(
@@ -57,6 +60,9 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.groceries,
                   label: "Groceries",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.groceriesScreen);
+                  },
                 ),
                 Gap(21),
 
