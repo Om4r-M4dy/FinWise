@@ -1,8 +1,12 @@
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
+import 'package:finwise/features/categories/pages/entertainment_screen.dart';
 import 'package:finwise/features/categories/pages/foodScreen.dart';
+import 'package:finwise/features/categories/pages/gifts_screen.dart';
 import 'package:finwise/features/categories/pages/groceries_screen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
+import 'package:finwise/features/categories/pages/medicine_screen.dart';
+import 'package:finwise/features/categories/pages/rent_screen.dart';
 import 'package:finwise/features/categories/pages/transport_screen.dart';
 import 'package:finwise/features/help/pages/chat_screen.dart';
 import 'package:finwise/features/help/pages/customer_service.dart';
@@ -25,6 +29,10 @@ class Routes {
   static const String addExpenses = '/add_expenses';
   static const String transportScreen = '/transport_screen';
   static const String groceriesScreen = '/groceries_screen';
+  static const String giftsScreen = '/gifts_screen';
+  static const String maedicineScreen = '/medicine_screen';
+  static const String rentScreen = '/rent_screen';
+  static const String entertainmentScreen = '/entertainment_screen';
 
   // config
   static final routes = GoRouter(
@@ -40,6 +48,10 @@ class Routes {
       GoRoute(path: addExpenses, builder: (context, state) => const AddExpenses()),
       GoRoute(path: transportScreen, builder: (context, state) => const TransportScreen()),
       GoRoute(path: groceriesScreen, builder: (context, state) => const GroceriesScreen()),
+      GoRoute(path: rentScreen, builder: (context, state) => const RentScreen()),
+      GoRoute(path: giftsScreen, builder: (context, state) => const GiftsScreen()),
+      GoRoute(path: entertainmentScreen, builder: (context, state) => const EntertainmentScreen()),
+      GoRoute(path: maedicineScreen, builder: (context, state) => const MedicineScreen()),
 
     ],
   );

@@ -50,6 +50,9 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.medicine,
                   label: "Medicine",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.maedicineScreen);
+                  },
                 ),
               ],
             ),
@@ -70,12 +73,18 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.rent,
                   label: "Rent",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.rentScreen);
+                  },
                 ),
                 Gap(21),
                 CategoryItem(
                   icon: AppAssets.gift,
                   label: "Gifts",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.giftsScreen);
+                  },
                 ),
               ],
             ),
@@ -93,6 +102,9 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.entertainment,
                   label: "Leisure",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.entertainmentScreen);
+                  },
                 ),
                 Gap(21),
                 CategoryItem(
