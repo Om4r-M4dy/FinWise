@@ -12,18 +12,26 @@ class CategoryDetails extends StatelessWidget {
     required this.subtitle,
     required this.trailing,
     this.leadingColor = AppColors.blueButton,
+    this.verticalPadding = 13,
+    this.horizontalPadding = 21,
   });
   final String icon;
   final String title;
   final String subtitle;
   final String trailing;
-
+  final double verticalPadding;
+  final double horizontalPadding;
   final Color leadingColor;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CategoryContainer(icon: icon, bgColor: leadingColor),
+      leading: CategoryContainer(
+        icon: icon,
+        bgColor: leadingColor,
+        verticalPadding: verticalPadding,
+        horizontalPadding: horizontalPadding,
+      ),
       contentPadding: EdgeInsets.zero,
       title: Text(
         title,
@@ -38,7 +46,7 @@ class CategoryDetails extends StatelessWidget {
       ),
       trailing: Text(
         trailing,
-        style: TextStyles.body_15.copyWith(color: AppColors.blueButton),
+        style: TextStyles.body_15.copyWith(color: AppColors.oceanBlueButton),
       ),
     );
   }
