@@ -1,7 +1,11 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
+import 'package:finwise/core/widgets/progress_section.dart';
+import 'package:finwise/features/categories/pages/foodScreen.dart';
 import 'package:finwise/features/categories/widgets/category_item.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -14,24 +18,41 @@ class MainCategories extends StatelessWidget {
     return Scaffold(
       appBar: DefaultAppBar(title: "Categories"),
       body: MyBodyView(
-        topSection: Container(height: MediaQuery.of(context).size.height * 0.1,),
+        topSection: ProgressSection(
+          percentage: 30,
+          totalAmount: 20000,
+          totalExpanse: 5000,
+          totalBalance: 7200,
+        ),
         bottomSection: Column(
           children: [
             Gap(13),
             Row(
               children: [
-                CategoryItem(icon: AppAssets.food, label: "Food"),
+                CategoryItem(
+                  icon: AppAssets.food,
+                  label: "Food",
+                  onTap: () {
+                    pushTo(context, Routes.foodScreen);
+                  },
+                ),
                 Gap(21),
                 CategoryItem(
                   icon: AppAssets.transport,
                   label: "Transport",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.transportScreen);
+                  },
                 ),
                 Gap(21),
                 CategoryItem(
                   icon: AppAssets.medicine,
                   label: "Medicine",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.maedicineScreen);
+                  },
                 ),
               ],
             ),
@@ -42,6 +63,9 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.groceries,
                   label: "Groceries",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.groceriesScreen);
+                  },
                 ),
                 Gap(21),
 
@@ -49,12 +73,18 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.rent,
                   label: "Rent",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.rentScreen);
+                  },
                 ),
                 Gap(21),
                 CategoryItem(
                   icon: AppAssets.gift,
                   label: "Gifts",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.giftsScreen);
+                  },
                 ),
               ],
             ),
@@ -72,6 +102,9 @@ class MainCategories extends StatelessWidget {
                   icon: AppAssets.entertainment,
                   label: "Leisure",
                   bgColor: AppColors.lightBlueButton,
+                  onTap: () {
+                    pushTo(context, Routes.entertainmentScreen);
+                  },
                 ),
                 Gap(21),
                 CategoryItem(
@@ -79,7 +112,7 @@ class MainCategories extends StatelessWidget {
                   label: "More",
                   bgColor: AppColors.lightBlueButton,
                 ),
-              ]
+              ],
             ),
           ],
         ),
