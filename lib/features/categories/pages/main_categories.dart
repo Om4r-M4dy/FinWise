@@ -5,7 +5,6 @@ import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/progress_section.dart';
-import 'package:finwise/features/categories/pages/foodScreen.dart';
 import 'package:finwise/features/categories/widgets/category_item.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

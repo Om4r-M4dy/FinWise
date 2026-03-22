@@ -1,4 +1,3 @@
-import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/categories/widgets/category_container.dart';

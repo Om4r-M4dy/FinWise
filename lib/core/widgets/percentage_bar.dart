@@ -1,7 +1,6 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class PercentageBar extends StatelessWidget {
   const PercentageBar({

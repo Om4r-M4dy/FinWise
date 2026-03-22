@@ -11,33 +11,40 @@ class MyBodyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          if (topSection != null) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 37.0,
-                vertical: 20,
-              ),
-                child: topSection,
-            ),
-          ] else
-            const Gap(20),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),
-              ),
-              child: Padding(
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+  child: Column(
+          children: [
+            if (topSection != null) ...[
+              Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 37.0,
                   vertical: 20,
                 ),
-                child: bottomSection,
+                  child: topSection,
               ),
-            ),
+            ] else
+              const Gap(20),],
+              ),
+          ),
+          SliverFillRemaining(
+hasScrollBody: false,
+      child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 37.0,
+                    vertical: 20,
+                  ),
+                  child: bottomSection,
+                ),
+              ),
+       
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
+import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
 import 'package:finwise/features/categories/pages/entertainment_screen.dart';
 import 'package:finwise/features/categories/pages/foodScreen.dart';
@@ -20,7 +21,7 @@ class Routes {
   static const String launch = '/';
   static const String onBoarding = '/on_boarding';
   static const String termsAndConditions = '/terms_and_conditions';
-  // static const String onBoarding = '/OnBoarding';
+  static const String analysisScreen = '/analysis';
   static const String categories = '/main_categories';
   static const String helpCenter = '/help_center';
   static const String customerService = '/customer_service';
@@ -52,6 +53,7 @@ class Routes {
       GoRoute(path: giftsScreen, builder: (context, state) => const GiftsScreen()),
       GoRoute(path: entertainmentScreen, builder: (context, state) => const EntertainmentScreen()),
       GoRoute(path: maedicineScreen, builder: (context, state) => const MedicineScreen()),
+      GoRoute(path: analysisScreen, builder: (context, state) =>  const AnalysisScreen()),
 
     ],
   );

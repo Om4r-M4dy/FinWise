@@ -44,6 +44,7 @@ class AppAssets {
   static const String salary = "assets/icons/Salary.svg";
   static const String saving = "assets/icons/Saving.svg";
   static const String search = "assets/icons/search.svg";
+  static const String searchButton = "assets/icons/Search.svg";
   static const String security = "assets/icons/Security.svg";
   static const String settings = "assets/icons/Settings.svg";
   static const String star = "assets/icons/Star.svg";
