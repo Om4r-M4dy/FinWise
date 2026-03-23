@@ -33,7 +33,7 @@ class BuildAuthUI extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-             pushTo(context, Routes.quickAnalysisScreen);
+             pushTo(context, Routes.settingsScreen);
           },
           child: Text(
             "Forgot Password?",

@@ -15,6 +15,8 @@ import 'package:finwise/features/help/pages/help_center.dart';
 import 'package:finwise/features/launch/launch_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
 import 'package:finwise/features/quick_analysis/page/quick_analysis_screen.dart';
+import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
+import 'package:finwise/features/settings/page/settings_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class Routes {
@@ -36,6 +38,8 @@ class Routes {
   static const String rentScreen = '/rent_screen';
   static const String entertainmentScreen = '/entertainment_screen';
   static const String quickAnalysisScreen = '/quick_analysis';
+  static const String settingsScreen = '/settings';
+  static const String notificationSettingsScreen = '/notification_settings';
 
 
 
@@ -61,6 +65,8 @@ class Routes {
       GoRoute(path: maedicineScreen, builder: (context, state) => const MedicineScreen()),
       GoRoute(path: analysisScreen, builder: (context, state) =>  const AnalysisScreen()),
       GoRoute(path: quickAnalysisScreen, builder: (context, state) =>  const QuickAnalysisScreen()),
+      GoRoute(path: settingsScreen, builder: (context, state) =>  const SettingsScreen()),
+      GoRoute(path: notificationSettingsScreen, builder: (context, state) =>  NotificationSettingsScreen()),
 
     ],
   );
