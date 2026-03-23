@@ -5,14 +5,15 @@ import 'package:gap/gap.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class TargetCard extends StatelessWidget {
-  const TargetCard({super.key, required this.title, required this.percent});
+  const TargetCard({super.key, required this.title, required this.percent, this.center});
 final String title;
 final double percent;
+final Widget? center;
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.lightBlueButton,
+        color:center!=null?null :AppColors.lightBlueButton,
         borderRadius: BorderRadius.circular(50),
       ),
         child: Column(
@@ -22,12 +23,12 @@ final double percent;
             backgroundColor: AppColors.background,
                         radius: 45,
                         lineWidth: 5.0,
-                        percent: 0.3,
-                 center: Text("${(percent * 100).toInt()}%", style: TextStyles.title_20), 
+                        percent: percent/100,
+                 center:center?? Text("${(percent * 100).toInt()}%", style: TextStyles.title_20), 
                         progressColor: AppColors.oceanBlueButton,
                       ),
                     Gap(5),
-                      Text(title, style: TextStyles.body_15.copyWith(color: Color(0xffF1FFF3)),),
+                      Text(title,maxLines: 2 ,style: TextStyles.body_15.copyWith(color: center!=null?AppColors.dark05:Color(0xffF1FFF3)),),
                        
         ],
       ),

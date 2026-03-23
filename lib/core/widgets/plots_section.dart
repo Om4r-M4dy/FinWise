@@ -9,11 +9,11 @@ import 'package:gap/gap.dart';
 class PlotsSections extends StatelessWidget {
   final List<BarChartGroupData> chartData;
   final double maxY;
-
+final String? plotTitle;
   const PlotsSections({
     super.key, 
     required this.chartData, 
-    this.maxY = 20,
+    this.maxY = 20, this.plotTitle,
   });
 static const List<String> weekTitles = [
       "1st Week", "2nd Week", "3rd Week", "4th Week",
@@ -32,7 +32,7 @@ static const List<String> weekTitles = [
         padding: const EdgeInsets.symmetric(horizontal: 29, vertical: 16),
         child: Column(
           children: [
-            _PlotHeader(),
+            _PlotHeader(plotTitle: plotTitle,),
 Gap(10),
             Expanded(
               child: SingleChildScrollView(
@@ -126,16 +126,14 @@ Gap(10),
 }
 
 class _PlotHeader extends StatelessWidget {
-  const _PlotHeader({
-    super.key,
-  });
-
+  const _PlotHeader({this.plotTitle});
+final String? plotTitle;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text("Income & Expenses", style: TextStyles.body_15),
+        Text(plotTitle??"Income & Expenses", style: TextStyles.body_15),
         Row(
           children: [
             IconButton(

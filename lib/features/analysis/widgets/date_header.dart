@@ -1,9 +1,7 @@
-import 'dart:math';
 
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class DateHeader extends StatelessWidget {
 final int selectedIndex;
