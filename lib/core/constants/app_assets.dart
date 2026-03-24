@@ -46,7 +46,7 @@ class AppAssets {
   static const String search = "assets/icons/search.svg";
   static const String searchButton = "assets/icons/Search.svg";
   static const String security = "assets/icons/Security.svg";
-  static const String settings = "assets/icons/Settings.svg";
+  static const String setting = "assets/icons/Setting.svg";
   static const String star = "assets/icons/Star.svg";
   static const String transactions = "assets/icons/Transactions.svg";
   static const String transport = "assets/icons/Transport.svg";
@@ -57,10 +57,13 @@ class AppAssets {
   static const String botInstagram = "assets/icons/bot_instagram.svg";
   static const String botSupport = "assets/icons/bot_support.svg";
   static const String botWhatsapp = "assets/icons/bot_whatsapp.svg";
+  static const String help = "assets/icons/help.svg";
+  static const String legout = "assets/icons/logout.svg";
 
   // imgs
   static const String controlMoney = "assets/imgs/controlMoney.png";
   static const String expenseManager = "assets/imgs/expenseManager.png";
+  static const String profileImage = "assets/imgs/profile_image.png";
 
   //lottie
   static const String logoJson = "assets/lottie/logo.json";
