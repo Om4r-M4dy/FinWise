@@ -13,6 +13,7 @@ import 'package:finwise/features/help/pages/chat_screen.dart';
 import 'package:finwise/features/help/pages/customer_service.dart';
 import 'package:finwise/features/help/pages/help_center.dart';
 import 'package:finwise/features/launch/launch_screen.dart';
+import 'package:finwise/features/notification/pages/notification_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
 import 'package:finwise/features/quick_analysis/page/quick_analysis_screen.dart';
 import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
@@ -42,6 +43,7 @@ class Routes {
   static const String settingsScreen = '/settings';
   static const String notificationSettingsScreen = '/notification_settings';
   static const String deleteAccountScreen = '/delete_account';
+  static const String notificationScreen = '/notification';
 
 
 
@@ -70,6 +72,7 @@ class Routes {
       GoRoute(path: settingsScreen, builder: (context, state) =>  const SettingsScreen()),
       GoRoute(path: notificationSettingsScreen, builder: (context, state) =>  NotificationSettingsScreen()),
       GoRoute(path: deleteAccountScreen, builder: (context, state) => const DeleteAccoutScreen()),
+      GoRoute(path: notificationScreen, builder: (context, state) => const NotificationScreen()),
 
     ],
   );
