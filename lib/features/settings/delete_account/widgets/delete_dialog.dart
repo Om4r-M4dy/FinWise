@@ -26,12 +26,14 @@ class DeleteDialog extends StatelessWidget {
           const Gap(27),
           const Text("Are you sure you want to log out?", style: TextStyles.body_15),
 const Gap(27),
-           Text("By deleting your account, you agree that you understand the consequences of this action and that you agree to permanently delete your account and all associated data. ", 
-          textAlign: TextAlign.center,
-          // textWidthBasis: TextWidthBasis.parent,
-          style: TextStyles.subtitle_17.copyWith(fontWeight: FontWeight.w400 )
-          
-          ),
+           Padding(
+             padding: const EdgeInsets.symmetric(horizontal: 15),
+             child: Text("By deleting your account, you agree that you understand the consequences of this action and that you agree to permanently delete your account and all associated data. ", 
+                       textAlign: TextAlign.center,
+                       style: TextStyles.subtitle_17.copyWith(fontWeight: FontWeight.w400 )
+                       
+                       ),
+           ),
 const Gap(30),
         
             MainButton(text: "yes, Delete account", onPress:() {

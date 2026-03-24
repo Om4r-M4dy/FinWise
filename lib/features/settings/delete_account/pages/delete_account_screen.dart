@@ -15,60 +15,62 @@ class DeleteAccoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(title: "Delete Accout"),
-      body: MyBodyView(bottomSection: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text("Are You Sure You Want To Delete Your Account?",
-          textAlign: TextAlign.center,
-
-          style: TextStyles.body_15,),
-      Gap(24),
-          Container(
-      padding: EdgeInsets.only(left: 25,right: 25,top: 25),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: AppColors.lightGreen
-            ),
-            child: Text(
-              """This action will permanently delete all of your data, and you will not be able to recover it. Please keep the following in mind before proceeding:
+      body: MyBodyView(bottomSection: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Are You Sure You Want To Delete Your Account?",
+            textAlign: TextAlign.center,
+        
+            style: TextStyles.body_15,),
+        Gap(24),
+            Container(
+        padding: EdgeInsets.only(left: 25,right: 25,top: 25),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                color: AppColors.lightGreen
+              ),
+              child: Text(
+                """This action will permanently delete all of your data, and you will not be able to recover it. Please keep the following in mind before proceeding:
                 
-  • All your expenses, income and associated transactions will be eliminated.
-  
-  • You will not be able to access your account or any related information.
-  
-  • This action cannot be undone.
+        • All your expenses, income and associated transactions will be eliminated.
+        
+        • You will not be able to access your account or any related information.
+        
+        • This action cannot be undone.
                                 """,
-              style: TextStyles.caption2_13.copyWith(
-                fontWeight: FontWeight.w300
+                style: TextStyles.caption2_13.copyWith(
+                  fontWeight: FontWeight.w300
+                ),
               ),
             ),
-          ),
-          Gap(34),
-           Text("Please Enter Your Password To Confirm Deletion Of Your Account.",
-          textAlign: TextAlign.center,
-          style: TextStyles.body_15,),
             Gap(34),
-            // password field
-
-            MainButton(text: "yes, Delete account", onPress:() {
-              showDialog(context: context
-              , builder: (context) => DeleteDialog());
-            },
-            textStyle: TextStyles.body_15.copyWith(
-              color: AppColors.lettersAndIcons,
-            ),
-            ),
-              Gap(11),
-             MainButton(text: "cancel", onPress:() {
-              pop(context);
-            },
-            textStyle: TextStyles.body_15.copyWith(
-              color: AppColors.darkGreen,
-            ),
-            backgroundColor: AppColors.lightGreen,
-            ),
-        ],
+             Text("Please Enter Your Password To Confirm Deletion Of Your Account.",
+            textAlign: TextAlign.center,
+            style: TextStyles.body_15,),
+              Gap(34),
+              // password field
+        
+              MainButton(text: "yes, Delete account", onPress:() {
+                showDialog(context: context
+                , builder: (context) => DeleteDialog());
+              },
+              textStyle: TextStyles.body_15.copyWith(
+                color: AppColors.lettersAndIcons,
+              ),
+              ),
+                Gap(11),
+               MainButton(text: "cancel", onPress:() {
+                pop(context);
+              },
+              textStyle: TextStyles.body_15.copyWith(
+                color: AppColors.darkGreen,
+              ),
+              backgroundColor: AppColors.lightGreen,
+              ),
+          ],
+        ),
       )),
     );
   }

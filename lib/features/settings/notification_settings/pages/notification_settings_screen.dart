@@ -13,27 +13,32 @@ class NotificationSettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: DefaultAppBar(title: "Notification Settings"),
     body: MyBodyView(
-      bottomSection: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          NotifysettingElement(title: "General Notification",),
-          Gap(27),
-          NotifysettingElement(title: "Sound",),
-            Gap(27),
-          NotifysettingElement(title: "Sound Call",),
-            Gap(27),
-          NotifysettingElement(title: "Vibrate",),
-            Gap(27),
-          NotifysettingElement(title: "Transaction Update",),
-            Gap(27),
-          NotifysettingElement(title: "Expense Reminder ",),
-            Gap(27),
-          NotifysettingElement(title: "Budget Notifications",),
-            Gap(27),
-          NotifysettingElement(title: "Low Balance Alerts",),
-       
-       
-        ],
+      bottomSection: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              NotifysettingElement(title: "General Notification",),
+              Gap(27),
+              NotifysettingElement(title: "Sound",),
+                Gap(27),
+              NotifysettingElement(title: "Sound Call",),
+                Gap(27),
+              NotifysettingElement(title: "Vibrate",),
+                Gap(27),
+              NotifysettingElement(title: "Transaction Update",),
+                Gap(27),
+              NotifysettingElement(title: "Expense Reminder ",),
+                Gap(27),
+              NotifysettingElement(title: "Budget Notifications",),
+                Gap(27),
+              NotifysettingElement(title: "Low Balance Alerts",),
+           
+           
+            ],
+          ),
+        ),
       )),
     );
   }

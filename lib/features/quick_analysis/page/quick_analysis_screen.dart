@@ -60,25 +60,27 @@ class QuickAnalysisScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomSection: Column(
-          children: [
-PlotsSections( 
-  plotTitle: "April Expenses",
-  chartData: getCurrentChartData(1),
-              maxY: calculateMaxY(1),
-         ),
-         Gap(26),
-         InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-         Gap(19),
-         InfoRecord(iconPath:  AppAssets.groceries,title:"Groceries" ,date:"17:00 - April 24",cat: "Pantry",amount:"-\$100,00",amountColor: AppColors.oceanBlueButton,),
+        bottomSection: SingleChildScrollView(
+          child: Column(
+            children: [
+          PlotsSections( 
+            plotTitle: "April Expenses",
+            chartData: getCurrentChartData(1),
+                maxY: calculateMaxY(1),
+           ),
+           Gap(26),
+           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
            Gap(19),
-         InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-           Gap(19),
-         InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-           Gap(19),
-         InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-         
-          ],
+           InfoRecord(iconPath:  AppAssets.groceries,title:"Groceries" ,date:"17:00 - April 24",cat: "Pantry",amount:"-\$100,00",amountColor: AppColors.oceanBlueButton,),
+             Gap(19),
+           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
+             Gap(19),
+           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
+             Gap(19),
+           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
+           
+            ],
+          ),
         ),
       ),
     );

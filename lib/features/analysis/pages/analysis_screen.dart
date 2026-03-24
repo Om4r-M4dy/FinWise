@@ -32,58 +32,60 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
           totalExpanse: 1187.40,
           totalBalance: 7783.00,
         ),
-        bottomSection: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DateHeader(
-              selectedIndex: index,
-              labels: ["Daily", "Weekly", "Monthly", "Year"],
-              onUpdate: (value) {
-                setState(() {
-                  index = value;
-                });
-              },
-            ),
-            Gap(30),
-            PlotsSections(
-              chartData: getCurrentChartData(index),
-              maxY: calculateMaxY(index),
-            ),
-            Gap(30),
-            IncomeExpenseRow(),
-            Gap(33),
-            Text("My Targets", style: TextStyles.body_15),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: SingleChildScrollView(
-                clipBehavior: Clip.none,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 169,
-                      height: 167,
-                      child: TargetCard(title: "Travel", percent: .3),
-                    ),
-                    Gap(20),
-
-                    SizedBox(
-                      width: 169,
-                      height: 167,
-                      child: TargetCard(title: "Car", percent: .5),
-                    ),
-                    Gap(20),
-                    SizedBox(
-                      width: 169,
-                      height: 167,
-                      child: TargetCard(title: "Car", percent: .5),
-                    ),
-                  ],
+        bottomSection: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DateHeader(
+                selectedIndex: index,
+                labels: ["Daily", "Weekly", "Monthly", "Year"],
+                onUpdate: (value) {
+                  setState(() {
+                    index = value;
+                  });
+                },
+              ),
+              Gap(30),
+              PlotsSections(
+                chartData: getCurrentChartData(index),
+                maxY: calculateMaxY(index),
+              ),
+              Gap(30),
+              IncomeExpenseRow(),
+              Gap(33),
+              Text("My Targets", style: TextStyles.body_15),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: SingleChildScrollView(
+                  clipBehavior: Clip.none,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 169,
+                        height: 167,
+                        child: TargetCard(title: "Travel", percent: .3),
+                      ),
+                      Gap(20),
+          
+                      SizedBox(
+                        width: 169,
+                        height: 167,
+                        child: TargetCard(title: "Car", percent: .5),
+                      ),
+                      Gap(20),
+                      SizedBox(
+                        width: 169,
+                        height: 167,
+                        child: TargetCard(title: "Car", percent: .5),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

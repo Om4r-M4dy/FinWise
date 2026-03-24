@@ -17,22 +17,24 @@ class SettingsScreen extends StatelessWidget {
       appBar: DefaultAppBar(title: "Settings"),
       body: MyBodyView(
         
-        bottomSection: Column(
-          children: [
-SettingChoice(icon: AppAssets.notification,title: "Notification Settings",onPress: () {
-  pushTo(context,Routes.notificationSettingsScreen);
-  
-},),
-SettingChoice(icon: AppAssets.passSettings,title: "Password Settings",onPress: () {
-  pushTo(context,Routes.notificationSettingsScreen);
-  
-},),
-SettingChoice(icon: AppAssets.profile,title: "Delete Account ",onPress: () {
-  pushTo(context,Routes.deleteAccountScreen);
-  
-},),
-
-          ],
+        bottomSection: SingleChildScrollView(
+          child: Column(
+            children: [
+          SettingChoice(icon: AppAssets.notification,title: "Notification Settings",onPress: () {
+            pushTo(context,Routes.notificationSettingsScreen);
+            
+          },),
+          SettingChoice(icon: AppAssets.passSettings,title: "Password Settings",onPress: () {
+            pushTo(context,Routes.notificationSettingsScreen);
+            
+          },),
+          SettingChoice(icon: AppAssets.profile,title: "Delete Account ",onPress: () {
+            pushTo(context,Routes.deleteAccountScreen);
+            
+          },),
+          
+            ],
+          ),
         ),
         ),
     );
