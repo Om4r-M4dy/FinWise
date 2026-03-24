@@ -13,6 +13,8 @@ import 'package:finwise/features/help/pages/customer_service.dart';
 import 'package:finwise/features/help/pages/help_center.dart';
 import 'package:finwise/features/launch/launch_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
+import 'package:finwise/features/profile/page/edit_profile.dart';
+import 'package:finwise/features/profile/page/profile_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class Routes {
@@ -33,26 +35,77 @@ class Routes {
   static const String maedicineScreen = '/medicine_screen';
   static const String rentScreen = '/rent_screen';
   static const String entertainmentScreen = '/entertainment_screen';
+  static const String profileScreen = '/profile_screen';
+  static const String editProfileScreen = '/edit_profile_screen';
 
   // config
   static final routes = GoRouter(
     routes: [
       GoRoute(path: launch, builder: (context, state) => const LaunchScreen()),
-      GoRoute(path: onBoarding, builder: (context, state) => const OnBoardingScreen()),
-      GoRoute(path: categories, builder: (context, state) => const MainCategories()),
-      GoRoute(path: termsAndConditions, builder: (context, state) => const TermsAndConditions()),
-      GoRoute(path: helpCenter, builder: (context, state) => const HelpCenter()),
-      GoRoute(path: customerService, builder: (context, state) => const CustomerService()),
-      GoRoute(path: chatScreen, builder: (context, state) => const ChatScreen()),
-      GoRoute(path: foodScreen, builder: (context, state) => const FoodScreen()),
-      GoRoute(path: addExpenses, builder: (context, state) => const AddExpenses()),
-      GoRoute(path: transportScreen, builder: (context, state) => const TransportScreen()),
-      GoRoute(path: groceriesScreen, builder: (context, state) => const GroceriesScreen()),
-      GoRoute(path: rentScreen, builder: (context, state) => const RentScreen()),
-      GoRoute(path: giftsScreen, builder: (context, state) => const GiftsScreen()),
-      GoRoute(path: entertainmentScreen, builder: (context, state) => const EntertainmentScreen()),
-      GoRoute(path: maedicineScreen, builder: (context, state) => const MedicineScreen()),
-
+      GoRoute(
+        path: onBoarding,
+        builder: (context, state) => const OnBoardingScreen(),
+      ),
+      GoRoute(
+        path: categories,
+        builder: (context, state) => const MainCategories(),
+      ),
+      GoRoute(
+        path: termsAndConditions,
+        builder: (context, state) => const TermsAndConditions(),
+      ),
+      GoRoute(
+        path: helpCenter,
+        builder: (context, state) => const HelpCenter(),
+      ),
+      GoRoute(
+        path: customerService,
+        builder: (context, state) => const CustomerService(),
+      ),
+      GoRoute(
+        path: chatScreen,
+        builder: (context, state) => const ChatScreen(),
+      ),
+      GoRoute(
+        path: foodScreen,
+        builder: (context, state) => const FoodScreen(),
+      ),
+      GoRoute(
+        path: addExpenses,
+        builder: (context, state) => const AddExpenses(),
+      ),
+      GoRoute(
+        path: transportScreen,
+        builder: (context, state) => const TransportScreen(),
+      ),
+      GoRoute(
+        path: groceriesScreen,
+        builder: (context, state) => const GroceriesScreen(),
+      ),
+      GoRoute(
+        path: rentScreen,
+        builder: (context, state) => const RentScreen(),
+      ),
+      GoRoute(
+        path: giftsScreen,
+        builder: (context, state) => const GiftsScreen(),
+      ),
+      GoRoute(
+        path: entertainmentScreen,
+        builder: (context, state) => const EntertainmentScreen(),
+      ),
+      GoRoute(
+        path: maedicineScreen,
+        builder: (context, state) => const MedicineScreen(),
+      ),
+      GoRoute(
+        path: profileScreen,
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: editProfileScreen,
+        builder: (context, state) => const EditProfileScreen(),
+      ),
     ],
   );
 }
