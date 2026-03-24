@@ -6,7 +6,6 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -29,7 +28,7 @@ SettingChoice(icon: AppAssets.passSettings,title: "Password Settings",onPress: (
   
 },),
 SettingChoice(icon: AppAssets.profile,title: "Delete Account ",onPress: () {
-  pushTo(context,Routes.notificationSettingsScreen);
+  pushTo(context,Routes.deleteAccountScreen);
   
 },),
 
