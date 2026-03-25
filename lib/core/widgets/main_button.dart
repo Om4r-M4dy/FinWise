@@ -3,7 +3,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 enum ButtonSize {
-  small(width: 169.0, height: 32.0),
+  small(width: 169.0, height: 36.0),
   medium(width: 207.0, height: 45.0),
   large(width: double.infinity, height: 45.0);
 

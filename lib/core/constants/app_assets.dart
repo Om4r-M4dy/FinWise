@@ -4,6 +4,10 @@ class AppAssets {
 
   //  static const String back = "assets/icons/bring back (1).png";
   //  static const String appBarNotification = "assets/icons/Icon-Notification.png";
+    static const String goal = "assets/icons/goal.svg";
+  static const String amountSaved = "assets/icons/amount saved.svg";
+  static const String travelCirlce = "assets/icons/travel circle.svg";
+
   static const String back = "assets/icons/bring_back.svg";
   static const String appBarNotification = "assets/icons/icon_notification.svg";
   static const String analysis = "assets/icons/Analysis.svg";
