@@ -1,5 +1,7 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            replaceWith(context, Routes.notificationScreen);
+          },
           icon: CustomSvgPicture(path: AppAssets.appBarNotification),
         ),
       ],
