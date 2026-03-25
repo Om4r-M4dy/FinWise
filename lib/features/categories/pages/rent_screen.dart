@@ -8,7 +8,6 @@ import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/progress_section.dart';
-import 'package:finwise/features/categories/widgets/category_container.dart';
 import 'package:finwise/features/categories/widgets/category_details.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

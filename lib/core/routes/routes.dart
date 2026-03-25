@@ -1,4 +1,5 @@
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
+import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
@@ -18,7 +19,14 @@ import 'package:finwise/features/help/pages/chat_screen.dart';
 import 'package:finwise/features/help/pages/customer_service.dart';
 import 'package:finwise/features/help/pages/help_center.dart';
 import 'package:finwise/features/launch/launch_screen.dart';
+import 'package:finwise/features/notification/pages/notification_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
+import 'package:finwise/features/quick_analysis/page/quick_analysis_screen.dart';
+import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
+import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
+import 'package:finwise/features/settings/page/settings_screen.dart';
+import 'package:finwise/features/profile/page/edit_profile.dart';
+import 'package:finwise/features/profile/page/profile_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class Routes {
@@ -26,7 +34,7 @@ class Routes {
   static const String launch = '/';
   static const String onBoarding = '/on_boarding';
   static const String termsAndConditions = '/terms_and_conditions';
-  // static const String onBoarding = '/OnBoarding';
+  static const String analysisScreen = '/analysis';
   static const String categories = '/main_categories';
   static const String helpCenter = '/help_center';
   static const String customerService = '/customer_service';
@@ -45,6 +53,15 @@ class Routes {
   static const String entertainmentScreen = '/entertainment_creen';
   static const String savings = '/savings';
   static const String addSavings = '/add_savings';
+  static const String entertainmentScreen = '/entertainment_screen';
+  static const String quickAnalysisScreen = '/quick_analysis';
+  static const String settingsScreen = '/settings';
+  static const String notificationSettingsScreen = '/notification_settings';
+  static const String deleteAccountScreen = '/delete_account';
+  static const String notificationScreen = '/notification';
+
+  static const String profileScreen = '/profile_screen';
+  static const String editProfileScreen = '/edit_profile_screen';
 
   // config
   static final routes = GoRouter(
@@ -70,7 +87,38 @@ class Routes {
       GoRoute(path: newHouse, builder: (context, state) => const NewHouse()),
       GoRoute(path: savings, builder: (context, state) => const Savings()),
       GoRoute(path: addSavings, builder: (context, state) => const AddSavings()),
-
+      GoRoute(
+        path: analysisScreen,
+        builder: (context, state) => const AnalysisScreen(),
+      ),
+      GoRoute(
+        path: quickAnalysisScreen,
+        builder: (context, state) => const QuickAnalysisScreen(),
+      ),
+      GoRoute(
+        path: settingsScreen,
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: notificationSettingsScreen,
+        builder: (context, state) => NotificationSettingsScreen(),
+      ),
+      GoRoute(
+        path: deleteAccountScreen,
+        builder: (context, state) => const DeleteAccoutScreen(),
+      ),
+      GoRoute(
+        path: notificationScreen,
+        builder: (context, state) => const NotificationScreen(),
+      ),
+      GoRoute(
+        path: profileScreen,
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: editProfileScreen,
+        builder: (context, state) => const EditProfileScreen(),
+      ),
     ],
   );
 }

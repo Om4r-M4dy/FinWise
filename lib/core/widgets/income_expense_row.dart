@@ -9,6 +9,7 @@ class IncomeExpenseRow extends StatelessWidget {
   const IncomeExpenseRow({super.key, this.bg});
   final Color? bg;
 
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -29,6 +30,7 @@ class IncomeExpenseRow extends StatelessWidget {
             color: AppColors.oceanBlueButton,
             title: "Expense",
             amount: "1.187.40",
+            isExpense: true,
           ),
         ),
       ],
