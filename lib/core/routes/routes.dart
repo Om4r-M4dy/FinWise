@@ -1,13 +1,19 @@
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
+import 'package:finwise/features/categories/pages/add_savings.dart';
+import 'package:finwise/features/categories/pages/car.dart';
 import 'package:finwise/features/categories/pages/entertainment_screen.dart';
 import 'package:finwise/features/categories/pages/foodScreen.dart';
 import 'package:finwise/features/categories/pages/gifts_screen.dart';
 import 'package:finwise/features/categories/pages/groceries_screen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
 import 'package:finwise/features/categories/pages/medicine_screen.dart';
+import 'package:finwise/features/categories/pages/new_house.dart';
 import 'package:finwise/features/categories/pages/rent_screen.dart';
+import 'package:finwise/features/categories/pages/savings.dart';
 import 'package:finwise/features/categories/pages/transport_screen.dart';
+import 'package:finwise/features/categories/pages/travel.dart';
+import 'package:finwise/features/categories/pages/wedding.dart';
 import 'package:finwise/features/help/pages/chat_screen.dart';
 import 'package:finwise/features/help/pages/customer_service.dart';
 import 'package:finwise/features/help/pages/help_center.dart';
@@ -32,7 +38,13 @@ class Routes {
   static const String giftsScreen = '/gifts_screen';
   static const String maedicineScreen = '/medicine_screen';
   static const String rentScreen = '/rent_screen';
-  static const String entertainmentScreen = '/entertainment_screen';
+  static const String wedding = '/wedding';
+  static const String travel = '/travel';
+  static const String newHouse = '/new_house';
+  static const String car = '/car';
+  static const String entertainmentScreen = '/entertainment_creen';
+  static const String savings = '/savings';
+  static const String addSavings = '/add_savings';
 
   // config
   static final routes = GoRouter(
@@ -52,6 +64,12 @@ class Routes {
       GoRoute(path: giftsScreen, builder: (context, state) => const GiftsScreen()),
       GoRoute(path: entertainmentScreen, builder: (context, state) => const EntertainmentScreen()),
       GoRoute(path: maedicineScreen, builder: (context, state) => const MedicineScreen()),
+      GoRoute(path: travel, builder: (context, state) => const Travel()),
+      GoRoute(path: wedding, builder: (context, state) => const Wedding()),
+      GoRoute(path: car, builder: (context, state) => const Car()),
+      GoRoute(path: newHouse, builder: (context, state) => const NewHouse()),
+      GoRoute(path: savings, builder: (context, state) => const Savings()),
+      GoRoute(path: addSavings, builder: (context, state) => const AddSavings()),
 
     ],
   );

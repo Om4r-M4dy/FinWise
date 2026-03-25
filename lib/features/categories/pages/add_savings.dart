@@ -9,13 +9,13 @@ import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class AddExpenses extends StatelessWidget {
-  const AddExpenses({super.key});
+class AddSavings extends StatelessWidget {
+  const AddSavings({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Add Expenses"),
+      appBar: DefaultAppBar(title: "Add Savings"),
       body: MyBodyView(
         topSection: Container(height: 5),
         bottomSection: Padding(
@@ -173,7 +173,7 @@ class AddExpenses extends StatelessWidget {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: AppColors.lightGreen,
-                      hintText: "Dinner",
+                      hintText: "Travel Deposit",
                       hintStyle: TextStyles.body_15.copyWith(
                         color: AppColors.lettersAndIcons,
                       ),
