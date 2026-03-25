@@ -3,7 +3,6 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';

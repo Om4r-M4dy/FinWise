@@ -8,8 +8,8 @@ import 'package:finwise/features/settings/delete_account/widgets/delete_dialog.d
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class DeleteAccoutScreen extends StatelessWidget {
-  const DeleteAccoutScreen({super.key});
+class DeleteAccountScreen extends StatelessWidget {
+  const DeleteAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

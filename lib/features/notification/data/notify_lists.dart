@@ -17,7 +17,7 @@ NotifyModel({
 
 }
 
-List<NotifyModel> todaynotifyList=[
+List<NotifyModel> todayNotifyList=[
 NotifyModel(
     iconPath: AppAssets.notification,
     title: "Reminder!",
@@ -34,7 +34,7 @@ NotifyModel(
 
 
 
-List<NotifyModel> yesterdaynotifyList=[
+List<NotifyModel> yesterdayNotifyList=[
 NotifyModel(
    iconPath: AppAssets.dollar,
 title: "Transactions",
@@ -51,7 +51,7 @@ NotifyModel(
 ];
 
 
-List<NotifyModel> thisWeekendnotifyList=[
+List<NotifyModel> thisWeekendNotifyList=[
 NotifyModel(
     iconPath: AppAssets.notification,
     title: "Expense record",

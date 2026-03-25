@@ -21,11 +21,11 @@ class NotificationScreen extends StatelessWidget {
         bottomSection: SingleChildScrollView(
           child: Column(
             children: [
-              CompleteNotifySection(sectionName: "Today",notifyList: todaynotifyList,),
+              CompleteNotifySection(sectionName: "Today",notifyList: todayNotifyList,),
               Gap(25),
-              CompleteNotifySection(sectionName: "Yesterday",notifyList: yesterdaynotifyList,),
+              CompleteNotifySection(sectionName: "Yesterday",notifyList: yesterdayNotifyList,),
                  Gap(25),
-              CompleteNotifySection(sectionName: "This Weekend",notifyList: thisWeekendnotifyList,),
+              CompleteNotifySection(sectionName: "This Weekend",notifyList: thisWeekendNotifyList,),
             
             
             ],
