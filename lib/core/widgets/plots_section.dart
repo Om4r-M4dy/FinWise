@@ -9,16 +9,23 @@ import 'package:gap/gap.dart';
 class PlotsSections extends StatelessWidget {
   final List<BarChartGroupData> chartData;
   final double maxY;
-final String? plotTitle;
+  final String? plotTitle;
   const PlotsSections({
-    super.key, 
-    required this.chartData, 
-    this.maxY = 20, this.plotTitle,
+    super.key,
+    required this.chartData,
+    this.maxY = 20,
+    this.plotTitle,
   });
-static const List<String> weekTitles = [
-      "1st Week", "2nd Week", "3rd Week", "4th Week",
-      "5th Week", "6th Week", "7th Week", "8th Week"
-    ];
+  static const List<String> weekTitles = [
+    "1st Week",
+    "2nd Week",
+    "3rd Week",
+    "4th Week",
+    "5th Week",
+    "6th Week",
+    "7th Week",
+    "8th Week",
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,17 +39,18 @@ static const List<String> weekTitles = [
         padding: const EdgeInsets.symmetric(horizontal: 29, vertical: 16),
         child: Column(
           children: [
-            _PlotHeader(plotTitle: plotTitle,),
-Gap(10),
+            _PlotHeader(plotTitle: plotTitle),
+            Gap(10),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                width: chartData.length * 80.0 < MediaQuery.of(context).size.width 
-             ? MediaQuery.of(context).size.width - 60 
-             : chartData.length * 80.0,
-              child: BarChart(
-                
+                  width:
+                      chartData.length * 80.0 <
+                          MediaQuery.of(context).size.width
+                      ? MediaQuery.of(context).size.width - 60
+                      : chartData.length * 80.0,
+                  child: BarChart(
                     BarChartData(
                       maxY: 20,
                       barTouchData: BarTouchData(enabled: true),
@@ -58,11 +66,21 @@ Gap(10),
                           sideTitles: SideTitles(
                             showTitles: true,
                             reservedSize: 35,
-                            getTitlesWidget: (value, meta) => Text(
-                              '${value.toInt()}k',
-                               style: TextStyles.caption3_12.copyWith(color: AppColors.lightBlueButton),
-                               
-                            ),
+                            getTitlesWidget: (value, meta) {
+                              return SideTitleWidget(
+                                meta: meta,
+
+                                fitInside: SideTitleFitInsideData.fromTitleMeta(
+                                  meta,
+                                ),
+                                child: Text(
+                                  '${value.toInt()}k',
+                                  style: TextStyles.caption3_12.copyWith(
+                                    color: AppColors.lightBlueButton,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                         bottomTitles: AxisTitles(
@@ -70,15 +88,22 @@ Gap(10),
                             showTitles: true,
                             getTitlesWidget: (value, meta) {
                               int index = value.toInt();
-                             if (index >= 0 && index < weekTitles.length) {
+                              if (index >= 0 && index < weekTitles.length) {
                                 return SideTitleWidget(
                                   meta: meta,
-                                 
-                                  fitInside :const SideTitleFitInsideData(enabled: false, distanceFromEdge: 0, parentAxisSize: 0, axisPosition: 0),
-                                  space: 5, 
+
+                                  fitInside: const SideTitleFitInsideData(
+                                    enabled: false,
+                                    distanceFromEdge: 0,
+                                    parentAxisSize: 0,
+                                    axisPosition: 0,
+                                  ),
+                                  space: 5,
                                   child: Text(
                                     weekTitles[index],
-                                    style: TextStyles.caption3_12.copyWith(color: AppColors.darkGreen),
+                                    style: TextStyles.caption3_12.copyWith(
+                                      color: AppColors.darkGreen,
+                                    ),
                                   ),
                                 );
                               }
@@ -95,21 +120,21 @@ Gap(10),
                           strokeWidth: .5,
                           dashArray: [5, 5],
                         ),
-                        horizontalInterval: maxY/ 4,
+                        horizontalInterval:maxY%2==0?maxY /3:maxY /2,
                       ),
-                     borderData: FlBorderData(
-                    show: true, 
-                    border: const Border(
-                      bottom: BorderSide(
-                        color:AppColors.darkGreen,
-                        width: 1, 
+                      borderData: FlBorderData(
+                        show: true,
+                        border: const Border(
+                          bottom: BorderSide(
+                            color: AppColors.darkGreen,
+                            width: 1,
+                          ),
+                          left: BorderSide(color: Colors.transparent),
+                          right: BorderSide(color: Colors.transparent),
+                          top: BorderSide(color: Colors.transparent),
+                        ),
                       ),
-                      left: BorderSide(color: Colors.transparent),
-                      right: BorderSide(color: Colors.transparent),
-                      top: BorderSide(color: Colors.transparent),
-                    ),
-                  ),
-                      barGroups: chartData
+                      barGroups: chartData,
                     ),
                     duration: const Duration(milliseconds: 400),
                   ),
@@ -121,28 +146,24 @@ Gap(10),
       ),
     );
   }
-
-
 }
 
 class _PlotHeader extends StatelessWidget {
   const _PlotHeader({this.plotTitle});
-final String? plotTitle;
+  final String? plotTitle;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(plotTitle??"Income & Expenses", style: TextStyles.body_15),
+        Text(plotTitle ?? "Income & Expenses", style: TextStyles.body_15),
         Row(
           children: [
             IconButton(
               onPressed: () {},
-              icon: const CustomSvgPicture(
-                path: AppAssets.searchButton,
-              ),
+              icon: const CustomSvgPicture(path: AppAssets.searchButton),
             ),
-    
+
             IconButton(
               onPressed: () {},
               icon: const CustomSvgPicture(path: AppAssets.calender),

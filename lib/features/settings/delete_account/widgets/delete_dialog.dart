@@ -1,4 +1,5 @@
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/context_extensions.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/main_button.dart';
@@ -14,7 +15,7 @@ class DeleteDialog extends StatelessWidget {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     child: Container(
       padding: const EdgeInsets.all(20),
-      height: 450,
+      height: context.screenHeight*.7,
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(20),

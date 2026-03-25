@@ -23,7 +23,7 @@ final Widget? center;
             backgroundColor: AppColors.background,
                         radius: 45,
                         lineWidth: 5.0,
-                        percent: percent/100,
+                        percent: percent,
                  center:center?? Text("${(percent * 100).toInt()}%", style: TextStyles.title_20), 
                         progressColor: AppColors.oceanBlueButton,
                       ),

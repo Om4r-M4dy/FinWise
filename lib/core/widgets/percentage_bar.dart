@@ -6,11 +6,11 @@ class PercentageBar extends StatelessWidget {
   const PercentageBar({
     super.key,
     required this.percentage,
-    required this.totalAmount,
+    required this.totalAmount, this.bgColor,
   });
   final double percentage;
   final double totalAmount;
-
+final Color? bgColor;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -19,7 +19,7 @@ class PercentageBar extends StatelessWidget {
         return Container(
           height: 28,
           decoration: BoxDecoration(
-            color: AppColors.background,
+            color:bgColor?? AppColors.background,
             borderRadius: BorderRadius.circular(13.5),
           ),
           child: TweenAnimationBuilder(

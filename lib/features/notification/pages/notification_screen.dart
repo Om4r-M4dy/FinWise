@@ -14,7 +14,8 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Notification"),
+      // TODO: make it back to home screen...
+      appBar: DefaultAppBar(title: "Notification"), 
       body: MyBodyView(
         
         bottomSection: SingleChildScrollView(
