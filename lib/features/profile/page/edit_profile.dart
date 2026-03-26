@@ -6,7 +6,7 @@ import 'package:finwise/core/widgets/app_icon_button.dart';
 import 'package:finwise/core/widgets/custom_text_form_field.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/features/profile/widget/row_app_bar.dart';
+import 'package:finwise/core/widgets/row_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
