@@ -14,6 +14,9 @@ class CustomTextFormField extends StatelessWidget {
     this.onChange,
     this.textInputAction,
     this.controller,
+    this.fillColor,
+    this.suffixIcon,
+    this.radius = 18,
   });
   final String? hintText;
   final String? labelText;
@@ -26,6 +29,9 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
   final TextEditingController? controller;
+  final Color? fillColor;
+  final Widget? suffixIcon;
+  final double radius;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -40,7 +46,13 @@ class CustomTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         prefixIcon: prefixIcon,
-         labelText: labelText,
+        labelText: labelText,
+        fillColor: fillColor,
+        suffixIcon: suffixIcon,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          borderSide: BorderSide.none,
+        ),
       ),
       validator: validator,
       onChanged: onChange,
