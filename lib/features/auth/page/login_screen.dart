@@ -1,11 +1,12 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
+import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/styles/text_styles.dart';
+import 'package:finwise/features/auth/page/signup_screen.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/socialbutton.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -128,7 +129,9 @@ class LoginScreen extends StatelessWidget {
                       child: SizedBox(
                         width: 207,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            pushReplacment(context, SignupScreen());
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.lightGreen,
                             padding: const EdgeInsets.symmetric(vertical: 16),
