@@ -6,12 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class SavingsItemHeader extends StatelessWidget {
-  const SavingsItemHeader({super.key, required this.goal, required this.amountSaved, required this.savingsIcon, required this.savingsLabel});
+  const SavingsItemHeader({
+    super.key,
+    required this.goal,
+    required this.amountSaved,
+    required this.savingsIcon,
+    required this.savingsLabel,  this.iconHeight = 30,  this.iconWidth = 55,
+  });
 
   final String goal;
   final String amountSaved;
   final String savingsIcon;
   final String savingsLabel;
+  final double iconHeight;
+    final double iconWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +42,8 @@ class SavingsItemHeader extends StatelessWidget {
             ),
             Gap(3),
             Text(
-goal,              style: TextStyles.headline_24.copyWith(color: Color(0xff052224)),
+              goal,
+              style: TextStyles.headline_24.copyWith(color: Color(0xff052224)),
             ),
             Gap(3),
             Row(
@@ -51,7 +60,7 @@ goal,              style: TextStyles.headline_24.copyWith(color: Color(0xff05222
             ),
             Gap(3),
             Text(
-             amountSaved,
+              amountSaved,
               style: TextStyles.headline_24.copyWith(
                 color: AppColors.mainGreen,
               ),
@@ -78,11 +87,7 @@ goal,              style: TextStyles.headline_24.copyWith(color: Color(0xff05222
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    CustomSvgPicture(
-                      path: savingsIcon,
-                      height: 30,
-                      width: 55,
-                    ),
+                    CustomSvgPicture(path: savingsIcon, height: iconHeight, width: iconWidth),
                     CustomSvgPicture(
                       path: AppAssets.travelCirlce,
                       height: 107,
