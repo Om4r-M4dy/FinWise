@@ -1,17 +1,16 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class PercentageBar extends StatelessWidget {
   const PercentageBar({
     super.key,
     required this.percentage,
-    required this.totalAmount,
+    required this.totalAmount, this.bgColor,
   });
   final double percentage;
   final double totalAmount;
-
+final Color? bgColor;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -20,7 +19,7 @@ class PercentageBar extends StatelessWidget {
         return Container(
           height: 28,
           decoration: BoxDecoration(
-            color: AppColors.background,
+            color:bgColor?? AppColors.background,
             borderRadius: BorderRadius.circular(13.5),
           ),
           child: TweenAnimationBuilder(
