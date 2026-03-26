@@ -1,5 +1,6 @@
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
+import 'package:finwise/features/calendar/page/calendar_screen.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
@@ -63,6 +64,7 @@ class Routes {
   static const String profileScreen = '/profile';
   static const String editProfileScreen = '/edit_profile';
   static const String searchScreen = '/search';
+  static const String calendarScreen = '/calendar';
 
   // config
   static final routes = GoRouter(
@@ -168,6 +170,10 @@ class Routes {
       GoRoute(
         path: searchScreen,
         builder: (context, state) => const SearchScreen(),
+      ),
+      GoRoute(
+        path: calendarScreen,
+        builder: (context, state) => const CalendarScreen(),
       ),
     ],
   );
