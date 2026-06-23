@@ -3,6 +3,7 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/styles/text_styles.dart';
+import 'package:finwise/features/auth/page/forgot_password.dart';
 import 'package:finwise/features/auth/page/signup_screen.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/socialbutton.dart';
@@ -110,7 +111,9 @@ class LoginScreen extends StatelessWidget {
                     /// Forgot password
                     Center(
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          pushto(context, const ForgotPasswordScreen());
+                        },
                         child: Text(
                           "Forgot Password?",
                           style: TextStyles.caption1_14.copyWith(
