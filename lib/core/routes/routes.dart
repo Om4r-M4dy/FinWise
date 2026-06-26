@@ -1,4 +1,7 @@
+import 'package:finwise/features/Home/pages/home_screen.dart';
+import 'package:finwise/features/Home/pages/nav_bar.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
+import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/calendar/page/calendar_screen.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
@@ -65,6 +68,10 @@ class Routes {
   static const String editProfileScreen = '/edit_profile';
   static const String searchScreen = '/search';
   static const String calendarScreen = '/calendar';
+
+  static const String homeScreen = '/home';
+  static const String bottomNavBar = '/bottom_nav_bar';
+  static const String transactionScreen = '/transaction_screen';
 
   // config
   static final routes = GoRouter(
@@ -174,6 +181,18 @@ class Routes {
       GoRoute(
         path: calendarScreen,
         builder: (context, state) => const CalendarScreen(),
+      ),
+      GoRoute(
+        path: homeScreen, 
+        builder: (context,state) => const HomeScreen()
+      ),
+      GoRoute(
+        path: bottomNavBar, 
+        builder: (context,state) => NavBar()
+      ),
+      GoRoute(
+        path: transactionScreen, 
+        builder: (context,state) => const TransactionScreen()
       ),
     ],
   );

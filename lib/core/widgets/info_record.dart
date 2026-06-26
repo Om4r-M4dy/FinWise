@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class InfoRecord extends StatelessWidget {
   const InfoRecord({
-    super.key, required this.iconPath, required this.title, required this.date, required this.cat, required this.amount, this.amountColor,
+    super.key, required this.iconPath, required this.title, required this.date, required this.cat, required this.amount, this.amountColor, this.bgColor,
   });
 final String iconPath;
 final String title;
@@ -13,6 +13,7 @@ final String date;
 final String cat;
 final String amount;
 final Color? amountColor;
+final Color? bgColor;
 
 
 
@@ -22,6 +23,7 @@ final Color? amountColor;
      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         AppIconButton(path:iconPath,
+        bgColor: bgColor ?? AppColors.lightBlueButton ,
         iconColor: AppColors.background,
         iconWidth: 23,
         bgWidth: 57,
@@ -32,7 +34,6 @@ final Color? amountColor;
          crossAxisAlignment: CrossAxisAlignment.start,
          children: [
            Text(title,style: TextStyles.body_15.copyWith(
-                         fontWeight: FontWeight.w600,
                                       color:AppColors.lettersAndIcons
            ),),
            Text(date,
@@ -62,7 +63,6 @@ final Color? amountColor;
                color: AppColors.mainGreen,
              ),
           Text(amount,style: TextStyles.body_15.copyWith(
-                         fontWeight: FontWeight.w600,
                          color: amountColor??AppColors.lettersAndIcons
            ),),
       ],

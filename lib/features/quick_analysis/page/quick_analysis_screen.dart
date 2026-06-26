@@ -26,7 +26,7 @@ class QuickAnalysisScreen extends StatelessWidget {
               TargetCard(
                 title: "Savings \nOn goals",
                 percent: 50,
-                center: CustomSvgPicture(path: AppAssets.car, width: 50),
+                center: CustomSvgPicture(path: AppAssets.car, width: 50), radius: 48,
               ),
               VerticalDivider(
                 width: 20,
