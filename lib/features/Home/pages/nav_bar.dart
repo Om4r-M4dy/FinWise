@@ -3,7 +3,6 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/features/Home/model/navBar_screens.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 // ignore: must_be_immutable
 class NavBar extends StatefulWidget {
@@ -45,11 +44,11 @@ class _NavBarState extends State<NavBar> {
           unselectedFontSize: 0,
           type: BottomNavigationBarType.fixed,
           items: [
-            nav_item(AppAssets.home),
-            nav_item(AppAssets.analysis),
-            nav_item(AppAssets.transactions),
-            nav_item(AppAssets.category),
-            nav_item(AppAssets.profile),
+            NavItem(AppAssets.home),
+            NavItem(AppAssets.analysis),
+            NavItem(AppAssets.transactions),
+            NavItem(AppAssets.category),
+            NavItem(AppAssets.profile),
           ],
           onTap: (index) {
             setState(() {
@@ -61,7 +60,8 @@ class _NavBarState extends State<NavBar> {
     );
   }
 
-  BottomNavigationBarItem nav_item(String path) {
+  // ignore: non_constant_identifier_names
+  BottomNavigationBarItem NavItem(String path) {
     return BottomNavigationBarItem(
       label: '',
       icon: CustomSvgPicture(path: path),

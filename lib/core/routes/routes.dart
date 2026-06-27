@@ -192,7 +192,7 @@ class Routes {
       ),
       GoRoute(
         path: transactionScreen, 
-        builder: (context,state) => const TransactionScreen()
+        builder: (context,state) =>  TransactionScreen()
       ),
     ],
   );
