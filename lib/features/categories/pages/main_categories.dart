@@ -23,100 +23,102 @@ class MainCategories extends StatelessWidget {
           totalExpanse: 5000,
           totalBalance: 7200,
         ),
-        bottomSection: Column(
-          children: [
-            Gap(13),
-            Row(
-              children: [
-                CategoryItem(
-                  icon: AppAssets.food,
-                  label: "Food",
-                  onTap: () {
-                    pushTo(context, Routes.foodScreen);
-                  },
-                ),
-                Gap(21),
-                CategoryItem(
-                  icon: AppAssets.transport,
-                  label: "Transport",
-                  bgColor: AppColors.lightBlueButton,
-                  onTap: () {
-                    pushTo(context, Routes.transportScreen);
-                  },
-                ),
-                Gap(21),
-                CategoryItem(
-                  icon: AppAssets.medicine,
-                  label: "Medicine",
-                  bgColor: AppColors.lightBlueButton,
-                  onTap: () {
-                    pushTo(context, Routes.medicineScreen);
-                  },
-                ),
-              ],
-            ),
-            Gap(38),
-            Row(
-              children: [
-                CategoryItem(
-                  icon: AppAssets.groceries,
-                  label: "Groceries",
-                  bgColor: AppColors.lightBlueButton,
-                  onTap: () {
-                    pushTo(context, Routes.groceriesScreen);
-                  },
-                ),
-                Gap(21),
-
-                CategoryItem(
-                  icon: AppAssets.rent,
-                  label: "Rent",
-                  bgColor: AppColors.lightBlueButton,
-                  onTap: () {
-                    pushTo(context, Routes.rentScreen);
-                  },
-                ),
-                Gap(21),
-                CategoryItem(
-                  icon: AppAssets.gift,
-                  label: "Gifts",
-                  bgColor: AppColors.lightBlueButton,
-                  onTap: () {
-                    pushTo(context, Routes.giftsScreen);
-                  },
-                ),
-              ],
-            ),
-            Gap(38),
-            Row(
-              children: [
-                CategoryItem(
-                  icon: AppAssets.saving,
-                  label: "Savings",
-                  bgColor: AppColors.lightBlueButton,
-                  onTap: () {
-                    pushTo(context, Routes.savings);
-                  },
-                ),
-                Gap(21),
-
-                CategoryItem(
-                  icon: AppAssets.entertainment,
-                  label: "Leisure",
-                  bgColor: AppColors.lightBlueButton,
-                  onTap: () {
-                    pushTo(context, Routes.entertainmentScreen);
-                  },
-                ),
-                Gap(21),
-                CategoryItem(
-                  icon: AppAssets.more,
-                  label: "More",
-                  bgColor: AppColors.lightBlueButton,
-                ),
-              ],
-            ),
-          ],
+        bottomSection: SingleChildScrollView(
+          child: Column(
+            children: [
+              Gap(13),
+              Row(
+                children: [
+                  CategoryItem(
+                    icon: AppAssets.food,
+                    label: "Food",
+                    onTap: () {
+                      pushTo(context, Routes.foodScreen);
+                    },
+                  ),
+                  Gap(21),
+                  CategoryItem(
+                    icon: AppAssets.transport,
+                    label: "Transport",
+                    bgColor: AppColors.lightBlueButton,
+                    onTap: () {
+                      pushTo(context, Routes.transportScreen);
+                    },
+                  ),
+                  Gap(21),
+                  CategoryItem(
+                    icon: AppAssets.medicine,
+                    label: "Medicine",
+                    bgColor: AppColors.lightBlueButton,
+                    onTap: () {
+                      pushTo(context, Routes.medicineScreen);
+                    },
+                  ),
+                ],
+              ),
+              Gap(38),
+              Row(
+                children: [
+                  CategoryItem(
+                    icon: AppAssets.groceries,
+                    label: "Groceries",
+                    bgColor: AppColors.lightBlueButton,
+                    onTap: () {
+                      pushTo(context, Routes.groceriesScreen);
+                    },
+                  ),
+                  Gap(21),
+          
+                  CategoryItem(
+                    icon: AppAssets.rent,
+                    label: "Rent",
+                    bgColor: AppColors.lightBlueButton,
+                    onTap: () {
+                      pushTo(context, Routes.rentScreen);
+                    },
+                  ),
+                  Gap(21),
+                  CategoryItem(
+                    icon: AppAssets.gift,
+                    label: "Gifts",
+                    bgColor: AppColors.lightBlueButton,
+                    onTap: () {
+                      pushTo(context, Routes.giftsScreen);
+                    },
+                  ),
+                ],
+              ),
+              Gap(38),
+              Row(
+                children: [
+                  CategoryItem(
+                    icon: AppAssets.saving,
+                    label: "Savings",
+                    bgColor: AppColors.lightBlueButton,
+                    onTap: () {
+                      pushTo(context, Routes.savings);
+                    },
+                  ),
+                  Gap(21),
+          
+                  CategoryItem(
+                    icon: AppAssets.entertainment,
+                    label: "Leisure",
+                    bgColor: AppColors.lightBlueButton,
+                    onTap: () {
+                      pushTo(context, Routes.entertainmentScreen);
+                    },
+                  ),
+                  Gap(21),
+                  CategoryItem(
+                    icon: AppAssets.more,
+                    label: "More",
+                    bgColor: AppColors.lightBlueButton,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
