@@ -20,7 +20,7 @@ abstract class AppThemes {
     inputDecorationTheme: InputDecorationTheme(
       fillColor: AppColors.lightGreen,
       filled: true,
-      hintStyle: TextStyles.caption2_13.copyWith(color: AppColors.dark05),
+      hintStyle: TextStyles.bodySmall.copyWith(color: AppColors.dark05),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide.none,

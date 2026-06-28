@@ -43,7 +43,7 @@ class Travel extends StatelessWidget {
                 const Gap(6),
                 Text(
                   "30% of your expenses, looks good.",
-                  style: TextStyles.body_15,
+                  style: TextStyles.bodyMedium,
                 ),
               ],
             ),
@@ -53,7 +53,7 @@ class Travel extends StatelessWidget {
               children: [
                 Text(
                   "April",
-                  style: TextStyles.body_15.copyWith(
+                  style: TextStyles.bodyMedium.copyWith(
                     fontWeight: FontWeight.w500,
                     color: AppColors.lettersAndIcons,
                   ),
@@ -95,7 +95,7 @@ class Travel extends StatelessWidget {
             Gap(10),
             Center(
               child: MainButton(
-                textStyle: TextStyles.body_15.copyWith(
+                textStyle: TextStyles.bodyMedium.copyWith(
                   color: Color(0xff093030),
                 ),
                 size: ButtonSize.small,

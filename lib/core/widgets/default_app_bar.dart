@@ -23,9 +23,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
         icon: CustomSvgPicture(path: AppAssets.back),
       ),
-      title: Center(
-        child: Text(title, style: TextStyles.title_20),
-      ),
+      title: Center(child: Text(title, style: TextStyles.bodyLarge)),
       actions: [
         IconButton(
           onPressed: () {

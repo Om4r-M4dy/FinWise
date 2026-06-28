@@ -77,7 +77,7 @@ class PlotsSections extends StatelessWidget {
                                 ),
                                 child: Text(
                                   '${value.toInt()}k',
-                                  style: TextStyles.caption3_12.copyWith(
+                                  style: TextStyles.bodySmall.copyWith(
                                     color: AppColors.lightBlueButton,
                                   ),
                                 ),
@@ -103,7 +103,7 @@ class PlotsSections extends StatelessWidget {
                                   space: 5,
                                   child: Text(
                                     weekTitles[index],
-                                    style: TextStyles.caption3_12.copyWith(
+                                    style: TextStyles.bodySmall.copyWith(
                                       color: AppColors.darkGreen,
                                     ),
                                   ),
@@ -158,7 +158,7 @@ class _PlotHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(plotTitle ?? "Income & Expenses", style: TextStyles.body_15),
+        Text(plotTitle ?? "Income & Expenses", style: TextStyles.bodySmall),
         Row(
           children: [
             IconButton(

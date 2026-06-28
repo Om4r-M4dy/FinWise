@@ -84,12 +84,12 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 8),
-      child: Text(title, style: TextStyles.subtitle_17),
+      child: Text(title, style: TextStyles.bodyMedium),
     );
   }
 
   Widget _buildBodyText(String text) {
-    return Text(text, style: TextStyles.caption2_13);
+    return Text(text, style: TextStyles.bodySmall);
   }
 
   Widget _buildBulletPoint(String text) {
@@ -98,7 +98,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(" • ", style: TextStyles.body_15),
+          const Text(" • ", style: TextStyles.bodyMedium),
           Expanded(child: Text(text)),
         ],
       ),

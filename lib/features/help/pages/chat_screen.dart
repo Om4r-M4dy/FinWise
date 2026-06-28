@@ -58,7 +58,7 @@ class ChatScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       hintText: "Write Here...",
-                      hintStyle: TextStyles.caption3_12.copyWith(
+                      hintStyle: TextStyles.bodySmall.copyWith(
                         color: Colors.grey,
                       ),
                       filled: true,
@@ -83,7 +83,7 @@ class ChatScreen extends StatelessWidget {
                 onTap: () {},
                 child: CustomSvgPicture(path: AppAssets.share),
               ),
-              Gap(5)
+              Gap(5),
             ],
           ),
         ),
@@ -105,7 +105,7 @@ class ChatScreen extends StatelessWidget {
             bottomRight: Radius.circular(0),
           ),
         ),
-        child: Text(text, style: TextStyles.body_15),
+        child: Text(text, style: TextStyles.bodyMedium),
       ),
     );
   }
@@ -125,7 +125,7 @@ class ChatScreen extends StatelessWidget {
             bottomRight: Radius.circular(20),
           ),
         ),
-        child: Text(text, style: TextStyles.body_15),
+        child: Text(text, style: TextStyles.bodyMedium),
       ),
     );
   }

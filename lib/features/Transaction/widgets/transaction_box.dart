@@ -36,7 +36,9 @@ class _TransactionBoxState extends State<TransactionBox> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected? AppColors.oceanBlueButton: AppColors.background,
+            color: isSelected
+                ? AppColors.oceanBlueButton
+                : AppColors.background,
             borderRadius: BorderRadius.circular(14),
           ),
           height: 100,
@@ -48,12 +50,23 @@ class _TransactionBoxState extends State<TransactionBox> {
                 height: 25,
                 width: 25,
                 path: widget.pathIcon ?? '',
-                color: isSelected? AppColors.background: widget.iconColor,
+                color: isSelected ? AppColors.background : widget.iconColor,
               ),
-              Text(widget.titel, style: TextStyles.body_15.copyWith(color: isSelected? AppColors.background:AppColors.lettersAndIcons)),
+              Text(
+                widget.titel,
+                style: TextStyles.bodyMedium.copyWith(
+                  color: isSelected
+                      ? AppColors.background
+                      : AppColors.lettersAndIcons,
+                ),
+              ),
               Text(
                 '\$${widget.palance}',
-                style: TextStyles.title_20.copyWith(color:isSelected? AppColors.background: widget.palanceColor),
+                style: TextStyles.bodyLarge.copyWith(
+                  color: isSelected
+                      ? AppColors.background
+                      : widget.palanceColor,
+                ),
               ),
             ],
           ),

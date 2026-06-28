@@ -28,7 +28,7 @@ class AddExpenses extends StatelessWidget {
                   margin: EdgeInsets.only(left: 10),
                   child: Text(
                     "Date",
-                    style: TextStyles.body_15.copyWith(
+                    style: TextStyles.bodyMedium.copyWith(
                       color: AppColors.lettersAndIcons,
                     ),
                   ),
@@ -42,7 +42,7 @@ class AddExpenses extends StatelessWidget {
                       filled: true,
                       fillColor: AppColors.lightGreen,
                       hintText: "April 30 ,2024",
-                      hintStyle: TextStyles.body_15.copyWith(
+                      hintStyle: TextStyles.bodyMedium.copyWith(
                         color: AppColors.lettersAndIcons,
                       ),
                       suffixIcon: Container(
@@ -61,7 +61,7 @@ class AddExpenses extends StatelessWidget {
                   margin: EdgeInsets.only(left: 10),
                   child: Text(
                     "Category",
-                    style: TextStyles.body_15.copyWith(
+                    style: TextStyles.bodyMedium.copyWith(
                       color: AppColors.lettersAndIcons,
                     ),
                   ),
@@ -72,7 +72,7 @@ class AddExpenses extends StatelessWidget {
                   child: DropdownButtonFormField(
                     hint: Text(
                       "Select the category",
-                      style: TextStyles.body_15.copyWith(
+                      style: TextStyles.bodyMedium.copyWith(
                         color: AppColors.darkGreen,
                         fontWeight: FontWeight.w400,
                       ),
@@ -100,7 +100,7 @@ class AddExpenses extends StatelessWidget {
                         value: "1",
                         child: Text(
                           "Category1",
-                          style: TextStyles.body_15.copyWith(
+                          style: TextStyles.bodyMedium.copyWith(
                             color: AppColors.lettersAndIcons,
                           ),
                         ),
@@ -109,7 +109,7 @@ class AddExpenses extends StatelessWidget {
                         value: "2",
                         child: Text(
                           "Category2",
-                          style: TextStyles.body_15.copyWith(
+                          style: TextStyles.bodyMedium.copyWith(
                             color: AppColors.lettersAndIcons,
                           ),
                         ),
@@ -118,7 +118,7 @@ class AddExpenses extends StatelessWidget {
                         value: "3",
                         child: Text(
                           "Category3",
-                          style: TextStyles.body_15.copyWith(
+                          style: TextStyles.bodyMedium.copyWith(
                             color: AppColors.lettersAndIcons,
                           ),
                         ),
@@ -133,7 +133,7 @@ class AddExpenses extends StatelessWidget {
                   margin: EdgeInsets.only(left: 10),
                   child: Text(
                     "Amount",
-                    style: TextStyles.body_15.copyWith(
+                    style: TextStyles.bodyMedium.copyWith(
                       color: AppColors.lettersAndIcons,
                     ),
                   ),
@@ -146,7 +146,7 @@ class AddExpenses extends StatelessWidget {
                       filled: true,
                       fillColor: AppColors.lightGreen,
                       hintText: "\$26.00",
-                      hintStyle: TextStyles.body_15.copyWith(
+                      hintStyle: TextStyles.bodyMedium.copyWith(
                         color: AppColors.lettersAndIcons,
                       ),
                       border: OutlineInputBorder(
@@ -161,7 +161,7 @@ class AddExpenses extends StatelessWidget {
                   margin: EdgeInsets.only(left: 10),
                   child: Text(
                     "Exspense Title",
-                    style: TextStyles.body_15.copyWith(
+                    style: TextStyles.bodyMedium.copyWith(
                       color: AppColors.lettersAndIcons,
                     ),
                   ),
@@ -174,7 +174,7 @@ class AddExpenses extends StatelessWidget {
                       filled: true,
                       fillColor: AppColors.lightGreen,
                       hintText: "Dinner",
-                      hintStyle: TextStyles.body_15.copyWith(
+                      hintStyle: TextStyles.bodyMedium.copyWith(
                         color: AppColors.lettersAndIcons,
                       ),
                       border: OutlineInputBorder(
@@ -192,7 +192,7 @@ class AddExpenses extends StatelessWidget {
                     filled: true,
                     fillColor: AppColors.lightGreen,
                     hintText: "Enter message",
-                    hintStyle: TextStyles.body_15.copyWith(
+                    hintStyle: TextStyles.bodyMedium.copyWith(
                       color: AppColors.mainGreen,
                     ),
                     border: OutlineInputBorder(
@@ -207,7 +207,7 @@ class AddExpenses extends StatelessWidget {
                     size: ButtonSize.small,
                     text: "Save",
                     onPress: () {},
-                    textStyle: TextStyles.body_15.copyWith(
+                    textStyle: TextStyles.bodyMedium.copyWith(
                       color: AppColors.lettersAndIcons,
                     ),
                   ),

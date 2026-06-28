@@ -11,7 +11,8 @@ class SavingsSubItem extends StatelessWidget {
     required this.label,
     super.key,
     this.height = 90,
-    this.width = double.infinity,required this.onTap,
+    this.width = double.infinity,
+    required this.onTap,
   });
   final Color bgColor;
   final String icon;
@@ -23,7 +24,7 @@ class SavingsSubItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:onTap ,
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -39,7 +40,9 @@ class SavingsSubItem extends StatelessWidget {
           Gap(1),
           Text(
             label,
-            style: TextStyles.body_15.copyWith(color: AppColors.lettersAndIcons),
+            style: TextStyles.bodyMedium.copyWith(
+              color: AppColors.lettersAndIcons,
+            ),
           ),
         ],
       ),

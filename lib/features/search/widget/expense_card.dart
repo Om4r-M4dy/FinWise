@@ -34,13 +34,13 @@ class ExpenseCard extends StatelessWidget {
             children: [
               Text(
                 'Dinner',
-                style: TextStyles.body_15,
+                style: TextStyles.bodyMedium,
                 textAlign: TextAlign.start,
               ),
               Gap(2),
               Text(
                 '18:27 - April 30',
-                style: TextStyles.caption3_12.copyWith(
+                style: TextStyles.bodySmall.copyWith(
                   color: AppColors.oceanBlueButton,
                 ),
               ),
@@ -49,7 +49,7 @@ class ExpenseCard extends StatelessWidget {
           Spacer(),
           Text(
             '-\$26,00',
-            style: TextStyles.body_15.copyWith(
+            style: TextStyles.bodyMedium.copyWith(
               color: AppColors.oceanBlueButton,
             ),
           ),

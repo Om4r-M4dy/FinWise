@@ -35,7 +35,7 @@ class GroceriesScreen extends StatelessWidget {
                 children: [
                   Text(
                     "March",
-                    style: TextStyles.body_15.copyWith(
+                    style: TextStyles.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
                       color: AppColors.lettersAndIcons,
                     ),
@@ -66,7 +66,7 @@ class GroceriesScreen extends StatelessWidget {
 
               Text(
                 "February",
-                style: TextStyles.body_15.copyWith(
+                style: TextStyles.bodyMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   color: AppColors.lettersAndIcons,
                 ),
@@ -106,7 +106,7 @@ class GroceriesScreen extends StatelessWidget {
                   onPress: () {
                     pushTo(context, Routes.addExpenses);
                   },
-                  textStyle: TextStyles.body_15.copyWith(
+                  textStyle: TextStyles.bodyMedium.copyWith(
                     color: AppColors.lettersAndIcons,
                   ),
                 ),

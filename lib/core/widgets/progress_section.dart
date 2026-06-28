@@ -55,7 +55,7 @@ class ProgressSection extends StatelessWidget {
             const Gap(6),
             Text(
               "30% of your expenses, looks good.",
-              style: TextStyles.body_15,
+              style: TextStyles.bodyMedium,
             ),
           ],
         ),
@@ -82,7 +82,7 @@ class TotalMoney extends StatelessWidget {
             const Gap(7),
             Text(
               isExpanse ? "Total Expanse" : "Total Balance",
-              style: TextStyles.caption2_13,
+              style: TextStyles.bodySmall,
             ),
           ],
         ),
@@ -90,7 +90,7 @@ class TotalMoney extends StatelessWidget {
           isExpanse
               ? "- \$${total.toStringAsFixed(2)}"
               : "\$${total.toStringAsFixed(2)}",
-          style: TextStyles.headline_24.copyWith(
+          style: TextStyles.headlineLarge.copyWith(
             color: isExpanse ? AppColors.oceanBlueButton : AppColors.background,
           ),
         ),

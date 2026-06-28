@@ -30,13 +30,13 @@ class AnalysisHome extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyles.caption3_12.copyWith(
+              style: TextStyles.bodySmall.copyWith(
                 color: AppColors.lettersAndIcons,
               ),
             ),
             Text(
               money,
-              style: TextStyles.body_15.copyWith(
+              style: TextStyles.bodyMedium.copyWith(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: moneyColor ?? AppColors.lettersAndIcons,

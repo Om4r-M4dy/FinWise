@@ -34,7 +34,7 @@ class ProfileOption extends StatelessWidget {
               borderRadius: 22,
             ),
             Gap(13),
-            Text(title, style: TextStyles.body_15),
+            Text(title, style: TextStyles.bodyMedium),
           ],
         ),
       ),

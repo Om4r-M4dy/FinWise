@@ -75,29 +75,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     alignment: Alignment.center,
                     child: Text(
                       EditProfileScreen.name,
-                      style: TextStyles.title_20,
+                      style: TextStyles.bodyLarge,
                     ),
                   ),
                   Align(
                     alignment: Alignment.center,
                     child: Text(
                       'ID: ${EditProfileScreen.id}',
-                      style: TextStyles.caption2_13,
+                      style: TextStyles.bodySmall,
                     ),
                   ),
                   Gap(30),
 
-                  Text('Account Settings', style: TextStyles.title_20),
+                  Text('Account Settings', style: TextStyles.bodyLarge),
                   Gap(30),
-                  Text('Username', style: TextStyles.body_15),
+                  Text('Username', style: TextStyles.bodyMedium),
                   Gap(13),
                   CustomTextFormField(hintText: 'John Smith'),
                   Gap(17),
-                  Text('phone', style: TextStyles.body_15),
+                  Text('phone', style: TextStyles.bodyMedium),
                   Gap(13),
                   CustomTextFormField(hintText: '+44 555 5555 55'),
                   Gap(17),
-                  Text('email address', style: TextStyles.body_15),
+                  Text('email address', style: TextStyles.bodyMedium),
                   Gap(13),
                   CustomTextFormField(hintText: 'example@example.com'),
                   Gap(40),
@@ -107,10 +107,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   _rowCustomSwitch('Turn dark Theme', 1),
                   Gap(36),
                   Center(
-                    child: MainButton(text: 'Update Profile', onPress: () {
-                      
-                    },),
-                  )
+                    child: MainButton(text: 'Update Profile', onPress: () {}),
+                  ),
                 ],
               ),
             ),
@@ -120,12 +118,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-
-
   Row _rowCustomSwitch(String title, int targetSwitch) {
     return Row(
       children: [
-        Text(title, style: TextStyles.body_15),
+        Text(title, style: TextStyles.bodyMedium),
         Spacer(),
         Switch(
           value: targetSwitch == 0 ? isActiveNotification : isActiveDarkThem,

@@ -20,7 +20,6 @@ class AnalysisScreen extends StatefulWidget {
 class _AnalysisScreenState extends State<AnalysisScreen> {
   int index = 0;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +52,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
               Gap(30),
               IncomeExpenseRow(),
               Gap(33),
-              Text("My Targets", style: TextStyles.body_15),
+              Text("My Targets", style: TextStyles.bodyMedium),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: SingleChildScrollView(
@@ -65,27 +64,37 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                       SizedBox(
                         width: 169,
                         height: 167,
-                        child: TargetCard(title: "Travel", percent: 30, radius: 50,),
+                        child: TargetCard(
+                          title: "Travel",
+                          percent: 30,
+                          radius: 50,
+                        ),
                       ),
                       Gap(20),
-          
+
                       SizedBox(
                         width: 169,
                         height: 167,
-                        child: TargetCard(title: "Car", percent: 50, radius: 50,),
+                        child: TargetCard(
+                          title: "Car",
+                          percent: 50,
+                          radius: 50,
+                        ),
                       ),
                       Gap(20),
                       SizedBox(
                         width: 169,
                         height: 167,
-                        child: TargetCard(title: "Car", percent: 50, radius: 50,),
+                        child: TargetCard(
+                          title: "Car",
+                          percent: 50,
+                          radius: 50,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-          
-          
             ],
           ),
         ),

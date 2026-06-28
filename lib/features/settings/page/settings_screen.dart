@@ -16,55 +16,71 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: DefaultAppBar(title: "Settings"),
       body: MyBodyView(
-        
         bottomSection: SingleChildScrollView(
           child: Column(
             children: [
-          SettingChoice(icon: AppAssets.notification,title: "Notification Settings",onPress: () {
-            pushTo(context,Routes.notificationSettingsScreen);
-            
-          },),
-          SettingChoice(icon: AppAssets.passSettings,title: "Password Settings",onPress: () {
-            pushTo(context,Routes.notificationSettingsScreen);
-            
-          },),
-          SettingChoice(icon: AppAssets.profile,title: "Delete Account ",onPress: () {
-            pushTo(context,Routes.deleteAccountScreen);
-            
-          },),
-          
+              SettingChoice(
+                icon: AppAssets.notification,
+                title: "Notification Settings",
+                onPress: () {
+                  pushTo(context, Routes.notificationSettingsScreen);
+                },
+              ),
+              SettingChoice(
+                icon: AppAssets.passSettings,
+                title: "Password Settings",
+                onPress: () {
+                  pushTo(context, Routes.notificationSettingsScreen);
+                },
+              ),
+              SettingChoice(
+                icon: AppAssets.profile,
+                title: "Delete Account ",
+                onPress: () {
+                  pushTo(context, Routes.deleteAccountScreen);
+                },
+              ),
             ],
           ),
         ),
-        ),
+      ),
     );
   }
 }
 
 class SettingChoice extends StatelessWidget {
   const SettingChoice({
-    super.key, required this.icon, required this.title, required this.onPress,
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.onPress,
   });
-final String icon;
-final String title;
-final void Function()? onPress;
+  final String icon;
+  final String title;
+  final void Function()? onPress;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-    leading:Container(
-      height: 31,
-      width: 31,
-      padding: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.mainGreen,
-        borderRadius: BorderRadius.circular(30)
-      ), child:  CustomSvgPicture(path: icon),),
-    title: Text(title,style: TextStyles.body_15,),
-    trailing: 
-    IconButton(
-      onPressed: onPress,
-      icon: Icon(Icons.arrow_forward_ios,weight: 7,color: AppColors.lettersAndIcons,)),
+      leading: Container(
+        height: 31,
+        width: 31,
+        padding: EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppColors.mainGreen,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: CustomSvgPicture(path: icon),
+      ),
+      title: Text(title, style: TextStyles.bodyMedium),
+      trailing: IconButton(
+        onPressed: onPress,
+        icon: Icon(
+          Icons.arrow_forward_ios,
+          weight: 7,
+          color: AppColors.lettersAndIcons,
+        ),
+      ),
     );
   }
 }

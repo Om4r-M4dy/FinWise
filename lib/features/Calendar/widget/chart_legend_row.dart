@@ -44,7 +44,7 @@ class ChartIndicator extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           text,
-          style: TextStyles.caption1_14.copyWith(fontWeight: FontWeight.w600),
+          style: TextStyles.bodySmall.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
