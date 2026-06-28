@@ -25,66 +25,68 @@ class Savings extends StatelessWidget {
           totalExpanse: 5000,
           totalBalance: 7200,
         ),
-        bottomSection: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: SavingsSubItem(
-                    icon: AppAssets.travel,
-                    bgColor: AppColors.oceanBlueButton,
-                    label: "Travel",
-                    onTap: () {
-                      pushTo(context, Routes.travel);
-                    },
+        bottomSection: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: SavingsSubItem(
+                      icon: AppAssets.travel,
+                      bgColor: AppColors.oceanBlueButton,
+                      label: "Travel",
+                      onTap: () {
+                        pushTo(context, Routes.travel);
+                      },
+                    ),
                   ),
-                ),
-                Gap(15),
-                Expanded(
-                  child: SavingsSubItem(
-                    icon: AppAssets.newHome,
-                    label: "New House",
-                    onTap: () {
-                      pushTo(context, Routes.newHouse);
-                    },
+                  Gap(15),
+                  Expanded(
+                    child: SavingsSubItem(
+                      icon: AppAssets.newHome,
+                      label: "New House",
+                      onTap: () {
+                        pushTo(context, Routes.newHouse);
+                      },
+                    ),
                   ),
-                ),
-                Gap(15),
-                Expanded(
-                  child: SavingsSubItem(
-                    icon: AppAssets.car,
-                    label: "Car",
-                    onTap: () {
-                      pushTo(context, Routes.car);
-                    },
+                  Gap(15),
+                  Expanded(
+                    child: SavingsSubItem(
+                      icon: AppAssets.car,
+                      label: "Car",
+                      onTap: () {
+                        pushTo(context, Routes.car);
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Gap(30),
-            SavingsSubItem(
-              icon: AppAssets.wedding,
-              label: "Wedding",
-              width: 100,
-              height: 95,
-              onTap: () {
-                pushTo(context, Routes.wedding);
-              },
-            ),
-
-            Gap(170),
-            Center(
-              child: MainButton(
-                size: ButtonSize.small,
-                text: "Add More",
-                textStyle: TextStyles.body_15.copyWith(
-                  color: Color(0xff093030),
-                ),
-                onPress: () {},
+                ],
               ),
-            ),
-          ],
+              Gap(30),
+              SavingsSubItem(
+                icon: AppAssets.wedding,
+                label: "Wedding",
+                width: 100,
+                height: 95,
+                onTap: () {
+                  pushTo(context, Routes.wedding);
+                },
+              ),
+          
+              Gap(170),
+              Center(
+                child: MainButton(
+                  size: ButtonSize.small,
+                  text: "Add More",
+                  textStyle: TextStyles.body_15.copyWith(
+                    color: Color(0xff093030),
+                  ),
+                  onPress: () {},
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

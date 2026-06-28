@@ -65,20 +65,20 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                       SizedBox(
                         width: 169,
                         height: 167,
-                        child: TargetCard(title: "Travel", percent: 30),
+                        child: TargetCard(title: "Travel", percent: 30, radius: 50,),
                       ),
                       Gap(20),
           
                       SizedBox(
                         width: 169,
                         height: 167,
-                        child: TargetCard(title: "Car", percent: 50),
+                        child: TargetCard(title: "Car", percent: 50, radius: 50,),
                       ),
                       Gap(20),
                       SizedBox(
                         width: 169,
                         height: 167,
-                        child: TargetCard(title: "Car", percent: 50),
+                        child: TargetCard(title: "Car", percent: 50, radius: 50,),
                       ),
                     ],
                   ),

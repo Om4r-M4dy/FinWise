@@ -1,5 +1,7 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -120,7 +122,7 @@ class PlotsSections extends StatelessWidget {
                           strokeWidth: .5,
                           dashArray: [5, 5],
                         ),
-                        horizontalInterval:maxY%2==0?maxY /3:maxY /2,
+                        horizontalInterval: maxY % 2 == 0 ? maxY / 3 : maxY / 2,
                       ),
                       borderData: FlBorderData(
                         show: true,
@@ -160,12 +162,16 @@ class _PlotHeader extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                pushTo(context, Routes.searchScreen);
+              },
               icon: const CustomSvgPicture(path: AppAssets.searchButton),
             ),
 
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                pushTo(context, Routes.calendarScreen);
+              },
               icon: const CustomSvgPicture(path: AppAssets.calender),
             ),
           ],

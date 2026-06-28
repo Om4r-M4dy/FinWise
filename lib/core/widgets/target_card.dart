@@ -5,31 +5,46 @@ import 'package:gap/gap.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class TargetCard extends StatelessWidget {
-  const TargetCard({super.key, required this.title, required this.percent, this.center});
-final String title;
-final double percent;
-final Widget? center;
+  const TargetCard({
+    super.key,
+    required this.title,
+    required this.percent,
+    this.center,
+    required this.radius, this.titelStyle,
+  });
+  final String title;
+  final double percent;
+  final double radius;
+  final Widget? center;
+  final TextStyle? titelStyle;
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color:center!=null?null :AppColors.lightBlueButton,
+        color: center != null ? null : AppColors.lightBlueButton,
         borderRadius: BorderRadius.circular(50),
       ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularPercentIndicator(
             backgroundColor: AppColors.background,
-                        radius: 45,
-                        lineWidth: 5.0,
-                        percent: percent/100,
-                 center:center?? Text("${(percent ).toInt()}%", style: TextStyles.title_20), 
-                        progressColor: AppColors.oceanBlueButton,
-                      ),
-                    Gap(5),
-                      Text(title,maxLines: 2 ,style: TextStyles.body_15.copyWith(color: center!=null?AppColors.dark05:Color(0xffF1FFF3)),),
-                       
+            radius: radius,
+            lineWidth: 5.0,
+            percent: percent / 100,
+            center:
+                center ??
+                Text("${(percent).toInt()}%", style: TextStyles.title_20),
+            progressColor: AppColors.oceanBlueButton,
+          ),
+          Gap(5),
+          Text(
+            title,
+            maxLines: 2,
+            style: titelStyle!=null? titelStyle: TextStyles.body_15.copyWith(
+              color: center != null ? AppColors.dark05 : Color(0xffF1FFF3),
+            ),
+          ),
         ],
       ),
     );
