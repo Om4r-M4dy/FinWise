@@ -34,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
               child: MainButton(
                 text: 'Spends',
                 size: ButtonSize.small,
-                textStyle: TextStyles.body_15,
+                textStyle: TextStyles.bodyMedium,
                 onPress: () {
                   setState(() {
                     _currentView = DashboardView.spends;
@@ -50,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
               child: MainButton(
                 text: 'Categories',
                 size: ButtonSize.small,
-                textStyle: TextStyles.body_15,
+                textStyle: TextStyles.bodyMedium,
                 onPress: () {
                   setState(() {
                     _currentView = DashboardView.categories;

@@ -35,7 +35,7 @@ class GiftsScreen extends StatelessWidget {
                 children: [
                   Text(
                     "April",
-                    style: TextStyles.body_15.copyWith(
+                    style: TextStyles.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
                       color: AppColors.lettersAndIcons,
                     ),
@@ -66,7 +66,7 @@ class GiftsScreen extends StatelessWidget {
 
               Text(
                 "March",
-                style: TextStyles.body_15.copyWith(
+                style: TextStyles.bodyMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   color: AppColors.lettersAndIcons,
                 ),
@@ -94,7 +94,7 @@ class GiftsScreen extends StatelessWidget {
 
               Text(
                 "February",
-                style: TextStyles.body_15.copyWith(
+                style: TextStyles.bodyMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   color: AppColors.lettersAndIcons,
                 ),
@@ -117,7 +117,7 @@ class GiftsScreen extends StatelessWidget {
                   onPress: () {
                     pushTo(context, Routes.addExpenses);
                   },
-                  textStyle: TextStyles.body_15.copyWith(
+                  textStyle: TextStyles.bodyMedium.copyWith(
                     color: AppColors.lettersAndIcons,
                   ),
                 ),

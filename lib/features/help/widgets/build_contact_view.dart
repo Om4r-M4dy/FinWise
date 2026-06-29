@@ -33,7 +33,7 @@ class BuildContactView extends StatelessWidget {
             leading: CustomSvgPicture(path: contacts[index]['icon'] as String),
             title: Text(
               contacts[index]['name'] as String,
-              style: TextStyles.body_15,
+              style: TextStyles.bodyMedium,
             ),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {

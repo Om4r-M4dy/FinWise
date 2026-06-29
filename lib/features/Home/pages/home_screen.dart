@@ -32,8 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hi, Welcome Back', style: TextStyles.title_20),
-                    Text('Good Morning', style: TextStyles.caption1_14),
+                    Text('Hi, Welcome Back', style: TextStyles.bodyLarge),
+                    Text('Good Morning', style: TextStyles.bodySmall),
                   ],
                 ),
                 Spacer(),

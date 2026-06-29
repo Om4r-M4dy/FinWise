@@ -73,13 +73,13 @@ class Savings extends StatelessWidget {
                   pushTo(context, Routes.wedding);
                 },
               ),
-          
+
               Gap(170),
               Center(
                 child: MainButton(
                   size: ButtonSize.small,
                   text: "Add More",
-                  textStyle: TextStyles.body_15.copyWith(
+                  textStyle: TextStyles.bodyMedium.copyWith(
                     color: Color(0xff093030),
                   ),
                   onPress: () {},

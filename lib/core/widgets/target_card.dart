@@ -10,7 +10,8 @@ class TargetCard extends StatelessWidget {
     required this.title,
     required this.percent,
     this.center,
-    required this.radius, this.titelStyle,
+    required this.radius,
+    this.titelStyle,
   });
   final String title;
   final double percent;
@@ -34,16 +35,20 @@ class TargetCard extends StatelessWidget {
             percent: percent / 100,
             center:
                 center ??
-                Text("${(percent).toInt()}%", style: TextStyles.title_20),
+                Text("${(percent).toInt()}%", style: TextStyles.bodyLarge),
             progressColor: AppColors.oceanBlueButton,
           ),
           Gap(5),
           Text(
             title,
             maxLines: 2,
-            style: titelStyle!=null? titelStyle: TextStyles.body_15.copyWith(
-              color: center != null ? AppColors.dark05 : Color(0xffF1FFF3),
-            ),
+            style: titelStyle != null
+                ? titelStyle
+                : TextStyles.bodyMedium.copyWith(
+                    color: center != null
+                        ? AppColors.dark05
+                        : Color(0xffF1FFF3),
+                  ),
           ),
         ],
       ),

@@ -18,7 +18,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyBodyView(
-      topSection: SafeArea(bottom: false,
+      topSection: SafeArea(
+        bottom: false,
         child: SizedBox(
           width: double.infinity,
           height: context.screenHeight * 0.13,
@@ -44,13 +45,15 @@ class ProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
-                  Text(name, style: TextStyles.title_20),
-                  Text('ID: $id', style: TextStyles.caption2_13),
+                  Text(name, style: TextStyles.bodyLarge),
+                  Text('ID: $id', style: TextStyles.bodySmall),
                   Gap(60),
                   ProfileOption(
                     path: AppAssets.profile,
                     title: 'Edit Profile',
-                    onTap: () {pushTo(context, Routes.editProfileScreen);},
+                    onTap: () {
+                      pushTo(context, Routes.editProfileScreen);
+                    },
                   ),
                   Gap(34),
                   ProfileOption(path: AppAssets.security, title: 'Security'),

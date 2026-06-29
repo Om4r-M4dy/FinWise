@@ -32,17 +32,10 @@ class CategoryItem extends StatelessWidget {
                 color: bgColor,
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: CustomSvgPicture(
-                height: 54,
-                width: 30,
-                path: icon,
-              ),
+              child: CustomSvgPicture(height: 54, width: 30, path: icon),
             ),
             SizedBox(height: 3),
-            Text(
-              label,
-              style: TextStyles.body_15
-            ),
+            Text(label, style: TextStyles.bodyMedium),
           ],
         ),
       ),

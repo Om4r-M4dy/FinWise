@@ -41,7 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Categories', style: TextStyles.body_15),
+            Text('Categories', style: TextStyles.bodyMedium),
             Gap(7),
             CustomTextFormField(
               hintText: 'Select the category',
@@ -55,7 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
               readOnly: true,
             ),
             Gap(30),
-            Text('Date', style: TextStyles.body_15),
+            Text('Date', style: TextStyles.bodyMedium),
             Gap(7),
             CustomTextFormField(
               hintText: '30 /APR/2023',
@@ -70,7 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Gap(40),
             //Radio Button
-            Text('Report', style: TextStyles.body_15),
+            Text('Report', style: TextStyles.bodyMedium),
             Gap(9),
             RadioGroup<TransactionType>(
               //is ther any problem with this widget?
@@ -132,7 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
             activeColor: AppColors.mainGreen,
           ),
           Gap(12),
-          Text(title, style: TextStyles.subtitle_17),
+          Text(title, style: TextStyles.bodyMedium),
         ],
       ),
     );

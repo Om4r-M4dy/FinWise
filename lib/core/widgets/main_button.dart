@@ -20,8 +20,8 @@ class MainButton extends StatelessWidget {
     required this.onPress,
     this.backgroundColor = AppColors.mainGreen,
     this.size = ButtonSize.medium,
-    this.textStyle= TextStyles.title_20,
-    this.textColor=AppColors.lettersAndIcons
+    this.textStyle = TextStyles.bodyLarge,
+    this.textColor = AppColors.lettersAndIcons,
   });
 
   final String text;
@@ -40,7 +40,7 @@ class MainButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
       onPressed: onPress,
-      child: Text(text, style: textStyle.copyWith(color:textColor)),
+      child: Text(text, style: textStyle.copyWith(color: textColor)),
     );
   }
 }

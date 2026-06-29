@@ -37,10 +37,10 @@ class TransactionScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Total Balance', style: TextStyles.body_15),
+                    Text('Total Balance', style: TextStyles.bodyMedium),
                     Text(
                       '\$7,783.00',
-                      style: TextStyles.headline_24.copyWith(
+                      style: TextStyles.headlineLarge.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -69,7 +69,8 @@ class TransactionScreen extends StatelessWidget {
                     palanceColor: AppColors.oceanBlueButton,
                   ),
                 ],
-              ), back: ProgressSection(
+              ),
+              back: ProgressSection(
                 percentage: 30,
                 totalAmount: 20000.00,
                 totalExpanse: 1187.40,
@@ -85,7 +86,7 @@ class TransactionScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('April', style: TextStyles.body_15),
+                  Text('April', style: TextStyles.bodyMedium),
                   // Container(
                   //   decoration: BoxDecoration(
                   //     borderRadius: BorderRadius.circular(12.5),
@@ -97,9 +98,9 @@ class TransactionScreen extends StatelessWidget {
                   //   ),
                   // ),
                   IconButton(
-              onPressed: () {},
-              icon: const CustomSvgPicture(path: AppAssets.calender),
-            ),
+                    onPressed: () {},
+                    icon: const CustomSvgPicture(path: AppAssets.calender),
+                  ),
                 ],
               ),
               Gap(20),
@@ -145,7 +146,7 @@ class TransactionScreen extends StatelessWidget {
                 ],
               ),
               Gap(24),
-              Text('March', style: TextStyles.body_15),
+              Text('March', style: TextStyles.bodyMedium),
               Gap(18),
               Column(
                 children: [

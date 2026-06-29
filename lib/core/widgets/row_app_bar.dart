@@ -4,10 +4,8 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 
 class RowAppBar extends StatelessWidget {
-  const RowAppBar({
-    super.key, required this.title,
-  });
-  final String title ;
+  const RowAppBar({super.key, required this.title});
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,12 +18,12 @@ class RowAppBar extends StatelessWidget {
           icon: CustomSvgPicture(path: AppAssets.back),
         ),
         Spacer(),
-        Text(title, style: TextStyles.title_20),
+        Text(title, style: TextStyles.bodyLarge),
         Spacer(),
         IconButton(
-      onPressed: () {},
-      icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-    ),
+          onPressed: () {},
+          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+        ),
       ],
     );
   }

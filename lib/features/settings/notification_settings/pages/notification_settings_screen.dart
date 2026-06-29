@@ -12,52 +12,50 @@ class NotificationSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(title: "Notification Settings"),
-    body: MyBodyView(
-      bottomSection: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              NotifysettingElement(title: "General Notification",),
-              Gap(27),
-              NotifysettingElement(title: "Sound",),
+      body: MyBodyView(
+        bottomSection: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                NotifysettingElement(title: "General Notification"),
                 Gap(27),
-              NotifysettingElement(title: "Sound Call",),
+                NotifysettingElement(title: "Sound"),
                 Gap(27),
-              NotifysettingElement(title: "Vibrate",),
+                NotifysettingElement(title: "Sound Call"),
                 Gap(27),
-              NotifysettingElement(title: "Transaction Update",),
+                NotifysettingElement(title: "Vibrate"),
                 Gap(27),
-              NotifysettingElement(title: "Expense Reminder ",),
+                NotifysettingElement(title: "Transaction Update"),
                 Gap(27),
-              NotifysettingElement(title: "Budget Notifications",),
+                NotifysettingElement(title: "Expense Reminder "),
                 Gap(27),
-              NotifysettingElement(title: "Low Balance Alerts",),
-           
-           
-            ],
+                NotifysettingElement(title: "Budget Notifications"),
+                Gap(27),
+                NotifysettingElement(title: "Low Balance Alerts"),
+              ],
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 }
 
 class NotifysettingElement extends StatelessWidget {
-  const NotifysettingElement({
-    super.key, required this.title,
-  });
-final String title;
+  const NotifysettingElement({super.key, required this.title});
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title,style: TextStyles.body_15.copyWith(
-          color: Color(0xff363130),
-        ),),
-      Toggle(),
+        Text(
+          title,
+          style: TextStyles.bodyMedium.copyWith(color: Color(0xff363130)),
+        ),
+        Toggle(),
       ],
     );
   }

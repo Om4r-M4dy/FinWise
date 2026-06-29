@@ -35,7 +35,7 @@ class RentScreen extends StatelessWidget {
                 children: [
                   Text(
                     "April",
-                    style: TextStyles.body_15.copyWith(
+                    style: TextStyles.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
                       color: AppColors.lettersAndIcons,
                     ),
@@ -56,7 +56,7 @@ class RentScreen extends StatelessWidget {
 
               Text(
                 "March",
-                style: TextStyles.body_15.copyWith(
+                style: TextStyles.bodyMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   color: AppColors.lettersAndIcons,
                 ),
@@ -75,7 +75,7 @@ class RentScreen extends StatelessWidget {
 
               Text(
                 "February",
-                style: TextStyles.body_15.copyWith(
+                style: TextStyles.bodyMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   color: AppColors.lettersAndIcons,
                 ),
@@ -95,7 +95,7 @@ class RentScreen extends StatelessWidget {
 
               Text(
                 "Junuary",
-                style: TextStyles.body_15.copyWith(
+                style: TextStyles.bodyMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   color: AppColors.lettersAndIcons,
                 ),
@@ -118,7 +118,7 @@ class RentScreen extends StatelessWidget {
                   onPress: () {
                     pushTo(context, Routes.addExpenses);
                   },
-                  textStyle: TextStyles.body_15.copyWith(
+                  textStyle: TextStyles.bodyMedium.copyWith(
                     color: AppColors.lettersAndIcons,
                   ),
                 ),

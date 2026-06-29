@@ -11,7 +11,9 @@ class SavingsItemHeader extends StatelessWidget {
     required this.goal,
     required this.amountSaved,
     required this.savingsIcon,
-    required this.savingsLabel,  this.iconHeight = 30,  this.iconWidth = 55,
+    required this.savingsLabel,
+    this.iconHeight = 30,
+    this.iconWidth = 55,
   });
 
   final String goal;
@@ -19,7 +21,7 @@ class SavingsItemHeader extends StatelessWidget {
   final String savingsIcon;
   final String savingsLabel;
   final double iconHeight;
-    final double iconWidth;
+  final double iconWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class SavingsItemHeader extends StatelessWidget {
                 Gap(1),
                 Text(
                   "Goal",
-                  style: TextStyles.caption3_12.copyWith(
+                  style: TextStyles.bodySmall.copyWith(
                     color: Color(0xff052224),
                   ),
                 ),
@@ -43,7 +45,9 @@ class SavingsItemHeader extends StatelessWidget {
             Gap(3),
             Text(
               goal,
-              style: TextStyles.headline_24.copyWith(color: Color(0xff052224)),
+              style: TextStyles.headlineLarge.copyWith(
+                color: Color(0xff052224),
+              ),
             ),
             Gap(3),
             Row(
@@ -52,7 +56,7 @@ class SavingsItemHeader extends StatelessWidget {
                 Gap(1),
                 Text(
                   "Amount Saved",
-                  style: TextStyles.caption3_12.copyWith(
+                  style: TextStyles.bodySmall.copyWith(
                     color: Color(0xff052224),
                   ),
                 ),
@@ -61,7 +65,7 @@ class SavingsItemHeader extends StatelessWidget {
             Gap(3),
             Text(
               amountSaved,
-              style: TextStyles.headline_24.copyWith(
+              style: TextStyles.headlineLarge.copyWith(
                 color: AppColors.mainGreen,
               ),
             ),
@@ -87,7 +91,11 @@ class SavingsItemHeader extends StatelessWidget {
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    CustomSvgPicture(path: savingsIcon, height: iconHeight, width: iconWidth),
+                    CustomSvgPicture(
+                      path: savingsIcon,
+                      height: iconHeight,
+                      width: iconWidth,
+                    ),
                     CustomSvgPicture(
                       path: AppAssets.travelCirlce,
                       height: 107,
@@ -97,7 +105,7 @@ class SavingsItemHeader extends StatelessWidget {
                 ),
                 Text(
                   savingsLabel,
-                  style: TextStyles.body_15.copyWith(
+                  style: TextStyles.bodyMedium.copyWith(
                     color: AppColors.background,
                   ),
                 ),

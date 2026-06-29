@@ -6,11 +6,12 @@ class PercentageBar extends StatelessWidget {
   const PercentageBar({
     super.key,
     required this.percentage,
-    required this.totalAmount, this.bgColor,
+    required this.totalAmount,
+    this.bgColor,
   });
   final double percentage;
   final double totalAmount;
-final Color? bgColor;
+  final Color? bgColor;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -19,7 +20,7 @@ final Color? bgColor;
         return Container(
           height: 28,
           decoration: BoxDecoration(
-            color:bgColor?? AppColors.background,
+            color: bgColor ?? AppColors.background,
             borderRadius: BorderRadius.circular(13.5),
           ),
           child: TweenAnimationBuilder(
@@ -30,24 +31,26 @@ final Color? bgColor;
               double currentProgressWidth = maxWidth * value;
               Widget buildLabels(Color color) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 21,vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 21,
+                    vertical: 5,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "${(value * 100).toInt()}%",
-                           textAlign: TextAlign.center,
-                        style: TextStyles.caption3_12.copyWith(
-                          color: color,
-                          ),
+                        textAlign: TextAlign.center,
+                        style: TextStyles.bodySmall.copyWith(color: color),
                       ),
                       Text(
                         "\$ ${totalAmount.toStringAsFixed(2)}",
                         textAlign: TextAlign.center,
-                        style: TextStyles.caption2_13.copyWith(
+                        style: TextStyles.bodySmall.copyWith(
                           color: color,
                           fontWeight: FontWeight.w500,
-                          fontStyle: FontStyle.italic),
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ],
                   ),
@@ -66,15 +69,16 @@ final Color? bgColor;
                     ),
                   ),
                   ClipRect(
-                    child:Align(
+                    child: Align(
                       alignment: Alignment.centerLeft,
                       widthFactor: value,
                       child: SizedBox(
                         width: maxWidth,
                         child: buildLabels(AppColors.background),
                       ),
-                    ) ,)
-             ],
+                    ),
+                  ),
+                ],
               );
             },
           ),
