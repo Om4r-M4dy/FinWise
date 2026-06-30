@@ -24,9 +24,9 @@ class AnalysisScreen extends StatefulWidget {
 class _AnalysisScreenState extends State<AnalysisScreen> {
   int index = 0;
   final List<Map<String, dynamic>> _mytargets = [
-    {"title": "Travel", "percent": 30.0, "radius": 40.0},
-    {"title": "Car", "percent": 50.0, "radius": 40.0},
-    {"title": "Emergency Fund", "percent": 50.0, "radius": 40.0},
+    {"title": "Travel", "percent": 30.0, "radius": 30.0},
+    {"title": "Car", "percent": 50.0, "radius": 30.0},
+    {"title": "Emergency Fund", "percent": 50.0, "radius": 30.0},
   ];
 
   @override
@@ -46,7 +46,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         ],
       ),
       body: MyBodyView(
-          clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.hardEdge,
 
         noPadding: true,
         topSection: ProgressSection(
@@ -95,17 +95,18 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                 ),
               ),
               SizedBox(
-                height: 187,
+                height: 180,
+
                 child: ListView.builder(
                   itemCount: _mytargets.length,
                   scrollDirection: Axis.horizontal,
                   clipBehavior: Clip.none,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   itemBuilder: (context, i) {
                     return Padding(
                       padding: EdgeInsets.only(left: 6, right: 6),
                       child: SizedBox(
-                        width: 169,
+                        width: 150,
                         child: TargetCard(
                           title: _mytargets[i]["title"],
                           percent: _mytargets[i]["percent"],

@@ -21,6 +21,7 @@ class TargetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -48,7 +49,9 @@ class TargetCard extends StatelessWidget {
           Gap(10),
           Text(
             title,
-            maxLines: 2,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+
             style: titelStyle != null
                 ? titelStyle
                 : TextStyles.bodyMedium.copyWith(

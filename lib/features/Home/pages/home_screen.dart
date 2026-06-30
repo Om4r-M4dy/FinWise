@@ -1,5 +1,7 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/info_record.dart';
@@ -37,9 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 Spacer(),
-                CircleAvatar(
-                  backgroundColor: AppColors.lightGreen,
-                  child: CustomSvgPicture(path: AppAssets.notification),
+                GestureDetector(
+                  onTap: () {
+                    pushTo(context, Routes.notificationScreen);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: AppColors.lightGreen,
+                    child: CustomSvgPicture(path: AppAssets.notification),
+                  ),
                 ),
               ],
             ),
