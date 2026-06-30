@@ -69,7 +69,8 @@ class TransactionScreen extends StatelessWidget {
                     palanceColor: AppColors.oceanBlueButton,
                   ),
                 ],
-              ), back: ProgressSection(
+              ),
+              back: ProgressSection(
                 percentage: 30,
                 totalAmount: 20000.00,
                 totalExpanse: 1187.40,
@@ -97,9 +98,9 @@ class TransactionScreen extends StatelessWidget {
                   //   ),
                   // ),
                   IconButton(
-              onPressed: () {},
-              icon: const CustomSvgPicture(path: AppAssets.calender),
-            ),
+                    onPressed: () {},
+                    icon: const CustomSvgPicture(path: AppAssets.calender),
+                  ),
                 ],
               ),
               Gap(20),

@@ -1,7 +1,7 @@
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/row_app_bar.dart';
-import 'package:finwise/features/calendar/widget/dashboard.dart';
-import 'package:finwise/features/calendar/widget/app_calendar.dart';
+import 'package:finwise/features/Calendar/widget/app_calendar.dart';
+import 'package:finwise/features/Calendar/widget/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

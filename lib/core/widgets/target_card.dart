@@ -10,7 +10,8 @@ class TargetCard extends StatelessWidget {
     required this.title,
     required this.percent,
     this.center,
-    required this.radius, this.titelStyle,
+    required this.radius,
+    this.titelStyle,
   });
   final String title;
   final double percent;
@@ -21,8 +22,15 @@ class TargetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            offset: const Offset(0, 0),
+            blurRadius: 4,
+          ),
+        ],
         color: center != null ? null : AppColors.lightBlueButton,
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(40),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -37,13 +45,15 @@ class TargetCard extends StatelessWidget {
                 Text("${(percent).toInt()}%", style: TextStyles.title_20),
             progressColor: AppColors.oceanBlueButton,
           ),
-          Gap(5),
+          Gap(10),
           Text(
             title,
             maxLines: 2,
-            style: titelStyle!=null? titelStyle: TextStyles.body_15.copyWith(
-              color: center != null ? AppColors.dark05 : Color(0xffF1FFF3),
-            ),
+            style:
+                titelStyle ??
+                TextStyles.body_15.copyWith(
+                  color: center != null ? AppColors.dark05 : Color(0xffF1FFF3),
+                ),
           ),
         ],
       ),

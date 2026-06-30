@@ -25,7 +25,7 @@ class BuildAuthUI extends StatelessWidget {
         MainButton(
           text: 'Sign Up',
           onPress: () {
-            // pushTo(context, Routes.bottomNavBar);
+            pushTo(context, Routes.bottomNavBar);
           },
           backgroundColor: AppColors.lightGreen,
         ),

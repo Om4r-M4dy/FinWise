@@ -19,13 +19,18 @@ class AnalysisScreen extends StatefulWidget {
 
 class _AnalysisScreenState extends State<AnalysisScreen> {
   int index = 0;
-
+  final List<Map<String, dynamic>> _mytargets = [
+    {"title": "Travel", "percent": 30.0, "radius": 40.0},
+    {"title": "Car", "percent": 50.0, "radius": 40.0},
+    {"title": "Emergency Fund", "percent": 50.0, "radius": 40.0},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(title: "Analysis"),
       body: MyBodyView(
+        noPadding: true,
         topSection: ProgressSection(
           percentage: 30,
           totalAmount: 20000.00,
@@ -33,59 +38,66 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
           totalBalance: 7783.00,
         ),
         bottomSection: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DateHeader(
-                selectedIndex: index,
-                labels: ["Daily", "Weekly", "Monthly", "Year"],
-                onUpdate: (value) {
-                  setState(() {
-                    index = value;
-                  });
-                },
-              ),
-              Gap(30),
-              PlotsSections(
-                chartData: getCurrentChartData(index),
-                maxY: calculateMaxY(index),
-              ),
-              Gap(30),
-              IncomeExpenseRow(),
-              Gap(33),
-              Text("My Targets", style: TextStyles.body_15),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: SingleChildScrollView(
-                  clipBehavior: Clip.none,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 169,
-                        height: 167,
-                        child: TargetCard(title: "Travel", percent: 30, radius: 50,),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 37.0,
+                  vertical: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    DateHeader(
+                      selectedIndex: index,
+                      labels: ["Daily", "Weekly", "Monthly", "Year"],
+                      onUpdate: (value) {
+                        setState(() {
+                          index = value;
+                        });
+                      },
+                    ),
+                    Gap(30),
+                    PlotsSections(
+                      chartData: getCurrentChartData(index),
+                      maxY: calculateMaxY(index),
+                    ),
+                    Gap(30),
+                    IncomeExpenseRow(),
+                    Gap(33),
+                    Text(
+                      "My Targets",
+                      style: TextStyles.subtitle_17.copyWith(
+                        fontWeight: FontWeight.w500,
                       ),
-                      Gap(20),
-          
-                      SizedBox(
-                        width: 169,
-                        height: 167,
-                        child: TargetCard(title: "Car", percent: 50, radius: 50,),
-                      ),
-                      Gap(20),
-                      SizedBox(
-                        width: 169,
-                        height: 167,
-                        child: TargetCard(title: "Car", percent: 50, radius: 50,),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-          
-          
+              SizedBox(
+                height: 187,
+                child: ListView.builder(
+                  itemCount: _mytargets.length,
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  itemBuilder: (context, i) {
+                    return Padding(
+                      padding: EdgeInsets.only(left: 6, right: 6),
+                      child: SizedBox(
+                        width: 169,
+                        child: TargetCard(
+                          title: _mytargets[i]["title"],
+                          percent: _mytargets[i]["percent"],
+                          radius: _mytargets[i]["radius"],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
