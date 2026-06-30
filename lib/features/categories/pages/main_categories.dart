@@ -2,6 +2,8 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
+import 'package:finwise/core/styles/text_styles.dart';
+import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/progress_section.dart';
@@ -15,7 +17,18 @@ class MainCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Categories"),
+      appBar: AppBar(
+        backgroundColor: AppColors.mainGreen,
+        title: Text("Categories", style: TextStyles.bodyLarge),
+        actions: [
+          IconButton(
+            onPressed: () {
+              pushTo(context, Routes.notificationScreen);
+            },
+            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+          ),
+        ],
+      ),
       body: MyBodyView(
         topSection: ProgressSection(
           percentage: 30,

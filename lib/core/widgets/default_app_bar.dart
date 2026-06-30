@@ -27,7 +27,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () {
-            replaceWith(context, Routes.notificationScreen);
+            pushTo(context, Routes.notificationScreen);
           },
           icon: CustomSvgPicture(path: AppAssets.appBarNotification),
         ),
