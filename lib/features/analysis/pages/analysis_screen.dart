@@ -34,6 +34,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.mainGreen,
+        leading: SizedBox.shrink(),
         title: Text("Analysis", style: TextStyles.bodyLarge),
         actions: [
           IconButton(
@@ -45,6 +46,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         ],
       ),
       body: MyBodyView(
+          clipBehavior: Clip.hardEdge,
+
         noPadding: true,
         topSection: ProgressSection(
           percentage: 30,

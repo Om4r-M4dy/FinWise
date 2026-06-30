@@ -8,11 +8,13 @@ class MyBodyView extends StatelessWidget {
     this.topSection,
     required this.bottomSection,
     this.noPadding = false,
+    this.clipBehavior = Clip.none,
   });
 
   final Widget? topSection;
   final Widget bottomSection;
   final bool noPadding;
+  final Clip clipBehavior;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,7 @@ class MyBodyView extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.infinity,
-              clipBehavior: Clip.hardEdge,
+              clipBehavior: clipBehavior,
               decoration: const BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),

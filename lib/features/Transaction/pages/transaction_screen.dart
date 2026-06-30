@@ -22,6 +22,7 @@ class TransactionScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.mainGreen,
+         leading:SizedBox.shrink(),
         title: Text('Transaction', style: TextStyles.bodyLarge),
         actions: [
           IconButton(
@@ -33,6 +34,7 @@ class TransactionScreen extends StatelessWidget {
         ],
       ),
       body: MyBodyView(
+        
         topSection: Column(
           children: [
             InkWell(

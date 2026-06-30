@@ -19,6 +19,7 @@ class MainCategories extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.mainGreen,
+         leading:SizedBox.shrink(),
         title: Text("Categories", style: TextStyles.bodyLarge),
         actions: [
           IconButton(
