@@ -20,7 +20,7 @@ class last_week_analysis extends StatelessWidget {
       child: IntrinsicHeight(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 22),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -32,11 +32,11 @@ class last_week_analysis extends StatelessWidget {
                   radius: 34,
                 ),
                 VerticalDivider(
-                  width: 20,
+                  width: 15,
                   thickness: 1.5,
                   color: AppColors.background,
                 ),
-                Column(
+                Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AnalysisHome(
                       icon: AppAssets.salary,
@@ -46,7 +46,7 @@ class last_week_analysis extends StatelessWidget {
                     ),
                     Container(
                       height: 1,
-                      width: MediaQuery.of(context).size.width * .45,
+                      width: MediaQuery.of(context).size.width * .40,
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       color: AppColors.background,
                     ),
