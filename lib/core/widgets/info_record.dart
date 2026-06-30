@@ -44,13 +44,13 @@ class InfoRecord extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyles.body_15.copyWith(
+                style: TextStyles.bodyMedium.copyWith(
                   color: AppColors.lettersAndIcons,
                 ),
               ),
               Text(
                 date,
-                style: TextStyles.caption3_12.copyWith(
+                style: TextStyles.bodySmall.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColors.oceanBlueButton,
                 ),
@@ -70,7 +70,7 @@ class InfoRecord extends StatelessWidget {
           child: Text(
             cat,
             textAlign: TextAlign.center,
-            style: TextStyles.caption2_13.copyWith(
+            style: TextStyles.bodySmall.copyWith(
               fontWeight: FontWeight.w300,
               color: AppColors.lettersAndIcons,
             ),
@@ -87,7 +87,7 @@ class InfoRecord extends StatelessWidget {
           child: Text(
             amount,
             overflow: TextOverflow.ellipsis,
-            style: TextStyles.body_15.copyWith(
+            style: TextStyles.bodyMedium.copyWith(
               color: amountColor ?? AppColors.lettersAndIcons,
             ),
           ),
