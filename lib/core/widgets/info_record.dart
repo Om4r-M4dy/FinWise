@@ -2,6 +2,7 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/app_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class InfoRecord extends StatelessWidget {
   const InfoRecord({
@@ -35,49 +36,60 @@ class InfoRecord extends StatelessWidget {
           bgWidth: 57,
           bgHeight: 53,
         ),
-        //  Gap(18),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyles.bodyMedium.copyWith(
-                color: AppColors.lettersAndIcons,
+        const Gap(10),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .25,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyles.bodyMedium.copyWith(
+                  color: AppColors.lettersAndIcons,
+                ),
               ),
-            ),
-            Text(
-              date,
-              style: TextStyles.bodySmall.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.oceanBlueButton,
+              Text(
+                date,
+                style: TextStyles.bodySmall.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.oceanBlueButton,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
 
         Container(
           width: 1,
           height: MediaQuery.of(context).size.width * .08,
-          margin: const EdgeInsets.symmetric(vertical: 15),
+          margin: const EdgeInsets.symmetric(horizontal: 3),
           color: AppColors.mainGreen,
         ),
-        Text(
-          cat,
-          style: TextStyles.bodySmall.copyWith(
-            fontWeight: FontWeight.w300,
-            color: AppColors.lettersAndIcons,
+        SizedBox(
+          width: 60,
+          child: Text(
+            cat,
+            textAlign: TextAlign.center,
+            style: TextStyles.bodySmall.copyWith(
+              fontWeight: FontWeight.w300,
+              color: AppColors.lettersAndIcons,
+            ),
           ),
         ),
         Container(
           width: 1,
           height: MediaQuery.of(context).size.width * .08,
-          margin: const EdgeInsets.symmetric(vertical: 15),
+          margin: const EdgeInsets.symmetric(horizontal: 3),
           color: AppColors.mainGreen,
         ),
-        Text(
-          amount,
-          style: TextStyles.bodyMedium.copyWith(
-            color: amountColor ?? AppColors.lettersAndIcons,
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .19,
+          child: Text(
+            amount,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyles.bodyMedium.copyWith(
+              color: amountColor ?? AppColors.lettersAndIcons,
+            ),
           ),
         ),
       ],

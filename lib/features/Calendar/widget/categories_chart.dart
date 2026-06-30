@@ -1,6 +1,6 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/context_extensions.dart';
-import 'package:finwise/features/calendar/widget/chart_legend_row.dart';
+import 'package:finwise/features/Calendar/widget/chart_legend_row.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

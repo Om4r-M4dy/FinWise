@@ -3,7 +3,7 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/main_button.dart';
-import 'package:finwise/features/calendar/widget/categories_chart.dart';
+import 'package:finwise/features/Calendar/widget/categories_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

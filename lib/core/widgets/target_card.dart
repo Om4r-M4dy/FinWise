@@ -21,9 +21,17 @@ class TargetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            offset: const Offset(0, 0),
+            blurRadius: 4,
+          ),
+        ],
         color: center != null ? null : AppColors.lightBlueButton,
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(40),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -38,10 +46,12 @@ class TargetCard extends StatelessWidget {
                 Text("${(percent).toInt()}%", style: TextStyles.bodyLarge),
             progressColor: AppColors.oceanBlueButton,
           ),
-          Gap(5),
+          Gap(10),
           Text(
             title,
-            maxLines: 2,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+
             style: titelStyle != null
                 ? titelStyle
                 : TextStyles.bodyMedium.copyWith(

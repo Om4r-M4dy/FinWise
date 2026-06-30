@@ -7,9 +7,10 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const DefaultAppBar({super.key, required this.title});
+  const DefaultAppBar({super.key, required this.title, this.noNotify = false});
 
   final String title;
+  final bool noNotify;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -24,14 +25,16 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: CustomSvgPicture(path: AppAssets.back),
       ),
       title: Center(child: Text(title, style: TextStyles.bodyLarge)),
-      actions: [
-        IconButton(
-          onPressed: () {
-            pushTo(context, Routes.notificationScreen);
-          },
-          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-        ),
-      ],
+      actions: noNotify
+          ? null
+          : [
+              IconButton(
+                onPressed: () {
+                  pushTo(context, Routes.notificationScreen);
+                },
+                icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+              ),
+            ],
     );
   }
 }

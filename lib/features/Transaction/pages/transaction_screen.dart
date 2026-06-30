@@ -22,6 +22,7 @@ class TransactionScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.mainGreen,
+        leading: SizedBox.shrink(),
         title: Text('Transaction', style: TextStyles.bodyLarge),
         actions: [
           IconButton(
@@ -111,7 +112,9 @@ class TransactionScreen extends StatelessWidget {
                   //   ),
                   // ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      pushTo(context, Routes.calendarScreen);
+                    },
                     icon: const CustomSvgPicture(path: AppAssets.calender),
                   ),
                 ],
