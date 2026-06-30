@@ -42,18 +42,20 @@ class TargetCard extends StatelessWidget {
             percent: percent / 100,
             center:
                 center ??
-                Text("${(percent).toInt()}%", style: TextStyles.title_20),
+                Text("${(percent).toInt()}%", style: TextStyles.bodyLarge),
             progressColor: AppColors.oceanBlueButton,
           ),
           Gap(10),
           Text(
             title,
             maxLines: 2,
-            style:
-                titelStyle ??
-                TextStyles.body_15.copyWith(
-                  color: center != null ? AppColors.dark05 : Color(0xffF1FFF3),
-                ),
+            style: titelStyle != null
+                ? titelStyle
+                : TextStyles.bodyMedium.copyWith(
+                    color: center != null
+                        ? AppColors.dark05
+                        : Color(0xffF1FFF3),
+                  ),
           ),
         ],
       ),

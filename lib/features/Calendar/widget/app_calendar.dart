@@ -63,7 +63,7 @@ class _AppCalendarState extends State<AppCalendar> {
       headerStyle: HeaderStyle(
         formatButtonVisible: false,
         titleCentered: true,
-        titleTextStyle: TextStyles.subtitle_17.copyWith(
+        titleTextStyle: TextStyles.bodyMedium.copyWith(
           color: AppColors.mainGreen,
           fontWeight: FontWeight.bold,
         ),
@@ -83,10 +83,10 @@ class _AppCalendarState extends State<AppCalendar> {
 
       // --- Days of the Week Configuration ---
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekdayStyle: TextStyles.caption1_14.copyWith(
+        weekdayStyle: TextStyles.bodySmall.copyWith(
           color: AppColors.blueButton,
         ),
-        weekendStyle: TextStyles.caption1_14.copyWith(
+        weekendStyle: TextStyles.bodySmall.copyWith(
           color: AppColors.blueButton,
         ),
       ),
@@ -94,10 +94,10 @@ class _AppCalendarState extends State<AppCalendar> {
       // --- Calendar Cells Configuration ---
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
-        defaultTextStyle: TextStyles.caption1_14,
-        weekendTextStyle: TextStyles.caption1_14,
+        defaultTextStyle: TextStyles.bodySmall,
+        weekendTextStyle: TextStyles.bodySmall,
 
-        selectedTextStyle: TextStyles.caption1_14.copyWith(
+        selectedTextStyle: TextStyles.bodySmall.copyWith(
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -107,7 +107,7 @@ class _AppCalendarState extends State<AppCalendar> {
         ),
 
         // Style for the actual current day (Today)
-        todayTextStyle: TextStyles.subtitle_17.copyWith(
+        todayTextStyle: TextStyles.bodyMedium.copyWith(
           color: AppColors.mainGreen,
           fontWeight: FontWeight.bold,
         ),

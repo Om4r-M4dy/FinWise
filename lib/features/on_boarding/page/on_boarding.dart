@@ -77,7 +77,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         _currentIndex == onBoardingPages.length - 1
                             ? 'Get Started'
                             : 'Next',
-                        style: TextStyles.size_30,
+                        style: TextStyles.headlineLarge,
                       ),
                     ),
                     const Gap(27),

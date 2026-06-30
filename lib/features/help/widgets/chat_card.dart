@@ -7,14 +7,14 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 
 class ChatCard extends StatelessWidget {
-  const ChatCard({
-    super.key,
-  });
+  const ChatCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){pushTo(context, Routes.chatScreen);},
+      onTap: () {
+        pushTo(context, Routes.chatScreen);
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadiusGeometry.circular(14),
@@ -24,22 +24,22 @@ class ChatCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ListTile(
-              leading: CustomSvgPicture(
-                path: AppAssets.botSupport,
-                height: 45,
+              leading: CustomSvgPicture(path: AppAssets.botSupport, height: 45),
+              title: Text('Help center', style: TextStyles.bodyMedium),
+              subtitle: Text(
+                "Hello! I'm here to assist you",
+                style: TextStyles.bodyMedium,
               ),
-              title: Text('Help center', style: TextStyles.body_15),
-              subtitle: Text("Hello! I'm here to assist you", style: TextStyles.body_15),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,11,9),
+              padding: const EdgeInsets.fromLTRB(0, 0, 11, 9),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadiusGeometry.circular(15),
                   color: AppColors.background,
                 ),
-                child: Text('Feb 08 -2024 ', style: TextStyles.caption3_12),
+                child: Text('Feb 08 -2024 ', style: TextStyles.bodySmall),
               ),
             ),
           ],

@@ -17,7 +17,7 @@ class BuildAuthUI extends StatelessWidget {
         Text(
           'Personalized financial insights\nat your fingertips.',
           textAlign: TextAlign.center,
-          style: TextStyles.caption1_14.copyWith(color: AppColors.darkModeIcon),
+          style: TextStyles.bodySmall.copyWith(color: AppColors.darkModeIcon),
         ),
         const Gap(42),
         MainButton(text: 'Log In', onPress: () {}),
@@ -33,7 +33,7 @@ class BuildAuthUI extends StatelessWidget {
           onPressed: () {},
           child: Text(
             "Forgot Password?",
-            style: TextStyles.caption1_14.copyWith(fontWeight: FontWeight.w600),
+            style: TextStyles.bodySmall.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       ],

@@ -42,13 +42,13 @@ class _HelpCenterState extends State<HelpCenter> {
                     1: SizedBox(
                       width: 169,
                       child: Center(
-                        child: Text('FAQ', style: TextStyles.body_15),
+                        child: Text('FAQ', style: TextStyles.bodyMedium),
                       ),
                     ),
                     2: SizedBox(
                       width: 169,
                       child: Center(
-                        child: Text('Contact Us', style: TextStyles.body_15),
+                        child: Text('Contact Us', style: TextStyles.bodyMedium),
                       ),
                     ),
                   },

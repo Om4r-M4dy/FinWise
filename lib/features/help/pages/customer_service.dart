@@ -18,11 +18,11 @@ class CustomerService extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('active chats', style: TextStyles.body_15),
+              Text('active chats', style: TextStyles.bodyMedium),
               Gap(18),
               ChatCard(),
               Gap(48),
-              Text('Ended chats', style: TextStyles.body_15),
+              Text('Ended chats', style: TextStyles.bodyMedium),
               Gap(18),
               ChatCard(),
               Gap(18),

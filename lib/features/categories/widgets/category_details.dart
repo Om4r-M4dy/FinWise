@@ -34,18 +34,18 @@ class CategoryDetails extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(
         title,
-        style: TextStyles.body_15.copyWith(color: AppColors.lettersAndIcons),
+        style: TextStyles.bodyMedium.copyWith(color: AppColors.lettersAndIcons),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyles.caption3_12.copyWith(
+        style: TextStyles.bodySmall.copyWith(
           fontWeight: FontWeight.w600,
           color: AppColors.blueButton,
         ),
       ),
       trailing: Text(
         trailing,
-        style: TextStyles.body_15.copyWith(color: AppColors.oceanBlueButton),
+        style: TextStyles.bodyMedium.copyWith(color: AppColors.oceanBlueButton),
       ),
     );
   }

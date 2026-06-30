@@ -15,25 +15,28 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // TODO: make it back to home screen...
-      appBar: DefaultAppBar(title: "Notification"), 
+      appBar: DefaultAppBar(title: "Notification"),
       body: MyBodyView(
-        
         bottomSection: SingleChildScrollView(
           child: Column(
             children: [
-              CompleteNotifySection(sectionName: "Today",notifyList: todayNotifyList,),
+              CompleteNotifySection(
+                sectionName: "Today",
+                notifyList: todayNotifyList,
+              ),
               Gap(25),
-              CompleteNotifySection(sectionName: "Yesterday",notifyList: yesterdayNotifyList,),
-                 Gap(25),
-              CompleteNotifySection(sectionName: "This Weekend",notifyList: thisWeekendNotifyList,),
-            
-            
+              CompleteNotifySection(
+                sectionName: "Yesterday",
+                notifyList: yesterdayNotifyList,
+              ),
+              Gap(25),
+              CompleteNotifySection(
+                sectionName: "This Weekend",
+                notifyList: thisWeekendNotifyList,
+              ),
             ],
           ),
         ),
-
-
-
       ),
     );
   }
@@ -41,40 +44,47 @@ class NotificationScreen extends StatelessWidget {
 
 class CompleteNotifySection extends StatelessWidget {
   const CompleteNotifySection({
-    super.key, required this.sectionName, required this.notifyList,
+    super.key,
+    required this.sectionName,
+    required this.notifyList,
   });
-final String sectionName;
-final List<NotifyModel> notifyList;
+  final String sectionName;
+  final List<NotifyModel> notifyList;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(sectionName,style: TextStyles.caption1_14.copyWith(fontWeight: FontWeight.w400),),
-     Gap(7),
-    
-    ListView.separated(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: (context,index){
-        NotifyModel model=notifyList[index];
-    return NotificationElement(iconPath: model.iconPath??AppAssets.notification,
-    title: model.title??"",
-    subTitle:model.subTitle??"",
-    date: model.date??"",
-    transactionDetails:model.transactionDetails
-    );
-      }, separatorBuilder: (context,index){
-    return   Container(
-                  height: 1,
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(top: 15,bottom: 25),
-                  color: AppColors.oceanBlueButton.withValues(alpha: 0.5),
-                );
-      }
-      , itemCount: notifyList.length)
-       ],
+        Text(
+          sectionName,
+          style: TextStyles.bodySmall.copyWith(fontWeight: FontWeight.w400),
+        ),
+        Gap(7),
+
+        ListView.separated(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            NotifyModel model = notifyList[index];
+            return NotificationElement(
+              iconPath: model.iconPath ?? AppAssets.notification,
+              title: model.title ?? "",
+              subTitle: model.subTitle ?? "",
+              date: model.date ?? "",
+              transactionDetails: model.transactionDetails,
+            );
+          },
+          separatorBuilder: (context, index) {
+            return Container(
+              height: 1,
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 15, bottom: 25),
+              color: AppColors.oceanBlueButton.withValues(alpha: 0.5),
+            );
+          },
+          itemCount: notifyList.length,
+        ),
+      ],
     );
   }
 }
-

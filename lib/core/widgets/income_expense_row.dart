@@ -46,7 +46,7 @@ class Info extends StatelessWidget {
     required this.color,
     required this.title,
     required this.amount,
-    this.isExpense=false,
+    this.isExpense = false,
   });
 
   final Color? bg;
@@ -54,7 +54,7 @@ class Info extends StatelessWidget {
   final Color? color;
   final String title;
   final String amount;
-final bool isExpense;
+  final bool isExpense;
 
   @override
   Widget build(BuildContext context) {
@@ -66,19 +66,21 @@ final bool isExpense;
       ),
       child: Center(
         child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomSvgPicture(path: icon, color: color, width: 25),
-          const  Gap(4),
+            const Gap(4),
             Text(
               title,
-              style: TextStyles.body_15.copyWith(fontWeight: FontWeight.w500),
+              style: TextStyles.bodyMedium.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
             Text(
-             '\$$amount',
-              style: TextStyles.title_20.copyWith(
+              '\$$amount',
+              style: TextStyles.bodyLarge.copyWith(
                 fontWeight: FontWeight.w600,
-                color: isExpense?color:AppColors.dark05,
+                color: isExpense ? color : AppColors.dark05,
               ),
             ),
           ],

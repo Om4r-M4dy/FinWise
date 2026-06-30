@@ -9,7 +9,7 @@ Widget buildPageContent(int index) {
       Text(
         onBoardingPages[index].title,
         textAlign: TextAlign.center,
-        style: TextStyles.size_30,
+        style: TextStyles.headlineLarge,
       ),
       const Spacer(flex: 5),
       Image.asset(

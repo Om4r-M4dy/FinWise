@@ -1,5 +1,7 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
@@ -18,7 +20,18 @@ class TransactionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Transaction'),
+      appBar: AppBar(
+        backgroundColor: AppColors.mainGreen,
+        title: Text('Transaction', style: TextStyles.bodyLarge),
+        actions: [
+          IconButton(
+            onPressed: () {
+              pushTo(context, Routes.notificationScreen);
+            },
+            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+          ),
+        ],
+      ),
       body: MyBodyView(
         topSection: Column(
           children: [
@@ -37,10 +50,10 @@ class TransactionScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Total Balance', style: TextStyles.body_15),
+                    Text('Total Balance', style: TextStyles.bodyMedium),
                     Text(
                       '\$7,783.00',
-                      style: TextStyles.headline_24.copyWith(
+                      style: TextStyles.headlineLarge.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -86,7 +99,7 @@ class TransactionScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('April', style: TextStyles.body_15),
+                  Text('April', style: TextStyles.bodyMedium),
                   // Container(
                   //   decoration: BoxDecoration(
                   //     borderRadius: BorderRadius.circular(12.5),
@@ -146,7 +159,7 @@ class TransactionScreen extends StatelessWidget {
                 ],
               ),
               Gap(24),
-              Text('March', style: TextStyles.body_15),
+              Text('March', style: TextStyles.bodyMedium),
               Gap(18),
               Column(
                 children: [
