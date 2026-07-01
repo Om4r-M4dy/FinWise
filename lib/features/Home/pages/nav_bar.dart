@@ -4,7 +4,6 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/features/Home/model/navBar_screens.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
 
@@ -14,58 +13,71 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int currentIndex = 0;
+
+  final List<String> icons = [
+    AppAssets.home,
+    AppAssets.analysis,
+    AppAssets.transactions,
+    AppAssets.category,
+    AppAssets.profile,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: navScreens[currentIndex],
+      // backgroundColor: AppColors.background,
+      appBar: navScreens[currentIndex].appBar?.call(context),
+      body: navScreens[currentIndex].page,
 
-      bottomNavigationBar: Container(
-        height: 108,
-        padding: EdgeInsets.only(top: 36, bottom: 36, left: 60, right: 60),
+      bottomNavigationBar: SizedBox(
+        width: double.infinity,
+        child: Container(
+          color: AppColors.background,
+          child: Container(
+            height: 80,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: const BoxDecoration(
+              color: AppColors.lightGreen,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(70),
+                topRight: Radius.circular(70),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(icons.length, (index) {
+                bool isSelected = currentIndex == index;
 
-        decoration: BoxDecoration(
-          color: AppColors.lightGreen,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(70),
-            topRight: Radius.circular(70),
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.mainGreen
+                          : Colors.transparent,
+                      // shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: CustomSvgPicture(
+                      path: icons[index],
+                      width: 25,
+                      height: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                );
+              }),
+            ),
           ),
         ),
-        child: BottomNavigationBar(
-          enableFeedback: false,
-          elevation: 0,
-
-          // fixedColor: Colors.transparent,
-          backgroundColor: Colors.transparent,
-          unselectedItemColor: Colors.transparent,
-          selectedItemColor: AppColors.mainGreen,
-          currentIndex: currentIndex,
-          selectedFontSize: 0,
-          unselectedFontSize: 0,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            NavItem(AppAssets.home),
-            NavItem(AppAssets.analysis),
-            NavItem(AppAssets.transactions),
-            NavItem(AppAssets.category),
-            NavItem(AppAssets.profile),
-          ],
-          onTap: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
-        ),
       ),
-    );
-  }
-
-  // ignore: non_constant_identifier_names
-  BottomNavigationBarItem NavItem(String path) {
-    return BottomNavigationBarItem(
-      label: '',
-      icon: CustomSvgPicture(path: path),
-      activeIcon: CustomSvgPicture(path: path, color: AppColors.mainGreen),
     );
   }
 }

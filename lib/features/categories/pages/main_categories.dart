@@ -16,21 +16,7 @@ class MainCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.mainGreen,
-         leading:SizedBox.shrink(),
-        title: Text("Categories", style: TextStyles.bodyLarge),
-        actions: [
-          IconButton(
-            onPressed: () {
-              pushTo(context, Routes.notificationScreen);
-            },
-            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-          ),
-        ],
-      ),
-      body: MyBodyView(
+    return  MyBodyView(
         topSection: ProgressSection(
           percentage: 30,
           totalAmount: 20000,
@@ -134,7 +120,7 @@ class MainCategories extends StatelessWidget {
             ],
           ),
         ),
-      ),
+     
     );
   }
 }

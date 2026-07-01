@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:device_preview/device_preview.dart';
 import 'package:finwise/core/routes/app_router.dart';
-import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     DevicePreview(
-      // enabled: false
+      // enabled: false,
       enabled: !kReleaseMode,
       builder: (context) => const MainApp(),
     ),
