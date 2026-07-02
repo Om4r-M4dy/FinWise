@@ -1,14 +1,14 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/auth/page/confNewPassword_screen.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class NewpasswordScreen extends StatelessWidget {
-  const NewpasswordScreen({super.key});
+class NewPasswordScreen extends StatelessWidget {
+  const NewPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class NewpasswordScreen extends StatelessWidget {
 
                       child: ElevatedButton(
                         onPressed: () {
-                          pushReplacment(context, PasswordChangedScreen());
+                          replaceWith(context, Routes.passwordChangedScreen);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.mainGreen,

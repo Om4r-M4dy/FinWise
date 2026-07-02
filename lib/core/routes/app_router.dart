@@ -4,8 +4,10 @@ import 'package:finwise/features/Home/pages/nav_bar.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
+import 'package:finwise/features/auth/page/confNewPassword_screen.dart';
 import 'package:finwise/features/auth/page/forgot_password.dart';
 import 'package:finwise/features/auth/page/login_screen.dart';
+import 'package:finwise/features/auth/page/newPassword_screen.dart';
 import 'package:finwise/features/auth/page/securityPin_screen.dart';
 import 'package:finwise/features/auth/page/security_fingerprint_screen.dart';
 import 'package:finwise/features/auth/page/signup_screen.dart';
@@ -187,7 +189,14 @@ class AppRouter {
         path: Routes.forgotPasswordScreen,
         builder: (context, state) => ForgotPasswordScreen(),
       ),
-     
+     GoRoute(
+        path: Routes.passwordChangedScreen,
+        builder: (context, state) => PasswordChangedScreen(),
+      ),
+      GoRoute(
+        path: Routes.newPasswordScreen,
+        builder: (context, state) => NewPasswordScreen(),
+      ),
      
     ],
   );
