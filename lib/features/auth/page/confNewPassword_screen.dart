@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:finwise/features/auth/page/security_fingerprint_screen.dart';
 
 class PasswordChangedScreen extends StatefulWidget {
   const PasswordChangedScreen({super.key});
@@ -25,12 +26,7 @@ class _PasswordChangedScreenState extends State<PasswordChangedScreen>
 
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SecurityFingerprintScreen(),
-          ),
-        );
+        replaceWith(context, Routes.bottomNavBar);
       }
     });
   }

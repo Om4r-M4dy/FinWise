@@ -1,10 +1,9 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/functions/navigations.dart';
-import 'package:finwise/features/auth/page/securityPin_screen.dart';
-import 'package:finwise/features/auth/page/signup_screen.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/socialbutton.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +89,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         width: 207,
                         child: ElevatedButton(
                           onPressed: () {
-                            pushReplacment(context, SecuritypinScreen());
+                            replaceWith(context, Routes.securitypinScreen);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.mainGreen,
@@ -120,7 +119,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         width: 207,
                         child: ElevatedButton(
                           onPressed: () {
-                            pushReplacment(context, SignupScreen());
+                            replaceWith(context, Routes.signupScreen);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.lightGreen,
@@ -181,7 +180,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                     Center(
                       child: GestureDetector(
                         onTap: () {
-                          pushReplacment(context, SignupScreen());
+                          replaceWith(context, Routes.signupScreen);
                         },
                         child: const Text.rich(
                           TextSpan(

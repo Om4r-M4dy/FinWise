@@ -2,9 +2,8 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/auth/page/newPassword_screen.dart';
-import 'package:finwise/features/auth/page/signup_screen.dart';
 import 'package:finwise/features/auth/widgets/socialbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -95,7 +94,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                         width: 207,
                         child: ElevatedButton(
                           onPressed: () {
-                            pushReplacment(context, NewpasswordScreen());
+                            replaceWith(context, Routes.newPasswordScreen);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.mainGreen,
@@ -123,7 +122,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                         width: 207,
                         child: ElevatedButton(
                           onPressed: () {
-                            pushReplacment(context, SignupScreen());
+                            // Handle send again action
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.lightGreen,
@@ -169,7 +168,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
 
                       GestureDetector(
                         onTap: () {
-                          pushReplacment(context, SignupScreen());
+                          replaceWith(context, Routes.signupScreen);
                         },
                         child: const Text.rich(
                           TextSpan(

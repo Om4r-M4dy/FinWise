@@ -2,9 +2,8 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/auth/page/forgot_password.dart';
-import 'package:finwise/features/auth/page/signup_screen.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/socialbutton.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +83,9 @@ class LoginScreen extends StatelessWidget {
                       child: SizedBox(
                         width: 207,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            replaceWith(context, Routes.bottomNavBar);
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.mainGreen,
 
@@ -112,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          pushto(context, const ForgotPasswordScreen());
+                          pushTo(context, Routes.forgotPasswordScreen);
                         },
                         child: Text(
                           "Forgot Password?",
@@ -133,7 +134,7 @@ class LoginScreen extends StatelessWidget {
                         width: 207,
                         child: ElevatedButton(
                           onPressed: () {
-                            pushReplacment(context, SignupScreen());
+                            replaceWith(context, Routes.signupScreen);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.lightGreen,

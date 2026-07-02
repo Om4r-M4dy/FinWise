@@ -16,17 +16,3 @@ void removeUntil(BuildContext context, String location, {Object? extra}) {
 void pop(BuildContext context) {
   context.pop();
 }
-
-//////////////////////
-///
-
-void pushReplacment(BuildContext context, Widget nextscreen) {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => nextscreen),
-  );
-}
-
-void pushto(BuildContext context, Widget nextscreen) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => nextscreen));
-}
