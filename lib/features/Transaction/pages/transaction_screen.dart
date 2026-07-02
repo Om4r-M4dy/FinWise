@@ -18,21 +18,7 @@ class TransactionScreen extends StatelessWidget {
   final FlipCardController flipController = FlipCardController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.mainGreen,
-        leading: SizedBox.shrink(),
-        title: Text('Transaction', style: TextStyles.bodyLarge),
-        actions: [
-          IconButton(
-            onPressed: () {
-              pushTo(context, Routes.notificationScreen);
-            },
-            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-          ),
-        ],
-      ),
-      body: MyBodyView(
+    return  MyBodyView(
         topSection: Column(
           children: [
             InkWell(
@@ -207,7 +193,6 @@ class TransactionScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

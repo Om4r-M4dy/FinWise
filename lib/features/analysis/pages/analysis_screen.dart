@@ -31,23 +31,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.mainGreen,
-        leading: SizedBox.shrink(),
-        title: Text("Analysis", style: TextStyles.bodyLarge),
-        actions: [
-          IconButton(
-            onPressed: () {
-              pushTo(context, Routes.notificationScreen);
-            },
-            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-          ),
-        ],
-      ),
-      body: MyBodyView(
+    return  MyBodyView(
         clipBehavior: Clip.hardEdge,
-
         noPadding: true,
         topSection: ProgressSection(
           percentage: 30,
@@ -120,7 +105,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
             ],
           ),
         ),
-      ),
+     
     );
   }
 }

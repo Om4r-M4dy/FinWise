@@ -23,92 +23,93 @@ class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 28, left: 36, right: 36),
-            child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Hi, Welcome Back', style: TextStyles.bodyLarge),
-                    Text('Good Morning', style: TextStyles.bodySmall),
-                  ],
-                ),
-                Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    pushTo(context, Routes.notificationScreen);
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: AppColors.lightGreen,
-                    child: CustomSvgPicture(path: AppAssets.notification),
+    return Column(
+      children: [
+        AppBar(
+          leadingWidth: 0,
+          titleSpacing: 22.5,
+          automaticallyImplyLeading: false,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Hi, Welcome Back', style: TextStyles.bodyLarge),
+                  Text('Good Morning', style: TextStyles.bodySmall),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                pushTo(context, Routes.notificationScreen);
+              },
+              icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+            ),
+          ],
+        ),
+
+        Gap(8),
+        Expanded(
+          child: MyBodyView(
+            topSection: ProgressSection(
+              percentage: 30,
+              totalAmount: 20000.00,
+              totalExpanse: 1187.40,
+              totalBalance: 7783.00,
+            ),
+            bottomSection: SingleChildScrollView(
+              child: Column(
+                children: [
+                  last_week_analysis(),
+                  Gap(26),
+                  DateHeader(
+                    selectedIndex: index,
+                    labels: ["Daily", "Weekly", "Monthly"],
+                    onUpdate: (value) {
+                      setState(() {
+                        index = value;
+                      });
+                    },
                   ),
-                ),
-              ],
-            ),
-          ),
-          Gap(20),
-          Expanded(
-            child: MyBodyView(
-              topSection: ProgressSection(
-                percentage: 30,
-                totalAmount: 20000.00,
-                totalExpanse: 1187.40,
-                totalBalance: 7783.00,
-              ),
-              bottomSection: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    last_week_analysis(),
-                    Gap(26),
-                    DateHeader(
-                      selectedIndex: index,
-                      labels: ["Daily", "Weekly", "Monthly"],
-                      onUpdate: (value) {
-                        setState(() {
-                          index = value;
-                        });
-                      },
-                    ),
-                    Gap(24),
-                    InfoRecord(
-                      iconPath: AppAssets.salary,
-                      title: "Salary",
-                      date: "18:27 - April 30",
-                      cat: "Monthly",
-                      amount: "\$4.000,00",
-                    ),
-                    Gap(19),
-                    InfoRecord(
-                      iconPath: AppAssets.groceries,
-                      bgColor: AppColors.blueButton,
-                      title: "Groceries",
-                      date: "17:00 - April 24",
-                      cat: "Pantry",
-                      amount: "-\$100,00",
-                      amountColor: AppColors.oceanBlueButton,
-                    ),
-                    Gap(19),
-                    InfoRecord(
-                      iconPath: AppAssets.salary,
-                      bgColor: AppColors.oceanBlueButton,
-                      title: "Salary",
-                      date: "8:30 - April 15",
-                      cat: "Monthly",
-                      amount: "\$674,40",
-                      amountColor: AppColors.oceanBlueButton,
-                    ),
-                  ],
-                ),
+                  Gap(24),
+                  InfoRecord(
+                    iconPath: AppAssets.salary,
+                    title: "Salary",
+                    date: "18:27 - April 30",
+                    cat: "Monthly",
+                    amount: "\$4.000,00",
+                  ),
+                  Gap(19),
+                  InfoRecord(
+                    iconPath: AppAssets.groceries,
+                    bgColor: AppColors.blueButton,
+                    title: "Groceries",
+                    date: "17:00 - April 24",
+                    cat: "Pantry",
+                    amount: "-\$100,00",
+                    amountColor: AppColors.oceanBlueButton,
+                  ),
+                  Gap(19),
+                  InfoRecord(
+                    iconPath: AppAssets.salary,
+                    bgColor: AppColors.oceanBlueButton,
+                    title: "Salary",
+                    date: "8:30 - April 15",
+                    cat: "Monthly",
+                    amount: "\$674,40",
+                    amountColor: AppColors.oceanBlueButton,
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
