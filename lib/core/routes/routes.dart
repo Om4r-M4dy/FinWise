@@ -1,38 +1,3 @@
-import 'package:finwise/features/Calendar/page/calendar_screen.dart';
-import 'package:finwise/features/Home/pages/home_screen.dart';
-import 'package:finwise/features/Home/pages/nav_bar.dart';
-import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
-import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
-import 'package:finwise/features/analysis/pages/analysis_screen.dart';
-import 'package:finwise/features/categories/pages/add_expenses.dart';
-import 'package:finwise/features/categories/pages/add_savings.dart';
-import 'package:finwise/features/categories/pages/car.dart';
-import 'package:finwise/features/categories/pages/entertainment_screen.dart';
-import 'package:finwise/features/categories/pages/food_screen.dart';
-import 'package:finwise/features/categories/pages/gifts_screen.dart';
-import 'package:finwise/features/categories/pages/groceries_screen.dart';
-import 'package:finwise/features/categories/pages/main_categories.dart';
-import 'package:finwise/features/categories/pages/medicine_screen.dart';
-import 'package:finwise/features/categories/pages/new_house.dart';
-import 'package:finwise/features/categories/pages/rent_screen.dart';
-import 'package:finwise/features/categories/pages/savings.dart';
-import 'package:finwise/features/categories/pages/transport_screen.dart';
-import 'package:finwise/features/categories/pages/travel.dart';
-import 'package:finwise/features/categories/pages/wedding.dart';
-import 'package:finwise/features/help/pages/chat_screen.dart';
-import 'package:finwise/features/help/pages/customer_service.dart';
-import 'package:finwise/features/help/pages/help_center.dart';
-import 'package:finwise/features/launch/launch_screen.dart';
-import 'package:finwise/features/notification/pages/notification_screen.dart';
-import 'package:finwise/features/on_boarding/page/on_boarding.dart';
-import 'package:finwise/features/quick_analysis/page/quick_analysis_screen.dart';
-import 'package:finwise/features/search/page/search_screen.dart';
-import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
-import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
-import 'package:finwise/features/settings/page/settings_screen.dart';
-import 'package:finwise/features/profile/page/edit_profile.dart';
-import 'package:finwise/features/profile/page/profile_screen.dart';
-import 'package:go_router/go_router.dart';
 
 class Routes {
   // route names

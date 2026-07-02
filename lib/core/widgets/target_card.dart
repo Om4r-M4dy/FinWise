@@ -52,9 +52,7 @@ class TargetCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
 
-            style: titelStyle != null
-                ? titelStyle
-                : TextStyles.bodyMedium.copyWith(
+            style: titelStyle ?? TextStyles.bodyMedium.copyWith(
                     color: center != null
                         ? AppColors.dark05
                         : Color(0xffF1FFF3),

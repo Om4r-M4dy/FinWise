@@ -3,6 +3,7 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/features/auth/page/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -20,7 +21,12 @@ class BuildAuthUI extends StatelessWidget {
           style: TextStyles.bodySmall.copyWith(color: AppColors.darkModeIcon),
         ),
         const Gap(42),
-        MainButton(text: 'Log In', onPress: () {}),
+        MainButton(
+          text: 'Log In',
+          onPress: () {
+            pushReplacment(context, LoginScreen());
+          },
+        ),
         const Gap(12),
         MainButton(
           text: 'Sign Up',
