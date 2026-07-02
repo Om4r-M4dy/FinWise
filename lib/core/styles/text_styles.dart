@@ -1,48 +1,20 @@
 import 'package:flutter/material.dart';
 
 class TextStyles {
-  static TextStyle size_30 = TextStyle(
-    fontSize: 30,
-    fontWeight: FontWeight.w600,
-  );
-
-  static TextStyle headline_24 = TextStyle(
+  static const TextStyle headlineLarge = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w600,
   );
-
-  static TextStyle title_20 = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
+  static const TextStyle bodyLarge = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
   );
-
-  static TextStyle subtitle_17 = TextStyle(
-    fontSize: 17,
-    fontWeight: FontWeight.w600,
-  );
-
-  static TextStyle body_15 = TextStyle(
-    fontSize: 15,
+  static const TextStyle bodyMedium = TextStyle(
+    fontSize: 16,
     fontWeight: FontWeight.w400,
   );
-
-  static TextStyle caption1_14 = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-  );
-
-  static TextStyle caption2_13 = TextStyle(
-    fontSize: 13,
-    fontWeight: FontWeight.w400,
-  );
-
-  static TextStyle caption3_12 = TextStyle(
+  static const TextStyle bodySmall = TextStyle(
     fontSize: 12,
-    fontWeight: FontWeight.w400,
-  );
-
-  static TextStyle caption4_11 = TextStyle(
-    fontSize: 11,
     fontWeight: FontWeight.w400,
   );
 }

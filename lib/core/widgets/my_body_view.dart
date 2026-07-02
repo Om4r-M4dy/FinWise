@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class MyBodyView extends StatelessWidget {
-  const MyBodyView({super.key, this.topSection, required this.bottomSection});
+  const MyBodyView({
+    super.key,
+    this.topSection,
+    required this.bottomSection,
+    this.noPadding = false,
+    this.clipBehavior = Clip.none,
+  });
 
   final Widget? topSection;
   final Widget bottomSection;
-
+  final bool noPadding;
+  final Clip clipBehavior;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,24 +26,27 @@ class MyBodyView extends StatelessWidget {
                 horizontal: 37.0,
                 vertical: 20,
               ),
-                child: topSection,
+              child: topSection,
             ),
           ] else
             const Gap(20),
           Expanded(
             child: Container(
               width: double.infinity,
+              clipBehavior: clipBehavior,
               decoration: const BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 37.0,
-                  vertical: 20,
-                ),
-                child: bottomSection,
-              ),
+              child: noPadding
+                  ? bottomSection
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 37.0,
+                        vertical: 20,
+                      ),
+                      child: bottomSection,
+                    ),
             ),
           ),
         ],

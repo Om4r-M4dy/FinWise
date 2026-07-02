@@ -3,7 +3,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 enum ButtonSize {
-  small(width: 169.0, height: 32.0),
+  small(width: 169.0, height: 36.0),
   medium(width: 207.0, height: 45.0),
   large(width: double.infinity, height: 45.0);
 
@@ -20,13 +20,16 @@ class MainButton extends StatelessWidget {
     required this.onPress,
     this.backgroundColor = AppColors.mainGreen,
     this.size = ButtonSize.medium,
+    this.textStyle = TextStyles.bodyLarge,
+    this.textColor = AppColors.lettersAndIcons,
   });
 
   final String text;
   final VoidCallback? onPress;
   final Color backgroundColor;
   final ButtonSize size;
-
+  final TextStyle textStyle;
+  final Color? textColor;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -34,15 +37,10 @@ class MainButton extends StatelessWidget {
         elevation: 0,
         backgroundColor: backgroundColor,
         minimumSize: Size(size.width, size.height),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
       onPressed: onPress,
-      child: Text(
-        text,
-        style: TextStyles.title_20,
-      ),
+      child: Text(text, style: textStyle.copyWith(color: textColor)),
     );
   }
 }
