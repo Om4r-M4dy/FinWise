@@ -37,4 +37,15 @@ class Routes {
   static const String homeScreen = '/home';
   static const String bottomNavBar = '/bottom_nav_bar';
   static const String transactionScreen = '/transaction_screen';
+  static const String securitypinScreen = '/securityPin_screen';
+  static const String securityFingerprintScreen = '/security_fingerprint_screen';
+  // Auth Routes
+  static const String signupScreen = '/signup_screen';
+  static const String loginScreen = '/login_screen';
+  static const String verifyScreen = '/verify_screen';
+  static const String forgotPasswordScreen = '/forgot_password_screen';
+  static const String resetPasswordScreen = '/reset_password_screen';
+  static const String setPinScreen = '/set_pin_screen';
+  
+  
 }

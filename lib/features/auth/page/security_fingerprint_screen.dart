@@ -1,10 +1,13 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
+import 'package:finwise/features/Home/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class SecurityFingerprintScreen extends StatelessWidget {
   const SecurityFingerprintScreen({super.key});
@@ -19,7 +22,8 @@ class SecurityFingerprintScreen extends StatelessWidget {
             const Gap(30),
             Text(
               "Security Fingerprint",
-              style: TextStyles.size_30.copyWith(
+              style: TextStyles.headlineLarge.copyWith(
+                fontSize: 30,
                 color: AppColors.lettersAndIcons,
                 fontFamily: AppFonts.poppins,
                 fontWeight: FontWeight.w600,
@@ -59,7 +63,7 @@ class SecurityFingerprintScreen extends StatelessWidget {
                     const Gap(40),
                     Text(
                       "Use Fingerprint To Access",
-                      style: TextStyles.headline_24.copyWith(
+                      style: TextStyles.headlineLarge.copyWith(
                         fontSize: 20,
                         color: AppColors.lettersAndIcons,
                         fontFamily: AppFonts.poppins,
@@ -76,7 +80,9 @@ class SecurityFingerprintScreen extends StatelessWidget {
                     SizedBox(
                       width: 250,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push(Routes.homeScreen);
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.lightGreen,
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -87,7 +93,7 @@ class SecurityFingerprintScreen extends StatelessWidget {
                         ),
                         child: Text(
                           "Use Touch Id",
-                          style: TextStyles.headline_24.copyWith(
+                          style: TextStyles.headlineLarge.copyWith(
                             fontSize: 18,
                             color: AppColors.lettersAndIcons,
                             fontFamily: AppFonts.poppins,

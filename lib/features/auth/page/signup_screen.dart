@@ -1,13 +1,15 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class SignupScreen extends StatelessWidget {
-  double space = 16;
-  SignupScreen({super.key});
+  final double space = 16;
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +139,9 @@ class SignupScreen extends StatelessWidget {
                       child: SizedBox(
                         width: 207,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push(Routes.forgotPasswordScreen);
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.mainGreen,
 
