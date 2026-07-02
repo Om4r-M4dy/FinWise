@@ -4,6 +4,11 @@ import 'package:finwise/features/Home/pages/nav_bar.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
+import 'package:finwise/features/auth/page/forgot_password.dart';
+import 'package:finwise/features/auth/page/login_screen.dart';
+import 'package:finwise/features/auth/page/securityPin_screen.dart';
+import 'package:finwise/features/auth/page/security_fingerprint_screen.dart';
+import 'package:finwise/features/auth/page/signup_screen.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
@@ -160,6 +165,30 @@ class AppRouter {
         path: Routes.transactionScreen,
         builder: (context, state) => TransactionScreen(),
       ),
+      // Security Routes
+      GoRoute(
+        path: Routes.securitypinScreen,
+        builder: (context, state) => SecuritypinScreen(),
+      ),
+      GoRoute(
+        path: Routes.securityFingerprintScreen,
+        builder: (context, state) => SecurityFingerprintScreen(),
+      ),
+      GoRoute(
+        path: Routes.signupScreen,
+        builder: (context, state) => SignupScreen(),
+      ),
+      GoRoute(
+        path: Routes.loginScreen,
+        builder: (context, state) => LoginScreen(),
+      ),
+   
+      GoRoute(
+        path: Routes.forgotPasswordScreen,
+        builder: (context, state) => ForgotPasswordScreen(),
+      ),
+     
+     
     ],
   );
 }

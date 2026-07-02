@@ -10,9 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:verification_code_field/verification_code_field.dart';
 
-class SecuritypinScreen extends StatelessWidget {
-  SecuritypinScreen({super.key});
+class SecuritypinScreen extends StatefulWidget {
+  const SecuritypinScreen({super.key});
 
+  @override
+  State<SecuritypinScreen> createState() => _SecuritypinScreenState();
+}
+
+class _SecuritypinScreenState extends State<SecuritypinScreen> {
   String otpCode = '';
 
   @override
@@ -27,7 +32,8 @@ class SecuritypinScreen extends StatelessWidget {
 
             Text(
               "Security pin",
-              style: TextStyles.size_30.copyWith(
+              style: TextStyles.headlineLarge.copyWith(
+                fontSize: 30,
                 color: AppColors.lettersAndIcons,
                 fontFamily: AppFonts.poppins,
                 fontWeight: FontWeight.w600,
@@ -54,7 +60,7 @@ class SecuritypinScreen extends StatelessWidget {
 
                       Text(
                         "Enter security pin",
-                        style: TextStyles.headline_24.copyWith(
+                        style: TextStyles.headlineLarge.copyWith(
                           fontSize: 20,
                           color: AppColors.lettersAndIcons,
                           fontFamily: AppFonts.poppins,
