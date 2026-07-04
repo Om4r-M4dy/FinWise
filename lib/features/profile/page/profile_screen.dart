@@ -73,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                     path: AppAssets.security,
                     title: 'Security',
                     onTap: () {
-                      // pushTo(context, Routes.security);
+                      pushTo(context, Routes.securityScreen);
                     },
                   ),
                   Gap(34),

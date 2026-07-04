@@ -1,10 +1,5 @@
-import 'package:finwise/core/constants/app_assets.dart';
-import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/functions/plot_helper.dart';
-import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/income_expense_row.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/plots_section.dart';

@@ -48,4 +48,14 @@ class Routes {
   static const String setPinScreen = '/set_pin_screen';
   static const String passwordChangedScreen = '/password_changed_screen';
   static const String newPasswordScreen = '/new_password_screen';
+  // Security Routes
+  static const String securityScreen = '/security_screen';
+  static const String changePinScreen = '/change_pin_screen';
+  static const String loadingChangePinScreen = '/loadingChangePin_screen';
+  static const String fingerprintScreen = '/fingerprint_screen';
+  static const String fingerprintDetailsScreen = '/fingerprint_details_screen';
+  static const String loadingDeletedFingerprintScreen =
+      '/loading_deleted_fingerprint_screen';
+  static const String addFingerprintScreen = '/add_fingerprint_screen';
+  static const String loadingChangeFingerScreen = '/loadingChangeFingerScreen';
 }

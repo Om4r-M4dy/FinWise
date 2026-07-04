@@ -1,6 +1,14 @@
 import 'package:finwise/features/Calendar/page/calendar_screen.dart';
 import 'package:finwise/features/Home/pages/home_screen.dart';
 import 'package:finwise/features/Home/pages/nav_bar.dart';
+import 'package:finwise/features/Security/pages/changePin_screen.dart';
+import 'package:finwise/features/Security/pages/fingerPrint_screen.dart';
+import 'package:finwise/features/Security/pages/fingerprint_details_screen.dart';
+import 'package:finwise/features/Security/pages/add_fingerprint_screen.dart';
+import 'package:finwise/features/Security/pages/loadingChangeFinger_screen.dart';
+import 'package:finwise/features/Security/pages/loading_deleted_fingerprint_screen.dart';
+import 'package:finwise/features/Security/pages/loadingChangePin_screen.dart';
+import 'package:finwise/features/Security/pages/security_screen.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
@@ -197,7 +205,41 @@ class AppRouter {
         path: Routes.newPasswordScreen,
         builder: (context, state) => NewPasswordScreen(),
       ),
-     
+
+      // security 
+      GoRoute(
+        path: Routes.securityScreen,
+        builder: (context, state) => SecurityScreen(),
+      ),
+      GoRoute(
+        path: Routes.changePinScreen,
+        builder: (context, state) => ChangepinScreen(),
+      ),
+      GoRoute(
+        path: Routes.loadingChangePinScreen,
+        builder: (context, state) => LoadingchangepinScreen(),
+      ),
+      GoRoute(
+        path: Routes.fingerprintScreen,
+        builder: (context, state) => FingerprintScreen(),
+      ),
+      GoRoute(
+        path: Routes.fingerprintDetailsScreen,
+        builder: (context, state) => FingerprintDetailsScreen(),
+      ),
+      GoRoute(
+        path: Routes.loadingDeletedFingerprintScreen,
+        builder: (context, state) => LoadingDeletedFingerprintScreen(),
+      ),
+      GoRoute(
+        path: Routes.addFingerprintScreen,
+        builder: (context, state) => AddFingerprintScreen(),
+      ),
+        GoRoute(
+        path: Routes.loadingChangeFingerScreen,
+        builder: (context, state) => LoadingchangefingerScreen(),
+      ),
+      
     ],
   );
 }

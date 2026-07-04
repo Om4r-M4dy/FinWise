@@ -4,14 +4,16 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-class PasswordChangedScreen extends StatefulWidget {
-  const PasswordChangedScreen({super.key});
+class LoadingDeletedFingerprintScreen extends StatefulWidget {
+  const LoadingDeletedFingerprintScreen({super.key});
 
   @override
-  State<PasswordChangedScreen> createState() => _PasswordChangedScreenState();
+  State<LoadingDeletedFingerprintScreen> createState() =>
+      _LoadingDeletedFingerprintScreenState();
 }
 
-class _PasswordChangedScreenState extends State<PasswordChangedScreen>
+class _LoadingDeletedFingerprintScreenState
+    extends State<LoadingDeletedFingerprintScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
 
@@ -26,7 +28,7 @@ class _PasswordChangedScreenState extends State<PasswordChangedScreen>
 
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
-        replaceWith(context, Routes.securityFingerprintScreen);
+        replaceWith(context, Routes.fingerprintScreen);
       }
     });
   }
@@ -64,7 +66,6 @@ class _PasswordChangedScreenState extends State<PasswordChangedScreen>
                           border: Border.all(color: Colors.white, width: 5),
                         ),
                       ),
-
                       Transform.rotate(
                         angle: controller.value * 2 * pi,
                         child: Stack(
@@ -89,15 +90,13 @@ class _PasswordChangedScreenState extends State<PasswordChangedScreen>
                 );
               },
             ),
-
             const SizedBox(height: 30),
-
             const Text(
-              "Password Has Been\nChanged Successfully",
+              "The Fingerprint Has\nBeen Successfully\nDeleted.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
