@@ -1,9 +1,9 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
+import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/Home/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -81,7 +81,7 @@ class SecurityFingerprintScreen extends StatelessWidget {
                       width: 250,
                       child: ElevatedButton(
                         onPressed: () {
-                          context.push(Routes.homeScreen);
+                          replaceWith(context, Routes.bottomNavBar);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.lightGreen,

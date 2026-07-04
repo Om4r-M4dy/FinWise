@@ -60,7 +60,6 @@ class DefaultFirebaseOptions {
     projectId: 'finwise-e4c7a',
     storageBucket: 'finwise-e4c7a.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAFyeqxNxB7sy0JGJEJj1eiVe0WdE2ElAA',
     appId: '1:1022288201597:ios:29bfc9c024bf6314d2ae14',

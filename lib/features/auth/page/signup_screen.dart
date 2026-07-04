@@ -140,7 +140,7 @@ class SignupScreen extends StatelessWidget {
                         width: 207,
                         child: ElevatedButton(
                           onPressed: () {
-                            replaceWith(context, Routes.bottomNavBar);
+                            replaceWith(context, Routes.forgotPasswordScreen);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.mainGreen,

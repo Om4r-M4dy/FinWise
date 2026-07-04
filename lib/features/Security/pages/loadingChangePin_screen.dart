@@ -4,14 +4,14 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-class PasswordChangedScreen extends StatefulWidget {
-  const PasswordChangedScreen({super.key});
+class LoadingchangepinScreen extends StatefulWidget {
+  const LoadingchangepinScreen({super.key});
 
   @override
-  State<PasswordChangedScreen> createState() => _PasswordChangedScreenState();
+  State<LoadingchangepinScreen> createState() => _LoadingchangepinScreenState();
 }
 
-class _PasswordChangedScreenState extends State<PasswordChangedScreen>
+class _LoadingchangepinScreenState extends State<LoadingchangepinScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
 
@@ -26,7 +26,7 @@ class _PasswordChangedScreenState extends State<PasswordChangedScreen>
 
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
-        replaceWith(context, Routes.securityFingerprintScreen);
+        replaceWith(context, Routes.fingerprintScreen);
       }
     });
   }
@@ -93,7 +93,7 @@ class _PasswordChangedScreenState extends State<PasswordChangedScreen>
             const SizedBox(height: 30),
 
             const Text(
-              "Password Has Been\nChanged Successfully",
+              "Pin Has Been\nChanged Successfully",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
