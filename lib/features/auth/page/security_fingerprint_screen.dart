@@ -7,7 +7,6 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class SecurityFingerprintScreen extends StatelessWidget {
   const SecurityFingerprintScreen({super.key});

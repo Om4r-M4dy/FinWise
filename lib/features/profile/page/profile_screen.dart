@@ -7,6 +7,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/features/profile/widget/profile_option.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -93,7 +94,16 @@ class ProfileScreen extends StatelessWidget {
                     },
                   ),
                   Gap(34),
-                  ProfileOption(path: AppAssets.legout, title: 'Logout'),
+                  ProfileOption(
+                    path: AppAssets.legout,
+                    title: 'Logout',
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      if (context.mounted) {
+                        removeUntil(context, Routes.loginScreen);
+                      }
+                    },
+                  ),
                 ],
               ),
             ),

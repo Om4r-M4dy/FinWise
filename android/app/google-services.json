@@ -12,7 +12,20 @@
           "package_name": "com.depi.finwise"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1022288201597-jsmijavt7p6ptpo4pdl644td1caupf1t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.depi.finwise",
+            "certificate_hash": "7f0094ab095203672e68056efb69dae260a706f7"
+          }
+        },
+        {
+          "client_id": "1022288201597-lqlbrc1r46bgkoclpvr8huopdji7t9jk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBkMNgmYbXUZgiPHqNQ7CHUhELEMckNwUU"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1022288201597-lqlbrc1r46bgkoclpvr8huopdji7t9jk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1022288201597-rtiviq8h6uouhbu4i68jqlu7rhbacmjg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.depi.finwise"
+              }
+            }
+          ]
         }
       }
     }

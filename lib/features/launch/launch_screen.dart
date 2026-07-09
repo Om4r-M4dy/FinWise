@@ -1,6 +1,9 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/features/launch/build_auth_u_i.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
@@ -74,7 +77,11 @@ class _LaunchScreenState extends State<LaunchScreen>
     if (!mounted) return;
     await _textController.forward();
     if (mounted) {
-      _slideController.forward();
+      if (FirebaseAuth.instance.currentUser != null) {
+        replaceWith(context, Routes.bottomNavBar);
+      } else {
+        _slideController.forward();
+      }
     }
   }
 
