@@ -13,7 +13,6 @@ import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:finwise/core/functions/google_auth.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -42,38 +41,59 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       return;
     }
 
+    // Basic email format validation
+    final emailRegex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$');
+    if (!emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address.')),
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
 
     try {
+      debugPrint('🔵 [ForgotPassword] Sending reset email to: $email');
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      debugPrint('✅ [ForgotPassword] Reset email sent successfully!');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Password reset email sent! Check your inbox.'),
-          ),
-        );
-        // Continue to pin screen or back to login
-        replaceWith(context, Routes.securitypinScreen);
+        _showSuccessBottomSheet(email);
       }
     } on FirebaseAuthException catch (e) {
+      debugPrint(
+        '🔴 [ForgotPassword] FirebaseAuthException: code=${e.code}, message=${e.message}',
+      );
       if (mounted) {
         String errorMessage = 'An error occurred. Please try again.';
         if (e.code == 'user-not-found') {
-          errorMessage = 'No user found for that email.';
+          errorMessage = 'No account found with this email address.';
         } else if (e.code == 'invalid-email') {
           errorMessage = 'The email address is badly formatted.';
+        } else if (e.code == 'too-many-requests') {
+          errorMessage = 'Too many requests. Please try again later.';
+        } else if (e.code == 'network-request-failed') {
+          errorMessage = 'No internet connection. Please check your network.';
         }
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(errorMessage)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ $errorMessage\n(code: ${e.code})'),
+            backgroundColor: Colors.redAccent,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
     } catch (e) {
+      debugPrint('🔴 [ForgotPassword] Unknown error: $e');
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.redAccent,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
     } finally {
       if (mounted) {
@@ -82,6 +102,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         });
       }
     }
+  }
+
+  void _showSuccessBottomSheet(String email) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      backgroundColor: AppColors.background,
+      builder: (ctx) => _SuccessBottomSheet(
+        email: email,
+        onBackToLogin: () {
+          Navigator.pop(ctx); // close bottom sheet
+          replaceWith(context, Routes.loginScreen);
+        },
+      ),
+    );
   }
 
   @override
@@ -104,7 +143,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             const Gap(10),
             Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              "Enter your registered email address below and we'll send you a link to reset your password.",
               style: TextStyles.caption1_14.copyWith(
                 color: AppColors.lettersAndIcons,
                 fontFamily: AppFonts.poppins,
@@ -128,9 +167,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             const Gap(40),
 
-            /// Next Step Button
+            /// Send Reset Email Button
             CustomAuthButton(
-              text: "Next Step",
+              text: "Send Reset Link",
               onPressed: _resetPassword,
               isLoading: _isLoading,
             ),
@@ -152,14 +191,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             const Gap(19),
 
-            //google && facebook
+            // google && facebook
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SocialButton(
                   icon: AppAssets.facebook,
                   onTap: () async {
-                    final user = await FacebookAuthService.signInWithFacebook(context);
+                    final user = await FacebookAuthService.signInWithFacebook(
+                      context,
+                    );
                     if (user != null && context.mounted) {
                       replaceWith(context, Routes.bottomNavBar);
                     }
@@ -198,6 +239,145 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+/// Animated success bottom sheet shown after reset email is sent
+// ─────────────────────────────────────────────────────────────
+class _SuccessBottomSheet extends StatefulWidget {
+  final String email;
+  final VoidCallback onBackToLogin;
+
+  const _SuccessBottomSheet({required this.email, required this.onBackToLogin});
+
+  @override
+  State<_SuccessBottomSheet> createState() => _SuccessBottomSheetState();
+}
+
+class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 650),
+    );
+    _scaleAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.elasticOut,
+    );
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Animated email check icon
+            ScaleTransition(
+              scale: _scaleAnimation,
+              child: Container(
+                width: 90,
+                height: 90,
+                decoration: BoxDecoration(
+                  color: AppColors.mainGreen.withOpacity(0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.mark_email_read_rounded,
+                  color: AppColors.mainGreen,
+                  size: 48,
+                ),
+              ),
+            ),
+            const Gap(20),
+            Text(
+              "Check Your Email!",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                fontFamily: AppFonts.poppins,
+                color: AppColors.lettersAndIcons,
+              ),
+            ),
+            const Gap(12),
+            Text(
+              "We've sent a password reset link to:",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.lettersAndIcons.withOpacity(0.7),
+                fontFamily: AppFonts.poppins,
+              ),
+            ),
+            const Gap(6),
+            Text(
+              widget.email,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppColors.mainGreen,
+                fontFamily: AppFonts.poppins,
+              ),
+            ),
+            const Gap(10),
+            Text(
+              "Open your email app, tap the link, and follow the instructions to reset your password.\n\nDon't see it? Check your spam folder.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                color: AppColors.lettersAndIcons.withOpacity(0.6),
+                fontFamily: AppFonts.poppins,
+                height: 1.6,
+              ),
+            ),
+            const Gap(28),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: widget.onBackToLogin,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.mainGreen,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  "Back to Login",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontFamily: AppFonts.poppins,
+                  ),
+                ),
+              ),
+            ),
+            const Gap(8),
           ],
         ),
       ),

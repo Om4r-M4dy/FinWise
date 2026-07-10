@@ -2,6 +2,7 @@
 class Routes {
   // route names
   static const String launch = '/';
+  static const String authScreen = '/auth_screen'; // Login / Sign Up choice
   static const String onBoarding = '/on_boarding';
   static const String termsAndConditions = '/terms_and_conditions';
   static const String analysisScreen = '/analysis';

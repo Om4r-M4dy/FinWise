@@ -1,10 +1,13 @@
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/on_boarding/Widget/background_card.dart';
 import 'package:finwise/features/on_boarding/Widget/build_page_content.dart';
 import 'package:finwise/features/on_boarding/data/on_boarding_data.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// A stateful widget that displays the onboarding flow of the application.
 /// It introduces the user to the app's core features before navigating to the main/login screen.
@@ -61,7 +64,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         // Navigate to the next page if available
                         if (_currentIndex < onBoardingPages.length - 1) {
                           _pageController.nextPage(
@@ -69,7 +72,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             curve: Curves.easeInOut,
                           );
                         } else {
-                          //navigate to home
+                          // Mark onboarding as seen (won't show again)
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool('seen_onboarding', true);
+                          if (context.mounted) {
+                            replaceWith(context, Routes.authScreen);
+                          }
                         }
                       },
                       // Dynamically change button text on the last page

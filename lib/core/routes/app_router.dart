@@ -36,6 +36,7 @@ import 'package:finwise/features/categories/pages/wedding.dart';
 import 'package:finwise/features/help/pages/chat_screen.dart';
 import 'package:finwise/features/help/pages/customer_service.dart';
 import 'package:finwise/features/help/pages/help_center.dart';
+import 'package:finwise/features/launch/auth_screen.dart';
 import 'package:finwise/features/launch/launch_screen.dart';
 import 'package:finwise/features/notification/pages/notification_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
@@ -55,6 +56,10 @@ class AppRouter {
       GoRoute(
         path: Routes.launch,
         builder: (context, state) => const LaunchScreen(),
+      ),
+      GoRoute(
+        path: Routes.authScreen,
+        builder: (context, state) => const AuthScreen(),
       ),
       GoRoute(
         path: Routes.onBoarding,

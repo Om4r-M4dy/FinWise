@@ -2,11 +2,11 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
-import 'package:finwise/features/launch/build_auth_u_i.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({super.key});
@@ -18,13 +18,6 @@ class LaunchScreen extends StatefulWidget {
 class _LaunchScreenState extends State<LaunchScreen>
     with TickerProviderStateMixin {
   late final AnimationController _textController;
-  late final AnimationController _slideController;
-
-  late final Animation<Offset> _logoSlide;
-  late final Animation<Color?> _logoIconColor;
-  late final Animation<Color?> _logoTextColor;
-  late final Animation<Color?> _backgroundColor;
-  late final Animation<double> _buttonsFade;
 
   @override
   void initState() {
@@ -32,114 +25,65 @@ class _LaunchScreenState extends State<LaunchScreen>
 
     _textController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 3),
     );
 
-    _slideController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-
-    final CurvedAnimation slideCurve = CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeInOutQuart,
-    );
-
-    _logoSlide = Tween<Offset>(
-      begin: Offset.zero, 
-      end: const Offset(0, -0.6)
-    ).animate(slideCurve);
-
-    _logoIconColor = ColorTween(
-      begin: AppColors.lettersAndIcons,
-      end: AppColors.mainGreen,
-    ).animate(slideCurve);
-
-    _logoTextColor = ColorTween(
-      begin: Colors.white,
-      end: AppColors.mainGreen,
-    ).animate(slideCurve);
-
-    _backgroundColor = ColorTween(
-      begin: AppColors.mainGreen,
-      end: AppColors.background,
-    ).animate(slideCurve);
-
-    _buttonsFade = CurvedAnimation(
-      parent: _slideController,
-      curve: const Interval(0.4, 1.0, curve: Curves.easeIn),
-    );
-
-    _startAnimationSequence();
+    _startSequence();
   }
 
-  void _startAnimationSequence() async {
-    if (!mounted) return;
+  Future<void> _startSequence() async {
+    // Play splash animation
     await _textController.forward();
-    if (mounted) {
-      if (FirebaseAuth.instance.currentUser != null) {
-        replaceWith(context, Routes.bottomNavBar);
-      } else {
-        _slideController.forward();
-      }
+
+    if (!mounted) return;
+
+    // ── Check where to navigate ────────────────────────────────────
+    // 1. If user is already logged in → go straight to home
+    if (FirebaseAuth.instance.currentUser != null) {
+      replaceWith(context, Routes.bottomNavBar);
+      return;
+    }
+
+    // 2. Check if user has seen OnBoarding before
+    final prefs = await SharedPreferences.getInstance();
+    final bool seenOnBoarding = prefs.getBool('seen_onboarding') ?? false;
+
+    if (!mounted) return;
+
+    if (seenOnBoarding) {
+      // Not first time → skip OnBoarding, go to auth choice screen
+      replaceWith(context, Routes.authScreen);
+    } else {
+      // First time ever → show OnBoarding
+      replaceWith(context, Routes.onBoarding);
     }
   }
 
   @override
   void dispose() {
     _textController.dispose();
-    _slideController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedBuilder(
-        animation: _slideController,
-        builder: (context, child) {
-          return Container(
-            color: _backgroundColor.value,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Stack(
-                  children: [
-                    _buildAnimatedBranding(),
-                    Align(
-                      alignment: const Alignment(0, 0.35),
-                      child: FadeTransition(
-                        opacity: _buttonsFade,
-                        child: BuildAuthUI(),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildAnimatedBranding() {
-    return Center(
-      child: SlideTransition(
-        position: _logoSlide,
+      backgroundColor: AppColors.mainGreen,
+      body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                _logoIconColor.value ?? Colors.white,
+              colorFilter: const ColorFilter.mode(
+                AppColors.lettersAndIcons,
                 BlendMode.srcIn,
               ),
               child: Lottie.asset(AppAssets.logoJson, repeat: false),
             ),
             const Gap(12),
             ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                _logoTextColor.value ?? Colors.white,
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
                 BlendMode.srcIn,
               ),
               child: Lottie.asset(
