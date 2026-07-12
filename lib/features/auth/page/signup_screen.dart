@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/constants/app_assets.dart';
@@ -5,6 +6,7 @@ import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
+import 'package:finwise/features/auth/models/user_model.dart';
 import 'package:finwise/features/auth/widgets/auth_layout.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/custom_auth_button.dart';
@@ -115,6 +117,17 @@ class _SignupScreenState extends State<SignupScreen> {
       if (userCredential.user != null) {
         await userCredential.user!.updateDisplayName(name);
       }
+
+      var userModel = UserModel(
+        name: name,
+        email: email,
+        phone: _completePhoneNumber,
+        dob: _selectedDob!,
+        id: userCredential.user!.uid,
+        photoUrl: userCredential.user!.photoURL ?? '',
+      );
+
+      FirebaseFirestore.instance.collection('user').doc(userCredential.user!.uid).set(userModel.toJson());
 
       if (mounted) {
         replaceWith(context, Routes.bottomNavBar);
