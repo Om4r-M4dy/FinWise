@@ -6,6 +6,7 @@ class UserModel {
   final String? profilePicture;
   final double? totalBalance;
   final double? totalExpense;
+  final double? dob;
   final double? monthlyBudgetLimit;
   final Map<String, bool>? settings;
 
@@ -17,6 +18,7 @@ class UserModel {
     required this.profilePicture,
     required this.totalBalance,
     required this.totalExpense,
+    required this.dob,
     required this.monthlyBudgetLimit,
     required this.settings,
   });
@@ -31,6 +33,7 @@ class UserModel {
       profilePicture: map['profilePicture'] ?? '',
       totalBalance: (map['totalBalance'] as num?)?.toDouble() ?? 0.0,
       totalExpense: (map['totalExpense'] as num?)?.toDouble() ?? 0.0,
+      dob: (map['dob'] as num?)?.toDouble() ?? 0.0,
       monthlyBudgetLimit: (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
       settings: Map<String, bool>.from(map['settings'] ?? {'pushNotifications': true, 'darkTheme': false}),
     );
@@ -46,6 +49,7 @@ class UserModel {
       'profilePicture': profilePicture,
       'totalBalance': totalBalance,
       'totalExpense': totalExpense,
+      'dob': dob,
       'monthlyBudgetLimit': monthlyBudgetLimit,
       'settings': settings,
     };

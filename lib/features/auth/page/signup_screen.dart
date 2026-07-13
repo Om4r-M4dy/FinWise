@@ -123,6 +123,7 @@ class _SignupScreenState extends State<SignupScreen> {
         email: email,
         phone: _completePhoneNumber,
         uid: userCredential.user!.uid,
+        dob: _selectedDob?.millisecondsSinceEpoch.toDouble() ?? 0.0,
         profilePicture: userCredential.user!.photoURL ?? '', totalBalance: null, totalExpense: null, monthlyBudgetLimit: null, settings: {},
       );
 
