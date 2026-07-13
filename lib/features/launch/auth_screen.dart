@@ -1,8 +1,4 @@
 import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/functions/navigations.dart';
-import 'package:finwise/core/routes/routes.dart';
-import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/features/launch/build_auth_u_i.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

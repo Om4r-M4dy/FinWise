@@ -13,6 +13,7 @@ import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -49,10 +50,16 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      // ── Save name to SharedPreferences ──────────────────────────
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_name', userCredential.user?.displayName ?? '');
+//-------------------------------------------------------------------------------
+
       if (mounted) {
         replaceWith(context, Routes.bottomNavBar);
       }
@@ -199,6 +206,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () async {
                     final user = await FacebookAuthService.signInWithFacebook(context);
                     if (user != null && context.mounted) {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('user_name', user.user?.displayName ?? '');
                       replaceWith(context, Routes.bottomNavBar);
                     }
                   },
@@ -211,6 +220,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () async {
                     final user = await GoogleAuth.signInWithGoogle(context);
                     if (user != null && context.mounted) {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('user_name', user.user?.displayName ?? '');
                       replaceWith(context, Routes.bottomNavBar);
                     }
                   },

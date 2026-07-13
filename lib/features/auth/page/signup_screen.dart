@@ -15,6 +15,7 @@ import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -36,6 +37,12 @@ class _SignupScreenState extends State<SignupScreen> {
   String _completePhoneNumber = '';
   DateTime? _selectedDob;
   bool _isLoading = false;
+
+  // ── Inline error messages ───────────────────────────────────────────
+  String? _nameError;
+  String? _emailError;
+  String? _passwordError;
+  String? _confirmPasswordError;
 
   @override
   void dispose() {
@@ -82,29 +89,70 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  // ── Sign Up Logic ────────────────────────────────────────────────────
-  Future<void> _signUp() async {
+  // ── Validate Fields ─────────────────────────────────────────────────
+  bool _validateFields() {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (name.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all required fields.')),
-      );
-      return;
+    bool isValid = true;
+
+    // Name validation
+    if (name.isEmpty) {
+      _nameError = 'Please enter your name';
+      isValid = false;
+    } else if (name.length < 2) {
+      _nameError = 'Name must be at least 2 characters';
+      isValid = false;
+    } else {
+      _nameError = null;
     }
 
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match.')),
-      );
-      return;
+    // Email validation
+    if (email.isEmpty) {
+      _emailError = 'Please enter your email';
+      isValid = false;
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      _emailError = 'Please enter a valid email address';
+      isValid = false;
+    } else {
+      _emailError = null;
     }
+
+    // Password validation
+    if (password.isEmpty) {
+      _passwordError = 'Please enter a password';
+      isValid = false;
+    } else if (password.length < 6) {
+      _passwordError = 'Password must be at least 6 characters';
+      isValid = false;
+    } else {
+      _passwordError = null;
+    }
+
+    // Confirm password validation
+    if (confirmPassword.isEmpty) {
+      _confirmPasswordError = 'Please confirm your password';
+      isValid = false;
+    } else if (password != confirmPassword) {
+      _confirmPasswordError = 'Passwords do not match';
+      isValid = false;
+    } else {
+      _confirmPasswordError = null;
+    }
+
+    setState(() {});
+    return isValid;
+  }
+
+  // ── Sign Up Logic ────────────────────────────────────────────────────
+  Future<void> _signUp() async {
+    if (!_validateFields()) return;
+
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
 
     setState(() => _isLoading = true);
 
@@ -116,26 +164,32 @@ class _SignupScreenState extends State<SignupScreen> {
         await userCredential.user!.updateDisplayName(name);
       }
 
+      // ── Save name to SharedPreferences ──────────────────────────
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_name', name);
+
       if (mounted) {
         replaceWith(context, Routes.bottomNavBar);
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        String errorMessage = 'An error occurred. Please try again.';
-        if (e.code == 'weak-password') {
-          errorMessage = 'The password provided is too weak.';
-        } else if (e.code == 'email-already-in-use') {
-          errorMessage = 'The account already exists for that email.';
-        } else if (e.code == 'invalid-email') {
-          errorMessage = 'The email address is badly formatted.';
-        }
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(errorMessage)));
+        setState(() {
+          if (e.code == 'weak-password') {
+            _passwordError = 'The password provided is too weak';
+          } else if (e.code == 'email-already-in-use') {
+            _emailError = 'This email is already registered';
+          } else if (e.code == 'invalid-email') {
+            _emailError = 'The email address is badly formatted';
+          } else {
+            _emailError = 'An error occurred. Please try again';
+          }
+        });
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+        setState(() {
+          _emailError = 'An unexpected error occurred';
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -159,6 +213,7 @@ class _SignupScreenState extends State<SignupScreen> {
             AuthTextField(
               hintText: "Your Name",
               controller: _nameController,
+              errorText: _nameError,
             ),
             Gap(space),
 
@@ -168,6 +223,8 @@ class _SignupScreenState extends State<SignupScreen> {
             AuthTextField(
               hintText: "example@example.com",
               controller: _emailController,
+              errorText: _emailError,
+              keyboardType: TextInputType.emailAddress,
             ),
             Gap(space),
 
@@ -190,6 +247,7 @@ class _SignupScreenState extends State<SignupScreen> {
               hintText: "Password",
               isPassword: true,
               controller: _passwordController,
+              errorText: _passwordError,
             ),
             Gap(space),
 
@@ -200,6 +258,7 @@ class _SignupScreenState extends State<SignupScreen> {
               hintText: "Confirm Password",
               isPassword: true,
               controller: _confirmPasswordController,
+              errorText: _confirmPasswordError,
             ),
             const Gap(28),
 
@@ -229,9 +288,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 SocialButton(
                   icon: AppAssets.facebook,
                   onTap: () async {
-                    final user =
-                        await FacebookAuthService.signInWithFacebook(context);
+                    final user = await FacebookAuthService.signInWithFacebook(
+                      context,
+                    );
                     if (user != null && context.mounted) {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString(
+                        'user_name',
+                        user.user?.displayName ?? '',
+                      );
                       replaceWith(context, Routes.bottomNavBar);
                     }
                   },
@@ -242,6 +307,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   onTap: () async {
                     final user = await GoogleAuth.signInWithGoogle(context);
                     if (user != null && context.mounted) {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString(
+                        'user_name',
+                        user.user?.displayName ?? '',
+                      );
                       replaceWith(context, Routes.bottomNavBar);
                     }
                   },
@@ -288,8 +358,10 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         filled: true,
         fillColor: AppColors.background,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
@@ -317,7 +389,7 @@ class _SignupScreenState extends State<SignupScreen> {
         fontFamily: AppFonts.poppins,
         fontSize: 14,
       ),
-      initialCountryCode: 'EG', // مصر افتراضياً
+      initialCountryCode: 'EG',
       onChanged: (phone) {
         _completePhoneNumber = phone.completeNumber;
       },
@@ -351,8 +423,10 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             filled: true,
             fillColor: AppColors.background,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
@@ -367,8 +441,10 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-                  const BorderSide(color: AppColors.mainGreen, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.mainGreen,
+                width: 1.5,
+              ),
             ),
             suffixIcon: Icon(
               Icons.calendar_today_rounded,

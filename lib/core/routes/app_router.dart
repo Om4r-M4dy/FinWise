@@ -197,12 +197,12 @@ class AppRouter {
         path: Routes.loginScreen,
         builder: (context, state) => LoginScreen(),
       ),
-   
+
       GoRoute(
         path: Routes.forgotPasswordScreen,
         builder: (context, state) => ForgotPasswordScreen(),
       ),
-     GoRoute(
+      GoRoute(
         path: Routes.passwordChangedScreen,
         builder: (context, state) => PasswordChangedScreen(),
       ),
@@ -211,7 +211,7 @@ class AppRouter {
         builder: (context, state) => NewPasswordScreen(),
       ),
 
-      // security 
+      // security
       GoRoute(
         path: Routes.securityScreen,
         builder: (context, state) => SecurityScreen(),
@@ -240,11 +240,10 @@ class AppRouter {
         path: Routes.addFingerprintScreen,
         builder: (context, state) => AddFingerprintScreen(),
       ),
-        GoRoute(
+      GoRoute(
         path: Routes.loadingChangeFingerScreen,
         builder: (context, state) => LoadingchangefingerScreen(),
       ),
-      
     ],
   );
 }
