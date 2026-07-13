@@ -10,6 +10,7 @@ import 'package:finwise/features/auth/models/user_model.dart';
 import 'package:finwise/features/auth/widgets/auth_layout.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/custom_auth_button.dart';
+import 'package:finwise/features/auth/widgets/signup_screen_parts.dart';
 import 'package:finwise/features/auth/widgets/socialbutton.dart';
 import 'package:finwise/core/functions/google_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -38,6 +40,12 @@ class _SignupScreenState extends State<SignupScreen> {
   String _completePhoneNumber = '';
   DateTime? _selectedDob;
   bool _isLoading = false;
+
+  // ── Inline error messages ───────────────────────────────────────────
+  String? _nameError;
+  String? _emailError;
+  String? _passwordError;
+  String? _confirmPasswordError;
 
   @override
   void dispose() {
@@ -84,29 +92,70 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  // ── Sign Up Logic ────────────────────────────────────────────────────
-  Future<void> _signUp() async {
+  // ── Validate Fields ─────────────────────────────────────────────────
+  bool _validateFields() {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (name.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all required fields.')),
-      );
-      return;
+    bool isValid = true;
+
+    // Name validation
+    if (name.isEmpty) {
+      _nameError = 'Please enter your name';
+      isValid = false;
+    } else if (name.length < 2) {
+      _nameError = 'Name must be at least 2 characters';
+      isValid = false;
+    } else {
+      _nameError = null;
     }
 
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match.')),
-      );
-      return;
+    // Email validation
+    if (email.isEmpty) {
+      _emailError = 'Please enter your email';
+      isValid = false;
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      _emailError = 'Please enter a valid email address';
+      isValid = false;
+    } else {
+      _emailError = null;
     }
+
+    // Password validation
+    if (password.isEmpty) {
+      _passwordError = 'Please enter a password';
+      isValid = false;
+    } else if (password.length < 6) {
+      _passwordError = 'Password must be at least 6 characters';
+      isValid = false;
+    } else {
+      _passwordError = null;
+    }
+
+    // Confirm password validation
+    if (confirmPassword.isEmpty) {
+      _confirmPasswordError = 'Please confirm your password';
+      isValid = false;
+    } else if (password != confirmPassword) {
+      _confirmPasswordError = 'Passwords do not match';
+      isValid = false;
+    } else {
+      _confirmPasswordError = null;
+    }
+
+    setState(() {});
+    return isValid;
+  }
+
+  // ── Sign Up Logic ────────────────────────────────────────────────────
+  Future<void> _signUp() async {
+    if (!_validateFields()) return;
+
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
 
     setState(() => _isLoading = true);
 
@@ -128,27 +177,32 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       await FirebaseFirestore.instance.collection('user').doc(userCredential.user!.uid).set(userModel.toMap());
+      // ── Save name to SharedPreferences ──────────────────────────
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_name', name);
 
       if (mounted) {
         replaceWith(context, Routes.bottomNavBar);
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        String errorMessage = 'An error occurred. Please try again.';
-        if (e.code == 'weak-password') {
-          errorMessage = 'The password provided is too weak.';
-        } else if (e.code == 'email-already-in-use') {
-          errorMessage = 'The account already exists for that email.';
-        } else if (e.code == 'invalid-email') {
-          errorMessage = 'The email address is badly formatted.';
-        }
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(errorMessage)));
+        setState(() {
+          if (e.code == 'weak-password') {
+            _passwordError = 'The password provided is too weak';
+          } else if (e.code == 'email-already-in-use') {
+            _emailError = 'This email is already registered';
+          } else if (e.code == 'invalid-email') {
+            _emailError = 'The email address is badly formatted';
+          } else {
+            _emailError = 'An error occurred. Please try again';
+          }
+        });
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+        setState(() {
+          _emailError = 'An unexpected error occurred';
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -166,66 +220,65 @@ class _SignupScreenState extends State<SignupScreen> {
           children: [
             const Gap(27),
 
-            // ── Full Name ──────────────────────────────────────────────
-            _label("Full name"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "Your Name",
-              controller: _nameController,
-            ),
-            Gap(space),
-
-            // ── Email ──────────────────────────────────────────────────
-            _label("Email"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "example@example.com",
-              controller: _emailController,
-            ),
-            Gap(space),
-
-            // ── Mobile Number with Country Picker ─────────────────────
-            _label("Mobile Number"),
-            const Gap(8),
-            _buildPhoneField(),
-            Gap(space),
-
-            // ── Date of Birth ──────────────────────────────────────────
-            _label("Date of Birth"),
-            const Gap(8),
-            _buildDobField(),
-            Gap(space),
-
-            // ── Password ───────────────────────────────────────────────
-            _label("Password"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "Password",
-              isPassword: true,
-              controller: _passwordController,
-            ),
-            Gap(space),
-
-            // ── Confirm Password ───────────────────────────────────────
-            _label("Confirm Password"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "Confirm Password",
-              isPassword: true,
-              controller: _confirmPasswordController,
-            ),
-            const Gap(28),
-
-            const Center(child: Text("By continuing, you agree to ")),
-            const Center(
-              child: Text(
-                "Terms of Use and Privacy Policy.",
-                style: TextStyle(fontWeight: FontWeight.w600),
+            // Full Name
+            LabeledField(
+              label: "Full name",
+              field: AuthTextField(
+                hintText: "Your Name",
+                controller: _nameController,
+                errorText: _nameError,
               ),
             ),
-            const Gap(13),
 
-            // ── Sign Up Button ─────────────────────────────────────────
+            // Email
+            LabeledField(
+              label: "Email",
+              field: AuthTextField(
+                hintText: "example@example.com",
+                controller: _emailController,
+                errorText: _emailError,
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ),
+
+            // Mobile Number
+            LabeledField(
+              label: "Mobile Number",
+              field: _buildPhoneField(),
+            ),
+
+            // Date of Birth
+            LabeledField(
+              label: "Date of Birth",
+              field: _buildDobField(),
+            ),
+
+            // Password
+            LabeledField(
+              label: "Password",
+              field: AuthTextField(
+                hintText: "Password",
+                isPassword: true,
+                controller: _passwordController,
+                errorText: _passwordError,
+              ),
+            ),
+
+            // Confirm Password
+            LabeledField(
+              label: "Confirm Password",
+              field: AuthTextField(
+                hintText: "Confirm Password",
+                isPassword: true,
+                controller: _confirmPasswordController,
+                errorText: _confirmPasswordError,
+              ),
+            ),
+
+            const Gap(28),
+            const TermsNotice(),
+
+            // Sign Up Button
             CustomAuthButton(
               text: "Sign Up",
               onPressed: _signUp,
@@ -235,40 +288,9 @@ class _SignupScreenState extends State<SignupScreen> {
             const Gap(28),
             const Center(child: Text("or sign up with")),
             const Gap(19),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SocialButton(
-                  icon: AppAssets.facebook,
-                  onTap: () async {
-                    final user =
-                        await FacebookAuthService.signInWithFacebook(context);
-                    if (user != null && context.mounted) {
-                      replaceWith(context, Routes.bottomNavBar);
-                    }
-                  },
-                ),
-                const Gap(16),
-                SocialButton(
-                  icon: AppAssets.google,
-                  onTap: () async {
-                    final user = await GoogleAuth.signInWithGoogle(context);
-                    if (user != null && context.mounted) {
-                      replaceWith(context, Routes.bottomNavBar);
-                    }
-                  },
-                ),
-              ],
-            ),
+            const SocialButtonsRow(),
             const Gap(19),
-
-            Center(
-              child: GestureDetector(
-                onTap: () => replaceWith(context, Routes.loginScreen),
-                child: const Text("Already have an account? Log In"),
-              ),
-            ),
+            const AlreadyAccountLink(),
             const Gap(20),
           ],
         ),
@@ -276,18 +298,8 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────
+ 
 
-  Widget _label(String text) {
-    return Text(
-      text,
-      style: TextStyles.caption1_14.copyWith(
-        color: AppColors.lettersAndIcons,
-        fontFamily: AppFonts.poppins,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
 
   /// Phone field with integrated country code picker
   Widget _buildPhoneField() {
@@ -301,8 +313,10 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         filled: true,
         fillColor: AppColors.background,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
@@ -330,7 +344,7 @@ class _SignupScreenState extends State<SignupScreen> {
         fontFamily: AppFonts.poppins,
         fontSize: 14,
       ),
-      initialCountryCode: 'EG', // مصر افتراضياً
+      initialCountryCode: 'EG',
       onChanged: (phone) {
         _completePhoneNumber = phone.completeNumber;
       },
@@ -364,8 +378,10 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             filled: true,
             fillColor: AppColors.background,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
@@ -380,8 +396,10 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-                  const BorderSide(color: AppColors.mainGreen, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.mainGreen,
+                width: 1.5,
+              ),
             ),
             suffixIcon: Icon(
               Icons.calendar_today_rounded,
