@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/constants/app_assets.dart';
@@ -5,6 +6,7 @@ import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
+import 'package:finwise/features/auth/models/user_model.dart';
 import 'package:finwise/features/auth/widgets/auth_layout.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/custom_auth_button.dart';
@@ -165,6 +167,16 @@ class _SignupScreenState extends State<SignupScreen> {
         await userCredential.user!.updateDisplayName(name);
       }
 
+      var userModel = UserModel(
+        username: name,
+        email: email,
+        phone: _completePhoneNumber,
+        uid: userCredential.user!.uid,
+        dob: _selectedDob?.millisecondsSinceEpoch.toDouble() ?? 0.0,
+        profilePicture: userCredential.user!.photoURL ?? '', totalBalance: null, totalExpense: null, monthlyBudgetLimit: null, settings: {},
+      );
+
+      await FirebaseFirestore.instance.collection('user').doc(userCredential.user!.uid).set(userModel.toMap());
       // ── Save name to SharedPreferences ──────────────────────────
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_name', name);
