@@ -8,6 +8,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/auth/widgets/auth_layout.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/custom_auth_button.dart';
+import 'package:finwise/features/auth/widgets/signup_screen_parts.dart';
 import 'package:finwise/features/auth/widgets/socialbutton.dart';
 import 'package:finwise/core/functions/google_auth.dart';
 import 'package:flutter/material.dart';
@@ -207,71 +208,65 @@ class _SignupScreenState extends State<SignupScreen> {
           children: [
             const Gap(27),
 
-            // ── Full Name ──────────────────────────────────────────────
-            _label("Full name"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "Your Name",
-              controller: _nameController,
-              errorText: _nameError,
-            ),
-            Gap(space),
-
-            // ── Email ──────────────────────────────────────────────────
-            _label("Email"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "example@example.com",
-              controller: _emailController,
-              errorText: _emailError,
-              keyboardType: TextInputType.emailAddress,
-            ),
-            Gap(space),
-
-            // ── Mobile Number with Country Picker ─────────────────────
-            _label("Mobile Number"),
-            const Gap(8),
-            _buildPhoneField(),
-            Gap(space),
-
-            // ── Date of Birth ──────────────────────────────────────────
-            _label("Date of Birth"),
-            const Gap(8),
-            _buildDobField(),
-            Gap(space),
-
-            // ── Password ───────────────────────────────────────────────
-            _label("Password"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "Password",
-              isPassword: true,
-              controller: _passwordController,
-              errorText: _passwordError,
-            ),
-            Gap(space),
-
-            // ── Confirm Password ───────────────────────────────────────
-            _label("Confirm Password"),
-            const Gap(8),
-            AuthTextField(
-              hintText: "Confirm Password",
-              isPassword: true,
-              controller: _confirmPasswordController,
-              errorText: _confirmPasswordError,
-            ),
-            const Gap(28),
-
-            const Center(child: Text("By continuing, you agree to ")),
-            const Center(
-              child: Text(
-                "Terms of Use and Privacy Policy.",
-                style: TextStyle(fontWeight: FontWeight.w600),
+            // Full Name
+            LabeledField(
+              label: "Full name",
+              field: AuthTextField(
+                hintText: "Your Name",
+                controller: _nameController,
+                errorText: _nameError,
               ),
             ),
-            const Gap(13),
 
-            // ── Sign Up Button ─────────────────────────────────────────
+            // Email
+            LabeledField(
+              label: "Email",
+              field: AuthTextField(
+                hintText: "example@example.com",
+                controller: _emailController,
+                errorText: _emailError,
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ),
+
+            // Mobile Number
+            LabeledField(
+              label: "Mobile Number",
+              field: _buildPhoneField(),
+            ),
+
+            // Date of Birth
+            LabeledField(
+              label: "Date of Birth",
+              field: _buildDobField(),
+            ),
+
+            // Password
+            LabeledField(
+              label: "Password",
+              field: AuthTextField(
+                hintText: "Password",
+                isPassword: true,
+                controller: _passwordController,
+                errorText: _passwordError,
+              ),
+            ),
+
+            // Confirm Password
+            LabeledField(
+              label: "Confirm Password",
+              field: AuthTextField(
+                hintText: "Confirm Password",
+                isPassword: true,
+                controller: _confirmPasswordController,
+                errorText: _confirmPasswordError,
+              ),
+            ),
+
+            const Gap(28),
+            const TermsNotice(),
+
+            // Sign Up Button
             CustomAuthButton(
               text: "Sign Up",
               onPressed: _signUp,
@@ -281,51 +276,9 @@ class _SignupScreenState extends State<SignupScreen> {
             const Gap(28),
             const Center(child: Text("or sign up with")),
             const Gap(19),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SocialButton(
-                  icon: AppAssets.facebook,
-                  onTap: () async {
-                    final user = await FacebookAuthService.signInWithFacebook(
-                      context,
-                    );
-                    if (user != null && context.mounted) {
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setString(
-                        'user_name',
-                        user.user?.displayName ?? '',
-                      );
-                      replaceWith(context, Routes.bottomNavBar);
-                    }
-                  },
-                ),
-                const Gap(16),
-                SocialButton(
-                  icon: AppAssets.google,
-                  onTap: () async {
-                    final user = await GoogleAuth.signInWithGoogle(context);
-                    if (user != null && context.mounted) {
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setString(
-                        'user_name',
-                        user.user?.displayName ?? '',
-                      );
-                      replaceWith(context, Routes.bottomNavBar);
-                    }
-                  },
-                ),
-              ],
-            ),
+            const SocialButtonsRow(),
             const Gap(19),
-
-            Center(
-              child: GestureDetector(
-                onTap: () => replaceWith(context, Routes.loginScreen),
-                child: const Text("Already have an account? Log In"),
-              ),
-            ),
+            const AlreadyAccountLink(),
             const Gap(20),
           ],
         ),
@@ -333,18 +286,8 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────
+ 
 
-  Widget _label(String text) {
-    return Text(
-      text,
-      style: TextStyles.caption1_14.copyWith(
-        color: AppColors.lettersAndIcons,
-        fontFamily: AppFonts.poppins,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
 
   /// Phone field with integrated country code picker
   Widget _buildPhoneField() {
