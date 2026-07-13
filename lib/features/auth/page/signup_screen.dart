@@ -119,15 +119,14 @@ class _SignupScreenState extends State<SignupScreen> {
       }
 
       var userModel = UserModel(
-        name: name,
+        username: name,
         email: email,
         phone: _completePhoneNumber,
-        dob: _selectedDob!,
-        id: userCredential.user!.uid,
-        photoUrl: userCredential.user!.photoURL ?? '',
+        uid: userCredential.user!.uid,
+        profilePicture: userCredential.user!.photoURL ?? '', totalBalance: null, totalExpense: null, monthlyBudgetLimit: null, settings: {},
       );
 
-      FirebaseFirestore.instance.collection('user').doc(userCredential.user!.uid).set(userModel.toJson());
+      FirebaseFirestore.instance.collection('user').doc(userCredential.user!.uid).set(userModel.toMap());
 
       if (mounted) {
         replaceWith(context, Routes.bottomNavBar);

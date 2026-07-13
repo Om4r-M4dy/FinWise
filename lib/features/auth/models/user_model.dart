@@ -1,45 +1,53 @@
 class UserModel {
-  final String? name;
+  final String? uid;
+  final String? username;
   final String? email;
   final String? phone;
-  final DateTime dob;
-  final String id;
-  final String? photoUrl;
-  final double? balance;
-  final double? totalIncome;
-  final double? totalExpenses;
+  final String? profilePicture;
+  final double? totalBalance;
+  final double? totalExpense;
+  final double? monthlyBudgetLimit;
+  final Map<String, bool>? settings;
 
   UserModel({
-    required this.name,
+    required this.uid,
+    required this.username,
     required this.email,
     required this.phone,
-    required this.dob,
-    required this.id,
-    required this.photoUrl,
-    this.balance,
-    this.totalIncome,
-    this.totalExpenses,
+    required this.profilePicture,
+    required this.totalBalance,
+    required this.totalExpense,
+    required this.monthlyBudgetLimit,
+    required this.settings,
   });
 
-  UserModel.fromJson(Map<String, dynamic> json)
-      : name = json['name'] as String,
-        email = json['email'] as String,
-        phone = json['phone'] as String,
-        dob = DateTime.parse(json['dob'] as String),
-        id = json['id'] as String,
-        photoUrl = json['photoUrl'] as String,
-        balance = json['balance'] as double?,
-        totalIncome = json['totalIncome'] as double?,
-        totalExpenses = json['totalExpenses'] as double?;
 
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'dob': dob.toIso8601String(),
-        'id': id,
-        'photoUrl': photoUrl,
-        'balance': balance,
-        'totalIncome': totalIncome,
-  };
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      uid: map['uid'] ?? '',
+      username: map['username'] ?? '',
+      email: map['email'] ?? '',
+      phone: map['phone'] ?? '',
+      profilePicture: map['profilePicture'] ?? '',
+      totalBalance: (map['totalBalance'] as num?)?.toDouble() ?? 0.0,
+      totalExpense: (map['totalExpense'] as num?)?.toDouble() ?? 0.0,
+      monthlyBudgetLimit: (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
+      settings: Map<String, bool>.from(map['settings'] ?? {'pushNotifications': true, 'darkTheme': false}),
+    );
+  }
+
+
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'username': username,
+      'email': email,
+      'phone': phone,
+      'profilePicture': profilePicture,
+      'totalBalance': totalBalance,
+      'totalExpense': totalExpense,
+      'monthlyBudgetLimit': monthlyBudgetLimit,
+      'settings': settings,
+    };
+  }
 }
