@@ -126,7 +126,7 @@ class _SignupScreenState extends State<SignupScreen> {
         profilePicture: userCredential.user!.photoURL ?? '', totalBalance: null, totalExpense: null, monthlyBudgetLimit: null, settings: {},
       );
 
-      FirebaseFirestore.instance.collection('user').doc(userCredential.user!.uid).set(userModel.toMap());
+      await FirebaseFirestore.instance.collection('user').doc(userCredential.user!.uid).set(userModel.toMap());
 
       if (mounted) {
         replaceWith(context, Routes.bottomNavBar);
