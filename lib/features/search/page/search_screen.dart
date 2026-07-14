@@ -22,88 +22,90 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _showSearchResults = false;
   @override
   Widget build(BuildContext context) {
-    return MyBodyView(
-      topSection: Column(
-        children: [
-          SafeArea(child: RowAppBar(title: 'Search')),
-          Gap(30),
-          CustomTextFormField(
-            hintText: 'Search...',
-            fillColor: AppColors.background,
-            radius: 30,
-            readOnly: true,
-          ),
-          Gap(24),
-        ],
-      ),
-
-      bottomSection: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      body: MyBodyView(
+        topSection: Column(
           children: [
-            Text('Categories', style: TextStyles.bodyMedium),
-            Gap(7),
-            CustomTextFormField(
-              hintText: 'Select the category',
-              suffixIcon: UnconstrainedBox(
-                child: CustomSvgPicture(
-                  path: AppAssets.arrowDown,
-                  width: 5,
-                  height: 9,
-                ),
-              ),
-              readOnly: true,
-            ),
+            SafeArea(child: RowAppBar(title: 'Search')),
             Gap(30),
-            Text('Date', style: TextStyles.bodyMedium),
-            Gap(7),
             CustomTextFormField(
-              hintText: '30 /APR/2023',
-              suffixIcon: UnconstrainedBox(
-                child: CustomSvgPicture(
-                  path: AppAssets.calender,
-                  width: 24,
-                  height: 22,
-                ),
-              ),
+              hintText: 'Search...',
+              fillColor: AppColors.background,
+              radius: 30,
               readOnly: true,
             ),
-            Gap(40),
-            //Radio Button
-            Text('Report', style: TextStyles.bodyMedium),
-            Gap(9),
-            RadioGroup<TransactionType>(
-              //is ther any problem with this widget?
-              groupValue: _selectedTransactionType,
-              onChanged: (value) {},
-              child: Row(
-                children: [
-                  _radioButtonBuilder(
-                    title: 'Income',
-                    value: TransactionType.income,
-                  ),
-                  Gap(55),
-                  _radioButtonBuilder(
-                    title: 'Expense',
-                    value: TransactionType.expense,
-                  ),
-                ],
-              ),
-            ),
-            Gap(50),
-            Center(
-              child: MainButton(
-                text: 'Search',
-                onPress: () {
-                  setState(() {
-                    _showSearchResults = true;
-                  });
-                },
-              ),
-            ),
-            Gap(70),
-            if (_showSearchResults) ExpenseCard(),
+            Gap(24),
           ],
+        ),
+  
+        bottomSection: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Categories', style: TextStyles.bodyMedium),
+              Gap(7),
+              CustomTextFormField(
+                hintText: 'Select the category',
+                suffixIcon: UnconstrainedBox(
+                  child: CustomSvgPicture(
+                    path: AppAssets.arrowDown,
+                    width: 5,
+                    height: 9,
+                  ),
+                ),
+                readOnly: true,
+              ),
+              Gap(30),
+              Text('Date', style: TextStyles.bodyMedium),
+              Gap(7),
+              CustomTextFormField(
+                hintText: '30 /APR/2023',
+                suffixIcon: UnconstrainedBox(
+                  child: CustomSvgPicture(
+                    path: AppAssets.calender,
+                    width: 24,
+                    height: 22,
+                  ),
+                ),
+                readOnly: true,
+              ),
+              Gap(40),
+              //Radio Button
+              Text('Report', style: TextStyles.bodyMedium),
+              Gap(9),
+              RadioGroup<TransactionType>(
+                //is ther any problem with this widget?
+                groupValue: _selectedTransactionType,
+                onChanged: (value) {},
+                child: Row(
+                  children: [
+                    _radioButtonBuilder(
+                      title: 'Income',
+                      value: TransactionType.income,
+                    ),
+                    Gap(55),
+                    _radioButtonBuilder(
+                      title: 'Expense',
+                      value: TransactionType.expense,
+                    ),
+                  ],
+                ),
+              ),
+              Gap(50),
+              Center(
+                child: MainButton(
+                  text: 'Search',
+                  onPress: () {
+                    setState(() {
+                      _showSearchResults = true;
+                    });
+                  },
+                ),
+              ),
+              Gap(70),
+              if (_showSearchResults) ExpenseCard(),
+            ],
+          ),
         ),
       ),
     );

@@ -14,20 +14,22 @@ class CalendarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyBodyView(
-      topSection: Column(
-        children: [
-          SafeArea(child: RowAppBar(title: 'Calendar')),
-          Gap(70),
-        ],
-      ),
-      bottomSection: SingleChildScrollView(
-        child: Column(
+    return Scaffold(
+      body: MyBodyView(
+        topSection: Column(
           children: [
-            AppCalendar(onDaySelected: (selectedDay, focusedDay) {}),
-            Gap(35),
-            Dashboard(),
+            SafeArea(child: RowAppBar(title: 'Calendar')),
+            Gap(70),
           ],
+        ),
+        bottomSection: SingleChildScrollView(
+          child: Column(
+            children: [
+              AppCalendar(onDaySelected: (selectedDay, focusedDay) {}),
+              Gap(35),
+              Dashboard(),
+            ],
+          ),
         ),
       ),
     );
