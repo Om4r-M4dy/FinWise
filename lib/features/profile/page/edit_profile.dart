@@ -1,12 +1,19 @@
+import 'dart:io';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/context_extensions.dart';
+import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/app_icon_button.dart';
 import 'package:finwise/core/widgets/custom_text_form_field.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/row_app_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:finwise/core/services/firebase/firestore_provider.dart';
+import 'package:finwise/features/auth/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

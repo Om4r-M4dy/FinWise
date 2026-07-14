@@ -23,7 +23,6 @@ class UserModel {
     required this.settings,
   });
 
-
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       uid: map['uid'] ?? '',
@@ -34,13 +33,15 @@ class UserModel {
       totalBalance: (map['totalBalance'] as num?)?.toDouble() ?? 0.0,
       totalExpense: (map['totalExpense'] as num?)?.toDouble() ?? 0.0,
       dob: (map['dob'] as num?)?.toDouble() ?? 0.0,
-      monthlyBudgetLimit: (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
-      settings: Map<String, bool>.from(map['settings'] ?? {'pushNotifications': true, 'darkTheme': false}),
+      monthlyBudgetLimit:
+          (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
+      settings: Map<String, bool>.from(
+        map['settings'] ?? {'pushNotifications': true, 'darkTheme': false},
+      ),
     );
   }
 
-
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'uid': uid,
       'username': username,
@@ -53,5 +54,36 @@ class UserModel {
       'monthlyBudgetLimit': monthlyBudgetLimit,
       'settings': settings,
     };
+  }
+
+  factory UserModel.fromJson(Map<String, dynamic> map) {
+    return UserModel(
+      uid: map['uid'] ?? '',
+      username: map['username'] ?? '',
+      email: map['email'] ?? '',
+      phone: map['phone'] ?? '',
+      profilePicture: map['profilePicture'] ?? '',
+      totalBalance: (map['totalBalance'] as num?)?.toDouble() ?? 0.0,
+      totalExpense: (map['totalExpense'] as num?)?.toDouble() ?? 0.0,
+      dob: (map['dob'] as num?)?.toDouble() ?? 0.0,
+      monthlyBudgetLimit:
+          (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
+      settings: Map<String, bool>.from(
+        map['settings'] ?? {'pushNotifications': true, 'darkTheme': false},
+      ),
+    );
+  }
+  Map<String, dynamic> toUpdateData() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (username != null) data['username'] = username;
+    if (phone != null) data['phone'] = phone;
+    if (profilePicture != null) data['profilePicture'] = profilePicture;
+    if (totalBalance != null) data['totalBalance'] = totalBalance;
+    if (totalExpense != null) data['totalExpense'] = totalExpense;
+    if (dob != null) data['dob'] = dob;
+    if (monthlyBudgetLimit != null)
+      data['monthlyBudgetLimit'] = monthlyBudgetLimit;
+    if (settings != null) data['settings'] = settings;
+    return data;
   }
 }
