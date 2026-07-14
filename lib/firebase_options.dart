@@ -66,6 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1022288201597',
     projectId: 'finwise-e4c7a',
     storageBucket: 'finwise-e4c7a.firebasestorage.app',
+    androidClientId: '1022288201597-jsmijavt7p6ptpo4pdl644td1caupf1t.apps.googleusercontent.com',
+    iosClientId: '1022288201597-rtiviq8h6uouhbu4i68jqlu7rhbacmjg.apps.googleusercontent.com',
     iosBundleId: 'com.depi.finwise',
   );
 
