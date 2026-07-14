@@ -10,7 +10,7 @@ import 'package:finwise/features/Security/pages/loading_deleted_fingerprint_scre
 import 'package:finwise/features/Security/pages/loadingChangePin_screen.dart';
 import 'package:finwise/features/Security/pages/security_screen.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
-import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
+import 'package:finwise/features/Transaction/presentation/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/auth/page/confNewPassword_screen.dart';
 import 'package:finwise/features/auth/page/forgot_password.dart';

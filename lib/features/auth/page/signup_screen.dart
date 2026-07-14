@@ -1,16 +1,11 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
-import 'package:finwise/core/constants/app_assets.dart';
-import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
-import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/auth/widgets/auth_layout.dart';
 import 'package:finwise/features/auth/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/widgets/custom_auth_button.dart';
 import 'package:finwise/features/auth/widgets/signup_screen_parts.dart';
-import 'package:finwise/features/auth/widgets/socialbutton.dart';
-import 'package:finwise/core/functions/google_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
