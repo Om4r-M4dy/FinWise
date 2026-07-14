@@ -12,13 +12,15 @@ import 'package:finwise/features/Security/pages/security_screen.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
-import 'package:finwise/features/auth/page/confNewPassword_screen.dart';
-import 'package:finwise/features/auth/page/forgot_password.dart';
-import 'package:finwise/features/auth/page/login_screen.dart';
-import 'package:finwise/features/auth/page/newPassword_screen.dart';
-import 'package:finwise/features/auth/page/securityPin_screen.dart';
-import 'package:finwise/features/auth/page/security_fingerprint_screen.dart';
-import 'package:finwise/features/auth/page/signup_screen.dart';
+import 'package:finwise/features/auth/persentation/page/confNewPassword_screen.dart';
+import 'package:finwise/features/auth/persentation/page/forgot_password.dart';
+import 'package:finwise/features/auth/persentation/page/login_screen.dart';
+import 'package:finwise/features/auth/persentation/page/newPassword_screen.dart';
+import 'package:finwise/features/auth/persentation/page/securityPin_screen.dart';
+import 'package:finwise/features/auth/persentation/page/security_fingerprint_screen.dart';
+import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/categories/pages/add_expenses.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
@@ -195,7 +197,10 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.loginScreen,
-        builder: (context, state) => LoginScreen(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => AuthCubit(),
+          child: const LoginScreen(),
+        ),
       ),
 
       GoRoute(
