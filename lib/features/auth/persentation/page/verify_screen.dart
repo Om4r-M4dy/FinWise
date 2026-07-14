@@ -7,8 +7,8 @@ import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:finwise/core/functions/google_auth.dart';
 import 'package:finwise/core/functions/facebook_auth.dart';
-import 'package:finwise/features/auth/widgets/auth_layout.dart';
-import 'package:finwise/features/auth/widgets/custom_auth_button.dart';
+import 'package:finwise/features/auth/persentation/widgets/auth_layout.dart';
+import 'package:finwise/features/auth/persentation/widgets/custom_auth_button.dart';
 import 'package:finwise/core/functions/navigations.dart';
 
 class VerifyScreen extends StatefulWidget {

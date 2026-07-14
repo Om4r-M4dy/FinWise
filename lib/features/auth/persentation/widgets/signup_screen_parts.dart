@@ -5,8 +5,8 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/auth/widgets/auth_text_field.dart';
-import 'package:finwise/features/auth/widgets/socialbutton.dart';
+import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart';
+import 'package:finwise/features/auth/persentation/widgets/socialbutton.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/functions/facebook_auth.dart';
@@ -69,12 +69,16 @@ class SocialButtonsRow extends StatelessWidget {
       children: [
         SocialButton(
           icon: AppAssets.facebook,
-          onTap: () => _handleSocialSignIn(context, FacebookAuthService.signInWithFacebook),
+          onTap: () => _handleSocialSignIn(
+            context,
+            FacebookAuthService.signInWithFacebook,
+          ),
         ),
         const Gap(16),
         SocialButton(
           icon: AppAssets.google,
-          onTap: () => _handleSocialSignIn(context, GoogleAuth.signInWithGoogle),
+          onTap: () =>
+              _handleSocialSignIn(context, GoogleAuth.signInWithGoogle),
         ),
       ],
     );

@@ -3,7 +3,7 @@ import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/auth/widgets/auth_text_field.dart';
+import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
