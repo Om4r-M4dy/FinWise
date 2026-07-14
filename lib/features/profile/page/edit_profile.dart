@@ -27,93 +27,95 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MyBodyView(
-      topSection: SafeArea(
-        bottom: false,
-        child: SizedBox(
-          width: double.infinity,
-          height: context.screenHeight * 0.12,
-          child: RowAppBar(title: 'Edit my Profile'),
-        ),
-      ),
-      bottomSection: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.topCenter,
-        children: [
-          Positioned(
-            top: -EditProfileScreen.profileImageRadius - 15,
-            child: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CircleAvatar(
-                  radius: EditProfileScreen.profileImageRadius,
-                  backgroundImage: AssetImage(AppAssets.profileImage),
-                ),
-                Positioned(
-                  right: 13,
-                  child: AppIconButton(
-                    path: AppAssets.cam,
-                    bgWidth: 25,
-                    bgHeight: 25,
-                    bgColor: AppColors.mainGreen,
-                  ),
-                ),
-              ],
-            ),
+    return Scaffold(
+      body: MyBodyView(
+        topSection: SafeArea(
+          bottom: false,
+          child: SizedBox(
+            width: double.infinity,
+            height: context.screenHeight * 0.12,
+            child: RowAppBar(title: 'Edit my Profile'),
           ),
-
-          Padding(
-            padding: const EdgeInsets.only(
-              top: EditProfileScreen.profileImageRadius + 20.0,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
+        ),
+        bottomSection: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.topCenter,
+          children: [
+            Positioned(
+              top: -EditProfileScreen.profileImageRadius - 15,
+              child: Stack(
+                alignment: Alignment.bottomRight,
                 children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      EditProfileScreen.name,
-                      style: TextStyles.bodyLarge,
-                    ),
+                  CircleAvatar(
+                    radius: EditProfileScreen.profileImageRadius,
+                    backgroundImage: AssetImage(AppAssets.profileImage),
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'ID: ${EditProfileScreen.id}',
-                      style: TextStyles.bodySmall,
+                  Positioned(
+                    right: 13,
+                    child: AppIconButton(
+                      path: AppAssets.cam,
+                      bgWidth: 25,
+                      bgHeight: 25,
+                      bgColor: AppColors.mainGreen,
                     ),
-                  ),
-                  Gap(30),
-
-                  Text('Account Settings', style: TextStyles.bodyLarge),
-                  Gap(30),
-                  Text('Username', style: TextStyles.bodyMedium),
-                  Gap(13),
-                  CustomTextFormField(hintText: 'John Smith'),
-                  Gap(17),
-                  Text('phone', style: TextStyles.bodyMedium),
-                  Gap(13),
-                  CustomTextFormField(hintText: '+44 555 5555 55'),
-                  Gap(17),
-                  Text('email address', style: TextStyles.bodyMedium),
-                  Gap(13),
-                  CustomTextFormField(hintText: 'example@example.com'),
-                  Gap(40),
-
-                  _rowCustomSwitch('push notifications', 0),
-                  Gap(37),
-                  _rowCustomSwitch('Turn dark Theme', 1),
-                  Gap(36),
-                  Center(
-                    child: MainButton(text: 'Update Profile', onPress: () {}),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+      
+            Padding(
+              padding: const EdgeInsets.only(
+                top: EditProfileScreen.profileImageRadius + 20.0,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+      
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        EditProfileScreen.name,
+                        style: TextStyles.bodyLarge,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'ID: ${EditProfileScreen.id}',
+                        style: TextStyles.bodySmall,
+                      ),
+                    ),
+                    Gap(30),
+      
+                    Text('Account Settings', style: TextStyles.bodyLarge),
+                    Gap(30),
+                    Text('Username', style: TextStyles.bodyMedium),
+                    Gap(13),
+                    CustomTextFormField(hintText: 'John Smith'),
+                    Gap(17),
+                    Text('phone', style: TextStyles.bodyMedium),
+                    Gap(13),
+                    CustomTextFormField(hintText: '+44 555 5555 55'),
+                    Gap(17),
+                    Text('email address', style: TextStyles.bodyMedium),
+                    Gap(13),
+                    CustomTextFormField(hintText: 'example@example.com'),
+                    Gap(40),
+      
+                    _rowCustomSwitch('push notifications', 0),
+                    Gap(37),
+                    _rowCustomSwitch('Turn dark Theme', 1),
+                    Gap(36),
+                    Center(
+                      child: MainButton(text: 'Update Profile', onPress: () {}),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
