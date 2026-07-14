@@ -1,4 +1,3 @@
-
 class Routes {
   // route names
   static const String launch = '/';
@@ -39,7 +38,8 @@ class Routes {
   static const String bottomNavBar = '/bottom_nav_bar';
   static const String transactionScreen = '/transaction_screen';
   static const String securitypinScreen = '/securityPin_screen';
-  static const String securityFingerprintScreen = '/security_fingerprint_screen';
+  static const String securityFingerprintScreen =
+      '/security_fingerprint_screen';
   // Auth Routes
   static const String signupScreen = '/signup_screen';
   static const String loginScreen = '/login_screen';
@@ -59,4 +59,5 @@ class Routes {
       '/loading_deleted_fingerprint_screen';
   static const String addFingerprintScreen = '/add_fingerprint_screen';
   static const String loadingChangeFingerScreen = '/loadingChangeFingerScreen';
+  static const String addBalance = '/add_balance';
 }

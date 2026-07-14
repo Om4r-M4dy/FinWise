@@ -1,3 +1,5 @@
+import 'package:finwise/features/Add/presentation/cubit/add_balance_cubit.dart';
+import 'package:finwise/features/Add/presentation/page/add_balance_screen.dart';
 import 'package:finwise/features/Calendar/page/calendar_screen.dart';
 import 'package:finwise/features/Home/pages/home_screen.dart';
 import 'package:finwise/features/Home/pages/nav_bar.dart';
@@ -248,6 +250,13 @@ class AppRouter {
       GoRoute(
         path: Routes.loadingChangeFingerScreen,
         builder: (context, state) => LoadingchangefingerScreen(),
+      ),
+      GoRoute(
+        path: Routes.addBalance,
+        builder: (context, state) => BlocProvider(
+          create: (context) => AddBalanceCubit(),
+          child: const AddBalanceScreen(),
+        ),
       ),
     ],
   );

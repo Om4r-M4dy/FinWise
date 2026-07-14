@@ -39,10 +39,10 @@ class _LaunchScreenState extends State<LaunchScreen>
 
     // ── Check where to navigate ────────────────────────────────────
     // 1. If user is already logged in → go straight to home
-    // if (FirebaseAuth.instance.currentUser != null) {
-    //   replaceWith(context, Routes.bottomNavBar);
-    //   return;
-    // }
+    if (FirebaseAuth.instance.currentUser != null) {
+      replaceWith(context, Routes.bottomNavBar);
+      return;
+    }
 
     // 2. Check if user has seen OnBoarding before
     final prefs = await SharedPreferences.getInstance();
