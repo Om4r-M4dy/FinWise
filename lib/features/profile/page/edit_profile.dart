@@ -286,7 +286,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       await FirestoreProvider.editUser(updatedModel);
 
       if (!mounted) return;
-      context.read<UserCubit>().setUser(updatedModel);
+      final userCubit = context.read<UserCubit>();
 
       // 5. Update the local UserPrefs cache
       await UserPrefs.setName(name);
@@ -299,7 +299,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (!mounted) return;
       LoadingDialog.hide(context);
       CustomSnackBar.showSuccess(context, "Profile updated successfully!");
-      Navigator.pop(context);
+      
+      // Update cubit and pop screen after a micro-delay to prevent Navigator lock
+      Future.delayed(const Duration(milliseconds: 50), () {
+        if (mounted) {
+          Navigator.pop(context);
+        }
+        userCubit.setUser(updatedModel);
+      });
     } catch (e) {
       if (!mounted) return;
       LoadingDialog.hide(context);

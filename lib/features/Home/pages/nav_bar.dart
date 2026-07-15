@@ -33,7 +33,7 @@ class _NavBarState extends State<NavBar> {
   final List<String> icons = [
     AppAssets.home,
     AppAssets.analysis,
-    AppAssets.transactions,
+    AppAssets.more,
     AppAssets.category,
     AppAssets.profile,
   ];
