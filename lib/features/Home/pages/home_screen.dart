@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 topSection: ProgressSection(
                   percentage: percentage,
                   totalAmount: budget,
-                  totalExpanse: expense,
+                  totalExpense: expense,
                   totalBalance: balance,
                 ),
                 bottomSection: SingleChildScrollView(

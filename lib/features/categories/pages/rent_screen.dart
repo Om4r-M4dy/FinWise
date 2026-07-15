@@ -23,7 +23,7 @@ class RentScreen extends StatelessWidget {
         topSection: ProgressSection(
           percentage: 30,
           totalAmount: 20000,
-          totalExpanse: 5000,
+          totalExpense: 5000,
           totalBalance: 7200,
         ),
         bottomSection: SingleChildScrollView(

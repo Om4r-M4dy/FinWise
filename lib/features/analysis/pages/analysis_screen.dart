@@ -48,7 +48,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
           topSection: ProgressSection(
             percentage: percentage,
             totalAmount: budget,
-            totalExpanse: expense,
+            totalExpense: expense,
             totalBalance: balance,
           ),
           bottomSection: SingleChildScrollView(

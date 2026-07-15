@@ -97,7 +97,7 @@ class TransactionScreen extends StatelessWidget {
                 back: ProgressSection(
                   percentage: percentage,
                   totalAmount: budget,
-                  totalExpanse: expense,
+                  totalExpense: expense,
                   totalBalance: balance,
                 ),
               ),

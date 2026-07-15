@@ -43,7 +43,7 @@ class MainCategories extends StatelessWidget {
           topSection: ProgressSection(
             percentage: percentage,
             totalAmount: budget,
-            totalExpanse: totalExpense,
+            totalExpense: totalExpense,
             totalBalance: balance,
           ),
           bottomSection: SingleChildScrollView(

@@ -17,13 +17,13 @@ class ProgressSection extends StatelessWidget {
     super.key,
     required this.percentage,
     required this.totalAmount,
-    required this.totalExpanse,
+    required this.totalExpense,
     required this.totalBalance,
     this.extraInfo,
   });
   final double percentage;
   final double totalAmount;
-  final double totalExpanse;
+  final double totalExpense;
   final double totalBalance;
   final Widget? extraInfo;
 
@@ -46,7 +46,7 @@ class ProgressSection extends StatelessWidget {
                 indent: 8,
                 endIndent: 8,
               ),
-              TotalMoney(total: totalExpanse, isExpanse: true),
+              TotalMoney(total: totalExpense, isExpense: true),
             ],
           ),
         ),
@@ -142,8 +142,8 @@ class ProgressSection extends StatelessWidget {
 }
 
 class TotalMoney extends StatelessWidget {
-  const TotalMoney({super.key, required this.total, this.isExpanse = false});
-  final bool isExpanse;
+  const TotalMoney({super.key, required this.total, this.isExpense = false});
+  final bool isExpense;
   final double total;
 
   @override
@@ -153,22 +153,22 @@ class TotalMoney extends StatelessWidget {
         Row(
           children: [
             CustomSvgPicture(
-              path: isExpanse ? AppAssets.expense : AppAssets.income,
+              path: isExpense ? AppAssets.expense : AppAssets.income,
               width: 12,
             ),
             const Gap(7),
             Text(
-              isExpanse ? "Total Expanse" : "Total Balance",
+              isExpense ? "Total Expanse" : "Total Balance",
               style: TextStyles.bodySmall,
             ),
           ],
         ),
         Text(
-          isExpanse
+          isExpense
               ? "- \$${total.toStringAsFixed(2)}"
               : "\$${total.toStringAsFixed(2)}",
           style: TextStyles.headlineLarge.copyWith(
-            color: isExpanse ? AppColors.oceanBlueButton : AppColors.background,
+            color: isExpense ? AppColors.oceanBlueButton : AppColors.background,
           ),
         ),
       ],
