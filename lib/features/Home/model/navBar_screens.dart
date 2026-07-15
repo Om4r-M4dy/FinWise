@@ -4,13 +4,14 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/Transaction/presentation/pages/add_transaction.dart';
 import 'package:flutter/material.dart';
-
 import 'package:finwise/features/Home/pages/home_screen.dart';
-import 'package:finwise/features/Transaction/presentation/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
 import 'package:finwise/features/profile/page/profile_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final List<NavItemModel> navScreens = [
   NavItemModel(icon: AppAssets.home, appBar: null, page: HomeScreen()),
@@ -38,7 +39,7 @@ final List<NavItemModel> navScreens = [
     appBar: (context) => AppBar(
       backgroundColor: AppColors.mainGreen,
       leading: SizedBox.shrink(),
-      title: Text("Transactions", style: TextStyles.bodyLarge),
+      title: Text("Add Transaction", style: TextStyles.bodyLarge),
       actions: [
         IconButton(
           onPressed: () {
@@ -48,7 +49,10 @@ final List<NavItemModel> navScreens = [
         ),
       ],
     ),
-    page: TransactionScreen(),
+    page: BlocProvider(
+      create: (context) => TransactionCubit(),
+      child: const AddTransaction(showAppBar: false),
+  ),
   ),
   NavItemModel(
     icon: AppAssets.category,
@@ -69,6 +73,7 @@ final List<NavItemModel> navScreens = [
   ),
   NavItemModel(icon: AppAssets.profile, appBar: null, page: ProfileScreen()),
 ];
+
 
 class NavItemModel {
   final Widget page;

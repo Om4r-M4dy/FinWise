@@ -10,6 +10,7 @@ import 'package:finwise/core/widgets/icon_with_text_button.dart';
 import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/progress_section.dart';
+import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/Transaction/presentation/widgets/transaction_box.dart';
@@ -44,10 +45,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
         final budget = userState.budget;
         final percentage = userState.budgetPercentage;
 
-        return MyBodyView(
-          clipBehavior: Clip.hardEdge,
-          noPadding: true,
-          topSection: Column(
+        return Scaffold(
+          appBar: const DefaultAppBar(title: 'Transactions'),
+          body: MyBodyView(
+            clipBehavior: Clip.hardEdge,
+            noPadding: true,
+            topSection: Column(
             children: [
               InkWell(
                 onTap: () {
@@ -122,6 +125,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
             isIncomeSelected: isIncomeSelected,
             isExpenseSelected: isExpenseSelected,
           ),
+        )
         );
       },
     );

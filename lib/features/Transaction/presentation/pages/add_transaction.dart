@@ -18,14 +18,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AddTransaction extends StatelessWidget {
-  const AddTransaction({super.key});
+  final bool showAppBar;
+  
+  const AddTransaction({super.key, this.showAppBar = true});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
-      appBar: DefaultAppBar(title: "Add Transaction"),
+      appBar: showAppBar ? DefaultAppBar(title: "Add Transaction") : null,
       body: MyBodyView(
         topSection: Container(height: 5),
         bottomSection: Padding(
