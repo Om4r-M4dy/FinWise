@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:device_preview/device_preview.dart';
 import 'package:finwise/core/routes/app_router.dart';
+import 'package:finwise/core/services/local/bloc_observer.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:finwise/core/styles/themes.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/firebase_options.dart';
@@ -15,6 +17,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await UserPrefs.init();
+  Bloc.observer = MyBlocObserver();
   runApp(
     DevicePreview(
       // enabled: false,
@@ -29,15 +32,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<UserCubit>(
-          create: (_) => UserCubit(),
-        ),
-        BlocProvider<TransactionCubit>(
-          create: (_) => TransactionCubit(),
-        ),
-      ],
+    return BlocProvider<UserCubit>(
+      create: (_) => UserCubit(),
       child: MaterialApp.router(
         routerConfig: AppRouter.routes,
         debugShowCheckedModeBanner: false,

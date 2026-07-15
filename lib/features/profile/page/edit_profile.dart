@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/extentions/context_extensions.dart';
@@ -53,8 +54,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _currentUser = context.read<UserCubit>().user;
 
     // Initialize controllers with current user values (or fallbacks)
-    _usernameController = TextEditingController(text: _currentUser?.username ?? UserPrefs.getName() ?? '');
-    _phoneController = TextEditingController(text: _currentUser?.phone ?? UserPrefs.getPhone() ?? '');
+    _usernameController = TextEditingController(
+      text: _currentUser?.username ?? UserPrefs.getName() ?? '',
+    );
+    _phoneController = TextEditingController(
+      text: _currentUser?.phone ?? UserPrefs.getPhone() ?? '',
+    );
     _emailController = TextEditingController(text: _currentUser?.email ?? '');
 
     // Initialize switches from settings map
@@ -62,7 +67,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     isActiveDarkThem = _currentUser?.settings?['darkTheme'] ?? false;
 
     // Initialize profile image path from cached UserPrefs or Firestore
-    _profileImagePath = UserPrefs.getProfileImagePath() ?? _currentUser?.profilePicture;
+    _profileImagePath =
+        UserPrefs.getProfileImagePath() ?? _currentUser?.profilePicture;
   }
 
   @override
@@ -79,7 +85,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (_profileImagePath != null && _profileImagePath!.isNotEmpty) {
       if (File(_profileImagePath!).existsSync()) {
         return FileImage(File(_profileImagePath!));
-      } else if (_profileImagePath!.startsWith('http') || _profileImagePath!.startsWith('https')) {
+      } else if (_profileImagePath!.startsWith('http') ||
+          _profileImagePath!.startsWith('https')) {
         return NetworkImage(_profileImagePath!);
       }
     }
@@ -220,7 +227,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null || _currentUser == null) {
-      CustomSnackBar.showError(context, "User session not found. Please log in again.");
+      CustomSnackBar.showError(
+        context,
+        "User session not found. Please log in again.",
+      );
       return;
     }
 
@@ -232,12 +242,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       String? finalProfilePictureUrl = _currentUser!.profilePicture;
       if (_profileImagePath != null &&
           _profileImagePath!.isNotEmpty &&
-          !(_profileImagePath!.startsWith('http') || _profileImagePath!.startsWith('https'))) {
-        final uploadedUrl = await uploadImageToCloudinary(File(_profileImagePath!));
+          !(_profileImagePath!.startsWith('http') ||
+              _profileImagePath!.startsWith('https'))) {
+        final uploadedUrl = await uploadImageToCloudinary(
+          File(_profileImagePath!),
+        );
         if (uploadedUrl == null || uploadedUrl.isEmpty) {
           if (!mounted) return;
           LoadingDialog.hide(context);
-          CustomSnackBar.showError(context, "Failed to upload profile picture to Cloudinary.");
+          CustomSnackBar.showError(
+            context,
+            "Failed to upload profile picture to Cloudinary.",
+          );
           return;
         }
         finalProfilePictureUrl = uploadedUrl;
@@ -268,7 +284,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       // 4. Persist details to Firestore and update the global UserCubit state
       await FirestoreProvider.editUser(updatedModel);
-      
+
       if (!mounted) return;
       context.read<UserCubit>().setUser(updatedModel);
 
@@ -295,7 +311,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     // Determine the ID to display
     final String displayId = _currentUser?.uid ?? 'N/A';
-    final String displayName = _usernameController.text.isNotEmpty ? _usernameController.text : (_currentUser?.username ?? 'User');
+    final String displayName = _usernameController.text.isNotEmpty
+        ? _usernameController.text
+        : (_currentUser?.username ?? 'User');
 
     return Scaffold(
       body: MyBodyView(
@@ -351,7 +369,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-      
+
             Padding(
               padding: const EdgeInsets.only(
                 top: EditProfileScreen.profileImageRadius + 20.0,
@@ -359,14 +377,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-      
+
                   children: [
                     Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        displayName,
-                        style: TextStyles.bodyLarge,
-                      ),
+                      child: Text(displayName, style: TextStyles.bodyLarge),
                     ),
                     Align(
                       alignment: Alignment.center,
@@ -376,7 +391,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
                     const Gap(30),
-      
+
                     Text('Account Settings', style: TextStyles.bodyLarge),
                     const Gap(30),
                     Text('Username', style: TextStyles.bodyMedium),
@@ -402,7 +417,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       readOnly: true,
                     ),
                     const Gap(40),
-      
+
                     _rowCustomSwitch('push notifications', 0),
                     const Gap(37),
                     _rowCustomSwitch('Turn dark Theme', 1),

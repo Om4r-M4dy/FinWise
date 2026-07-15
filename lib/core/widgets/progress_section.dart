@@ -75,7 +75,9 @@ class ProgressSection extends StatelessWidget {
     List<TransactionModel> txList,
     double percentage,
   ) {
-    final expenses = txList.where((tx) => tx.type == 'expense').toList();
+    final expenses = txList
+        .where((tx) => tx.type.toLowerCase() == 'expense')
+        .toList();
     if (expenses.isEmpty) {
       return "Great job! You haven't recorded any expenses yet.";
     }

@@ -51,7 +51,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (imagePath != null && imagePath.isNotEmpty) {
       if (File(imagePath).existsSync()) {
         return FileImage(File(imagePath));
-      } else if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+      } else if (imagePath.startsWith('http') ||
+          imagePath.startsWith('https')) {
         return NetworkImage(imagePath);
       }
     }
@@ -63,7 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Watch UserCubit so the widget rebuilds when user profile data is updated
     final user = context.watch<UserCubit>().user;
     final displayName = user?.username ?? _userName;
-    final displayImage = (user?.profilePicture != null && user!.profilePicture!.isNotEmpty)
+    final displayImage =
+        (user?.profilePicture != null && user!.profilePicture!.isNotEmpty)
         ? user.profilePicture
         : _profileImagePath;
     final displayEmail = user?.email ?? '';
