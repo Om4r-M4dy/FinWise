@@ -3,37 +3,31 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 
-class TransactionBox extends StatefulWidget {
+class TransactionBox extends StatelessWidget {
   const TransactionBox({
     super.key,
     this.pathIcon,
     required this.titel,
-    required this.palance,
+    required this.balance,
     this.iconColor,
-    this.palanceColor,
+    this.balanceColor,
+    this.isSelected = false,
+    required this.onTap,
   });
+
   final String? pathIcon;
   final String titel;
-  final String palance;
+  final String balance;
   final Color? iconColor;
-  final Color? palanceColor;
-
-  @override
-  State<TransactionBox> createState() => _TransactionBoxState();
-}
-
-class _TransactionBoxState extends State<TransactionBox> {
-  bool isSelected = false;
+  final Color? balanceColor;
+  final bool isSelected;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
-        onTap: () {
-          setState(() {
-            isSelected = !isSelected;
-          });
-        },
+        onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
             color: isSelected
@@ -49,11 +43,11 @@ class _TransactionBoxState extends State<TransactionBox> {
               CustomSvgPicture(
                 height: 25,
                 width: 25,
-                path: widget.pathIcon ?? '',
-                color: isSelected ? AppColors.background : widget.iconColor,
+                path: pathIcon ?? '',
+                color: isSelected ? AppColors.background : iconColor,
               ),
               Text(
-                widget.titel,
+                titel,
                 style: TextStyles.bodyMedium.copyWith(
                   color: isSelected
                       ? AppColors.background
@@ -61,11 +55,11 @@ class _TransactionBoxState extends State<TransactionBox> {
                 ),
               ),
               Text(
-                '\$${widget.palance}',
+                '\$$balance',
                 style: TextStyles.bodyLarge.copyWith(
                   color: isSelected
                       ? AppColors.background
-                      : widget.palanceColor,
+                      : balanceColor,
                 ),
               ),
             ],

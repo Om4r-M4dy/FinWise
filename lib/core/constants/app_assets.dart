@@ -19,7 +19,7 @@ class AppAssets {
   static const String chatCam = "assets/icons/chat-cam.svg";
   static const String chatMic = "assets/icons/chat-mic.svg";
   static const String chatShare = "assets/icons/chat-share.svg";
-    static const String camFiled = "assets/icons/cam_filed.svg";
+  static const String camFiled = "assets/icons/cam_filed.svg";
   static const String mic = "assets/icons/mic.svg";
   static const String share = "assets/icons/share.svg";
   static const String checkProgress = "assets/icons/check_progress.svg";
@@ -72,4 +72,5 @@ class AppAssets {
   //lottie
   static const String logoJson = "assets/lottie/logo.json";
   static const String finwiseJson = "assets/lottie/finwise.json";
+  static const String loadingJson = "assets/lottie/Loading.json";
 }

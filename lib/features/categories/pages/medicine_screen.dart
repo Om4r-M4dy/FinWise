@@ -23,7 +23,7 @@ class MedicineScreen extends StatelessWidget {
         topSection: ProgressSection(
           percentage: 30,
           totalAmount: 20000,
-          totalExpanse: 5000,
+          totalExpense: 5000,
           totalBalance: 7200,
         ),
         bottomSection: SingleChildScrollView(
@@ -109,7 +109,7 @@ class MedicineScreen extends StatelessWidget {
                 child: MainButton(
                   text: "Add Expenses",
                   onPress: () {
-                    pushTo(context, Routes.addExpenses);
+                    pushTo(context, Routes.addTransaction);
                   },
                   textStyle: TextStyles.bodyMedium.copyWith(
                     color: AppColors.lettersAndIcons,

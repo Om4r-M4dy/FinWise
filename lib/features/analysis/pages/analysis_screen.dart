@@ -9,6 +9,12 @@ import 'package:finwise/features/analysis/widgets/date_header.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_state.dart';
+
 class AnalysisScreen extends StatefulWidget {
   const AnalysisScreen({super.key});
 
@@ -26,81 +32,89 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  MyBodyView(
-        clipBehavior: Clip.hardEdge,
-        noPadding: true,
-        topSection: ProgressSection(
-          percentage: 30,
-          totalAmount: 20000.00,
-          totalExpanse: 1187.40,
-          totalBalance: 7783.00,
-        ),
-        bottomSection: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: 20),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 37.0,
-                  vertical: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, userState) {
+        final budget = userState.budget;
+        final expense = userState.expense;
+        final balance = userState.balance;
+        final percentage = userState.budgetPercentage;
 
-                  children: [
-                    DateHeader(
-                      selectedIndex: index,
-                      labels: ["Daily", "Weekly", "Monthly", "Year"],
-                      onUpdate: (value) {
-                        setState(() {
-                          index = value;
-                        });
-                      },
-                    ),
-                    Gap(30),
-                    PlotsSections(
-                      chartData: getCurrentChartData(index),
-                      maxY: calculateMaxY(index),
-                    ),
-                    Gap(30),
-                    IncomeExpenseRow(),
-                    Gap(33),
-                    Text(
-                      "My Targets",
-                      style: TextStyles.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w500,
+        return MyBodyView(
+          clipBehavior: Clip.hardEdge,
+          noPadding: true,
+          topSection: ProgressSection(
+            percentage: percentage,
+            totalAmount: budget,
+            totalExpense: expense,
+            totalBalance: balance,
+          ),
+          bottomSection: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 37.0,
+                    vertical: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    children: [
+                      DateHeader(
+                        selectedIndex: index,
+                        labels: ["Daily", "Weekly", "Monthly"],
+                        onUpdate: (value) {
+                          setState(() {
+                            index = value;
+                          });
+                        },
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 180,
-
-                child: ListView.builder(
-                  itemCount: _mytargets.length,
-                  scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.none,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemBuilder: (context, i) {
-                    return Padding(
-                      padding: EdgeInsets.only(left: 6, right: 6),
-                      child: SizedBox(
-                        width: 150,
-                        child: TargetCard(
-                          title: _mytargets[i]["title"],
-                          percent: _mytargets[i]["percent"],
-                          radius: _mytargets[i]["radius"],
+                      Gap(30),
+                      PlotsSections(
+                        chartData: getCurrentChartData(index),
+                        maxY: calculateMaxY(index),
+                      ),
+                      Gap(30),
+                      IncomeExpenseRow(),
+                      Gap(33),
+                      Text(
+                        "My Targets",
+                        style: TextStyles.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 180,
+
+                  child: ListView.builder(
+                    itemCount: _mytargets.length,
+                    scrollDirection: Axis.horizontal,
+                    clipBehavior: Clip.none,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    itemBuilder: (context, i) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 6, right: 6),
+                        child: SizedBox(
+                          width: 150,
+                          child: TargetCard(
+                            title: _mytargets[i]["title"],
+                            percent: _mytargets[i]["percent"],
+                            radius: _mytargets[i]["radius"],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-     
+        );
+      },
     );
   }
 }

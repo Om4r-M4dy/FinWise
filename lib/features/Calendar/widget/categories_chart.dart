@@ -1,5 +1,5 @@
 import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/functions/context_extensions.dart';
+import 'package:finwise/core/extentions/context_extensions.dart';
 import 'package:finwise/features/Calendar/widget/chart_legend_row.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class CategoriesChart extends StatelessWidget {
                 startDegreeOffset: 0,
                 centerSpaceRadius: 0,
                 sectionsSpace: 3,
-                
+
                 sections: [
                   // A transparent padding slice is used to control the visual center
                   // and effectively create a donut-like gap for the chart layout.

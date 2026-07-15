@@ -10,7 +10,7 @@ import 'package:finwise/features/Add/presentation/page/add_balance_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:finwise/features/Home/pages/home_screen.dart';
-import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
+import 'package:finwise/features/Transaction/presentation/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
 import 'package:finwise/features/profile/page/profile_screen.dart';

@@ -3,7 +3,11 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/features/Home/model/navBar_screens.dart';
 import 'package:finwise/features/auth/persentation/page/complete_profile_bottom_sheet.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NavBar extends StatefulWidget {
   final bool showCompleteProfile;
@@ -16,6 +20,18 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int currentIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    // Load transactions once — shared across Home, Analysis, Transaction tabs
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userState = context.read<UserCubit>().state;
+      if (userState is UserLoaded) {
+        context.read<TransactionCubit>().getTransactions(userState.user.uid!);
+      }
+    });
+  }
+
   final List<String> icons = [
     AppAssets.home,
     AppAssets.analysis,
@@ -24,22 +40,22 @@ class _NavBarState extends State<NavBar> {
     AppAssets.profile,
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.showCompleteProfile) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showModalBottomSheet(
-          context: context,
-          isDismissible: false,
-          enableDrag: false,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (_) => const CompleteProfileBottomSheet(),
-        );
-      });
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (widget.showCompleteProfile) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       showModalBottomSheet(
+  //         context: context,
+  //         isDismissible: false,
+  //         enableDrag: false,
+  //         isScrollControlled: true,
+  //         backgroundColor: Colors.transparent,
+  //         builder: (_) => const CompleteProfileBottomSheet(),
+  //       );
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

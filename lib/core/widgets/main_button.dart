@@ -21,7 +21,7 @@ class MainButton extends StatelessWidget {
     this.backgroundColor = AppColors.mainGreen,
     this.size = ButtonSize.medium,
     this.textStyle = TextStyles.bodyLarge,
-    this.textColor = AppColors.lettersAndIcons,
+    this.textColor = AppColors.background,
   });
 
   final String text;
@@ -37,7 +37,7 @@ class MainButton extends StatelessWidget {
         elevation: 0,
         backgroundColor: backgroundColor,
         minimumSize: Size(size.width, size.height),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       onPressed: onPress,
       child: Text(text, style: textStyle.copyWith(color: textColor)),

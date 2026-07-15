@@ -6,6 +6,7 @@ class UserModel {
   final String? profilePicture;
   final double? totalBalance;
   final double? totalExpense;
+  final double? totalIncome;
   final double? dob;
   final double? monthlyBudgetLimit;
   final double? income;
@@ -19,6 +20,7 @@ class UserModel {
     required this.profilePicture,
     required this.totalBalance,
     required this.totalExpense,
+    required this.totalIncome,
     required this.dob,
     required this.monthlyBudgetLimit,
     this.income,
@@ -34,6 +36,7 @@ class UserModel {
       profilePicture: map['profilePicture'] ?? '',
       totalBalance: (map['totalBalance'] as num?)?.toDouble() ?? 0.0,
       totalExpense: (map['totalExpense'] as num?)?.toDouble() ?? 0.0,
+      totalIncome: (map['totalIncome'] as num?)?.toDouble() ?? 0.0,
       dob: (map['dob'] as num?)?.toDouble() ?? 0.0,
       monthlyBudgetLimit:
           (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
@@ -53,6 +56,7 @@ class UserModel {
       'profilePicture': profilePicture,
       'totalBalance': totalBalance,
       'totalExpense': totalExpense,
+      'totalIncome': totalIncome,
       'dob': dob,
       'monthlyBudgetLimit': monthlyBudgetLimit,
       'income': income,
@@ -69,6 +73,7 @@ class UserModel {
       profilePicture: map['profilePicture'] ?? '',
       totalBalance: (map['totalBalance'] as num?)?.toDouble() ?? 0.0,
       totalExpense: (map['totalExpense'] as num?)?.toDouble() ?? 0.0,
+      totalIncome: (map['totalIncome'] as num?)?.toDouble() ?? 0.0,
       dob: (map['dob'] as num?)?.toDouble() ?? 0.0,
       monthlyBudgetLimit:
           (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
@@ -85,10 +90,11 @@ class UserModel {
     if (profilePicture != null) data['profilePicture'] = profilePicture;
     if (totalBalance != null) data['totalBalance'] = totalBalance;
     if (totalExpense != null) data['totalExpense'] = totalExpense;
+    if (totalIncome != null) data['totalIncome'] = totalIncome;
     if (dob != null) data['dob'] = dob;
-    if (monthlyBudgetLimit != null)
+    if (monthlyBudgetLimit != null) {
       data['monthlyBudgetLimit'] = monthlyBudgetLimit;
-    if (income != null) data['income'] = income;
+    }
     if (settings != null) data['settings'] = settings;
     return data;
   }

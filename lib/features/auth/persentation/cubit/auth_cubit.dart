@@ -1,11 +1,10 @@
 import 'package:finwise/core/services/firebase/firestore_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:finwise/core/functions/google_auth.dart';
 import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:finwise/features/auth/models/user_model.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'auth_state.dart';
 
@@ -31,6 +30,7 @@ class AuthCubit extends Cubit<AuthState> {
         profilePicture: user.photoURL ?? '',
         totalBalance: 0.0,
         totalExpense: 0.0,
+        totalIncome: 0.0,
         dob: 0.0,
         monthlyBudgetLimit: 0.0,
         income: null,
@@ -60,9 +60,9 @@ class AuthCubit extends Cubit<AuthState> {
       if (user != null) {
         final userModel = await _getOrCreateUserModel(user);
 
-        // Save name to SharedPreferences
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_name', userModel.username ?? '');
+        // Save name and login state using UserPrefs
+        await UserPrefs.setName(userModel.username ?? '');
+        await UserPrefs.setIsLoggedIn(true);
 
         bool isCompleteProfile = false;
         if (userModel.income != null && userModel.income! > 0) {
@@ -100,8 +100,8 @@ class AuthCubit extends Cubit<AuthState> {
       if (userCredential != null && userCredential.user != null) {
         final userModel = await _getOrCreateUserModel(userCredential.user!);
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_name', userModel.username ?? '');
+        await UserPrefs.setName(userModel.username ?? '');
+        await UserPrefs.setIsLoggedIn(true);
 
         emit(
           AuthSuccess(
@@ -127,8 +127,8 @@ class AuthCubit extends Cubit<AuthState> {
       if (userCredential != null && userCredential.user != null) {
         final userModel = await _getOrCreateUserModel(userCredential.user!);
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_name', userModel.username ?? '');
+        await UserPrefs.setName(userModel.username ?? '');
+        await UserPrefs.setIsLoggedIn(true);
 
         emit(
           AuthSuccess(

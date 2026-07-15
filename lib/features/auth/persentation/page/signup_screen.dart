@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/functions/navigations.dart';
@@ -10,11 +9,13 @@ import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart'
 import 'package:finwise/features/auth/persentation/widgets/custom_auth_button.dart';
 import 'package:finwise/features/auth/persentation/widgets/signup_screen_parts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -170,18 +171,20 @@ class _SignupScreenState extends State<SignupScreen> {
         uid: userCredential.user!.uid,
         dob: _selectedDob?.millisecondsSinceEpoch.toDouble() ?? 0.0,
         profilePicture: userCredential.user!.photoURL ?? '',
-        totalBalance: null,
-        totalExpense: null,
-        monthlyBudgetLimit: null,
+        totalBalance: 0.0,
+        totalExpense: 0.0,
+        totalIncome: 0.0,
+        monthlyBudgetLimit: 0.0,
         settings: {},
       );
 
       await FirestoreProvider.addUser(userModel);
-      // ── Save name to SharedPreferences ──────────────────────────
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_name', name);
+      // ── Save name and login state using UserPrefs ────────────────
+      await UserPrefs.setName(name);
+      await UserPrefs.setIsLoggedIn(true);
 
       if (mounted) {
+        context.read<UserCubit>().setUser(userModel);
         replaceWith(context, Routes.bottomNavBar);
       }
     } on FirebaseAuthException catch (e) {

@@ -5,7 +5,6 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/persentation/widgets/socialbutton.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/functions/navigations.dart';
@@ -22,8 +21,8 @@ class LabeledField extends StatelessWidget {
     required this.label,
     required this.field,
     this.gapAfter = 16,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class LabeledField extends StatelessWidget {
 
 /// Row containing Facebook and Google social login buttons.
 class SocialButtonsRow extends StatelessWidget {
-  const SocialButtonsRow({Key? key}) : super(key: key);
+  const SocialButtonsRow({super.key});
 
   Future<void> _handleSocialSignIn(
     BuildContext context,
@@ -87,7 +86,7 @@ class SocialButtonsRow extends StatelessWidget {
 
 /// Terms and privacy notice widget.
 class TermsNotice extends StatelessWidget {
-  const TermsNotice({Key? key}) : super(key: key);
+  const TermsNotice({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +107,7 @@ class TermsNotice extends StatelessWidget {
 
 /// "Already have an account?" navigation link.
 class AlreadyAccountLink extends StatelessWidget {
-  const AlreadyAccountLink({Key? key}) : super(key: key);
+  const AlreadyAccountLink({super.key});
 
   @override
   Widget build(BuildContext context) {
