@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:finwise/features/auth/persentation/widgets/auth_layout.dart';
 import 'package:finwise/features/auth/persentation/widgets/custom_auth_button.dart';
+import 'package:finwise/features/auth/persentation/widgets/loading_overlay.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({super.key});
@@ -44,7 +45,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null && user.emailVerified) {
       if (mounted) {
-        pushTo(context, Routes.bottomNavBar);
+        replaceWith(context, Routes.bottomNavBar);
       }
     } else {
       ScaffoldMessenger.of(
@@ -56,33 +57,39 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AuthLayout(
-      title: 'Verify Email',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Gap(30),
-          Text(
-            'A verification link has been sent to your email.\nPlease check your inbox and verify your account.',
-            style: TextStyles.bodyLarge.copyWith(
-              color: AppColors.lettersAndIcons,
-            ),
+    return Stack(
+      children: [
+        AuthLayout(
+          title: 'Verify Email',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(30),
+              Text(
+                'A verification link has been sent to your email.\nPlease check your inbox and verify your account.',
+                style: TextStyles.bodyLarge.copyWith(
+                  color: AppColors.lettersAndIcons,
+                ),
+              ),
+              const Gap(40),
+              CustomAuthButton(
+                text: 'Resend Email',
+                onPressed: _isResending ? null : _resendVerification,
+              ),
+              const Gap(20),
+              CustomAuthButton(
+                text: 'I have verified',
+                onPressed: _checking ? null : _checkVerification,
+                backgroundColor: AppColors.lightGreen,
+              ),
+            ],
           ),
-          const Gap(40),
-          CustomAuthButton(
-            text: _isResending ? 'Resending...' : 'Resend Email',
-            onPressed: _isResending ? null : _resendVerification,
-            isLoading: _isResending,
-          ),
-          const Gap(20),
-          CustomAuthButton(
-            text: _checking ? 'Checking...' : 'I have verified',
-            onPressed: _checking ? null : _checkVerification,
-            backgroundColor: AppColors.lightGreen,
-            isLoading: _checking,
-          ),
-        ],
-      ),
+        ),
+        LoadingOverlay(
+          isLoading: _isResending || _checking,
+          message: _isResending ? "Resending..." : "Checking...",
+        ),
+      ],
     );
   }
 }

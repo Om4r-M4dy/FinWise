@@ -13,7 +13,7 @@ import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubi
 import 'package:gap/gap.dart';
 
 class ProgressSection extends StatelessWidget {
-  ProgressSection({
+  const ProgressSection({
     super.key,
     required this.percentage,
     required this.totalAmount,
