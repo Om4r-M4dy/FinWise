@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:go_router/go_router.dart';
 
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
@@ -15,8 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -27,11 +26,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   static const double profileImageRadius = 117 / 2;
-  static const String id = '25030024';
 
   String _userName = '';
   String? _profileImagePath;
-  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -39,147 +36,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadUserData();
   }
 
-  Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
+  // Loads cached profile values from local SharedPreferences synchronously.
+  void _loadUserData() {
     setState(() {
-      _userName = prefs.getString('user_name') ?? 'User';
-      _profileImagePath = prefs.getString('profile_image_path');
+      _userName = UserPrefs.getName() ?? 'User';
+      _profileImagePath = UserPrefs.getProfileImagePath();
     });
   }
 
-  // ── Pick Image ────────────────────────────────────────────────────────
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: source,
-        maxWidth: 512,
-        maxHeight: 512,
-        imageQuality: 80,
-      );
-
-      if (pickedFile != null) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('profile_image_path', pickedFile.path);
-        if (mounted) {
-          setState(() {
-            _profileImagePath = pickedFile.path;
-          });
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Could not pick image: $e')));
-      }
-    }
-  }
-
-  // ── Show Bottom Sheet ─────────────────────────────────────────────────
-  void _showImagePickerSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.background,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.lettersAndIcons.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const Gap(16),
-                Text(
-                  'Change Profile Photo',
-                  style: TextStyles.bodyLarge.copyWith(fontSize: 18),
-                ),
-                const Gap(20),
-                ListTile(
-                  leading: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.camera_alt_rounded,
-                      color: AppColors.mainGreen,
-                    ),
-                  ),
-                  title: const Text(
-                    'Camera',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Take a new photo',
-                    style: TextStyle(
-                      color: AppColors.lettersAndIcons.withOpacity(0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(ImageSource.camera);
-                  },
-                ),
-                ListTile(
-                  leading: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.photo_library_rounded,
-                      color: AppColors.mainGreen,
-                    ),
-                  ),
-                  title: const Text(
-                    'Gallery',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Choose from gallery',
-                    style: TextStyle(
-                      color: AppColors.lettersAndIcons.withOpacity(0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(ImageSource.gallery);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   // ── Profile Image Widget ──────────────────────────────────────────────
-  ImageProvider _getProfileImage() {
-    if (_profileImagePath != null && File(_profileImagePath!).existsSync()) {
-      return FileImage(File(_profileImagePath!));
+  // Resolves the image source dynamically. Supports local files, network URLs,
+  // and falls back to a default asset image.
+  ImageProvider _getProfileImage(String? imagePath) {
+    if (imagePath != null && imagePath.isNotEmpty) {
+      if (File(imagePath).existsSync()) {
+        return FileImage(File(imagePath));
+      } else if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+        return NetworkImage(imagePath);
+      }
     }
-    return AssetImage(AppAssets.profileImage);
+    return const AssetImage(AppAssets.profileImage);
   }
 
   @override
   Widget build(BuildContext context) {
+    // Watch UserCubit so the widget rebuilds when user profile data is updated
+    final user = context.watch<UserCubit>().user;
+    final displayName = user?.username ?? _userName;
+    final displayImage = (user?.profilePicture != null && user!.profilePicture!.isNotEmpty)
+        ? user.profilePicture
+        : _profileImagePath;
+    final displayEmail = user?.email ?? '';
+
     return MyBodyView(
       topSection: SafeArea(
         bottom: false,
@@ -207,41 +95,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Positioned(
             top: -profileImageRadius - 15,
-            child: Stack(
-              children: [
-                CircleAvatar(
-                  radius: profileImageRadius,
-                  backgroundImage: _getProfileImage(),
-                ),
-                Positioned(
-                  bottom: 4,
-                  right: 4,
-                  child: GestureDetector(
-                    onTap: _showImagePickerSheet,
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: AppColors.mainGreen,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            child: CircleAvatar(
+              radius: profileImageRadius,
+              backgroundImage: _getProfileImage(displayImage),
             ),
           ),
 
@@ -252,14 +108,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
-                  Text(_userName, style: TextStyles.bodyLarge),
-                  Text('ID: $id', style: TextStyles.bodySmall),
+                  Text(displayName, style: TextStyles.bodyLarge),
+                  Text(displayEmail, style: TextStyles.bodySmall),
                   Gap(60),
                   ProfileOption(
                     path: AppAssets.profile,
                     title: 'Edit Profile',
-                    onTap: () {
-                      pushTo(context, Routes.editProfileScreen);
+                    onTap: () async {
+                      // Use GoRouter context.push directly to safely await the result
+                      await context.push(Routes.editProfileScreen);
+                      _loadUserData();
                     },
                   ),
                   Gap(34),
