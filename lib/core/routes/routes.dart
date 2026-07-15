@@ -49,6 +49,7 @@ class Routes {
   static const String setPinScreen = '/set_pin_screen';
   static const String passwordChangedScreen = '/password_changed_screen';
   static const String newPasswordScreen = '/new_password_screen';
+  static const String completedProfile = '/complete_profile_bottom_sheet';
   // Security Routes
   static const String securityScreen = '/security_screen';
   static const String changePinScreen = '/change_pin_screen';

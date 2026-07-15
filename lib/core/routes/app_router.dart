@@ -14,6 +14,7 @@ import 'package:finwise/features/Security/pages/security_screen.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
+import 'package:finwise/features/auth/persentation/page/complete_profile_bottom_sheet.dart';
 import 'package:finwise/features/auth/persentation/page/confNewPassword_screen.dart';
 import 'package:finwise/features/auth/persentation/page/forgot_password.dart';
 import 'package:finwise/features/auth/persentation/page/login_screen.dart';
@@ -179,7 +180,17 @@ class AppRouter {
         path: Routes.homeScreen,
         builder: (context, state) => const HomeScreen(),
       ),
-      GoRoute(path: Routes.bottomNavBar, builder: (context, state) => NavBar()),
+      GoRoute(
+        path: Routes.bottomNavBar,
+        builder: (context, state) {
+          final showCompleteProfile = state.extra == true;
+          return NavBar(showCompleteProfile: showCompleteProfile);
+        },
+      ),
+      GoRoute(
+        path: Routes.completedProfile,
+        builder: (context, state) => CompleteProfileBottomSheet(),
+      ),
       GoRoute(
         path: Routes.transactionScreen,
         builder: (context, state) => TransactionScreen(),

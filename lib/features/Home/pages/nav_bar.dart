@@ -2,10 +2,12 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/features/Home/model/navBar_screens.dart';
+import 'package:finwise/features/auth/persentation/page/complete_profile_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({super.key});
+  final bool showCompleteProfile;
+  const NavBar({super.key, this.showCompleteProfile = false});
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -17,10 +19,27 @@ class _NavBarState extends State<NavBar> {
   final List<String> icons = [
     AppAssets.home,
     AppAssets.analysis,
-    AppAssets.transactions,
+    AppAssets.more,
     AppAssets.category,
     AppAssets.profile,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.showCompleteProfile) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showModalBottomSheet(
+          context: context,
+          isDismissible: false,
+          enableDrag: false,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => const CompleteProfileBottomSheet(),
+        );
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

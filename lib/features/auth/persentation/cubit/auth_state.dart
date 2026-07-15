@@ -8,7 +8,9 @@ class AuthLoading extends AuthState {}
 
 class AuthSuccess extends AuthState {
   final UserModel userModel;
-  AuthSuccess({required this.userModel});
+  final bool? isCompleteProfile;
+  AuthSuccess({required this.userModel, this.isCompleteProfile});
+
 }
 
 class AuthFailure extends AuthState {

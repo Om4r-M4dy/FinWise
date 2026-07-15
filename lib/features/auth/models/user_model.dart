@@ -8,6 +8,7 @@ class UserModel {
   final double? totalExpense;
   final double? dob;
   final double? monthlyBudgetLimit;
+  final double? income;
   final Map<String, bool>? settings;
 
   UserModel({
@@ -20,6 +21,7 @@ class UserModel {
     required this.totalExpense,
     required this.dob,
     required this.monthlyBudgetLimit,
+    this.income,
     required this.settings,
   });
 
@@ -35,6 +37,7 @@ class UserModel {
       dob: (map['dob'] as num?)?.toDouble() ?? 0.0,
       monthlyBudgetLimit:
           (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
+      income: (map['income'] as num?)?.toDouble(),
       settings: Map<String, bool>.from(
         map['settings'] ?? {'pushNotifications': true, 'darkTheme': false},
       ),
@@ -52,6 +55,7 @@ class UserModel {
       'totalExpense': totalExpense,
       'dob': dob,
       'monthlyBudgetLimit': monthlyBudgetLimit,
+      'income': income,
       'settings': settings,
     };
   }
@@ -68,6 +72,7 @@ class UserModel {
       dob: (map['dob'] as num?)?.toDouble() ?? 0.0,
       monthlyBudgetLimit:
           (map['monthlyBudgetLimit'] as num?)?.toDouble() ?? 0.0,
+      income: (map['income'] as num?)?.toDouble(),
       settings: Map<String, bool>.from(
         map['settings'] ?? {'pushNotifications': true, 'darkTheme': false},
       ),
@@ -83,6 +88,7 @@ class UserModel {
     if (dob != null) data['dob'] = dob;
     if (monthlyBudgetLimit != null)
       data['monthlyBudgetLimit'] = monthlyBudgetLimit;
+    if (income != null) data['income'] = income;
     if (settings != null) data['settings'] = settings;
     return data;
   }

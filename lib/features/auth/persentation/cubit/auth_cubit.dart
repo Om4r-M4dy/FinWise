@@ -33,6 +33,7 @@ class AuthCubit extends Cubit<AuthState> {
         totalExpense: 0.0,
         dob: 0.0,
         monthlyBudgetLimit: 0.0,
+        income: null,
         settings: {'pushNotifications': true, 'darkTheme': false},
       );
       await FirestoreProvider.addUser(userModel);
@@ -49,10 +50,11 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
 
       final user = userCredential.user;
       if (user != null) {
@@ -62,7 +64,17 @@ class AuthCubit extends Cubit<AuthState> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_name', userModel.username ?? '');
 
-        emit(AuthSuccess(userModel: userModel));
+        bool isCompleteProfile = false;
+        if (userModel.income != null && userModel.income! > 0) {
+          isCompleteProfile = true;
+        }
+
+        emit(
+          AuthSuccess(
+            userModel: userModel,
+            isCompleteProfile: isCompleteProfile,
+          ),
+        );
       } else {
         emit(AuthFailure('Login failed: User is null'));
       }
@@ -91,7 +103,13 @@ class AuthCubit extends Cubit<AuthState> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_name', userModel.username ?? '');
 
-        emit(AuthSuccess(userModel: userModel));
+        emit(
+          AuthSuccess(
+            userModel: userModel,
+            isCompleteProfile:
+                userModel.income != null && userModel.income! > 0,
+          ),
+        );
       } else {
         emit(AuthFailure('Google sign-in was cancelled or failed.'));
       }
@@ -103,19 +121,59 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> loginWithFacebook(BuildContext context) async {
     emit(AuthLoading());
     try {
-      final userCredential = await FacebookAuthService.signInWithFacebook(context);
+      final userCredential = await FacebookAuthService.signInWithFacebook(
+        context,
+      );
       if (userCredential != null && userCredential.user != null) {
         final userModel = await _getOrCreateUserModel(userCredential.user!);
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_name', userModel.username ?? '');
 
-        emit(AuthSuccess(userModel: userModel));
+        emit(
+          AuthSuccess(
+            userModel: userModel,
+            isCompleteProfile:
+                userModel.income != null && userModel.income! > 0,
+          ),
+        );
       } else {
         emit(AuthFailure('Facebook sign-in was cancelled or failed.'));
       }
     } catch (e) {
       emit(AuthFailure('Facebook sign-in error: $e'));
+    }
+  }
+
+  Future<void> checkCurrentUser() async {
+    emit(AuthLoading());
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        emit(AuthFailure('NOT_LOGGED_IN'));
+
+        return;
+      }
+
+      final userModel = await _getOrCreateUserModel(user);
+
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('user_name', userModel.username ?? '');
+
+      bool isCompleteProfile = false;
+
+      if (userModel.income != null && userModel.income! > 0) {
+        isCompleteProfile = true;
+      }
+
+      emit(
+        AuthSuccess(userModel: userModel, isCompleteProfile: isCompleteProfile),
+      );
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
     }
   }
 }

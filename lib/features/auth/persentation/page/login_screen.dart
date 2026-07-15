@@ -31,9 +31,14 @@ class _LoginScreenState extends State<LoginScreen> {
       listener: (context, state) {
         if (state is AuthLoading) {
           showLoadingDialog(context);
-        }
-        if (state is AuthSuccess) {
-          replaceWith(context, Routes.bottomNavBar);
+        } else if (state is AuthSuccess) {
+          pop(context); // dismiss loading dialog
+          if (state.isCompleteProfile == true) {
+            replaceWith(context, Routes.bottomNavBar);
+          } else {
+            // Profile incomplete → go to NavBar but show complete profile sheet
+            replaceWith(context, Routes.bottomNavBar, extra: true);
+          }
         } else if (state is AuthFailure) {
           pop(context);
           showMyDialog(context, state.errorMessage);
