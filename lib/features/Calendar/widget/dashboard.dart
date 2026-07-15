@@ -59,6 +59,9 @@ class _DashboardState extends State<Dashboard> {
                 backgroundColor: _currentView == DashboardView.spends
                     ? AppColors.mainGreen
                     : AppColors.lightGreen,
+                textColor: _currentView == DashboardView.spends
+                    ? AppColors.background
+                    : AppColors.lettersAndIcons,
               ),
             ),
             const Gap(19),
@@ -75,6 +78,9 @@ class _DashboardState extends State<Dashboard> {
                 backgroundColor: _currentView == DashboardView.categories
                     ? AppColors.mainGreen
                     : AppColors.lightGreen,
+                textColor: _currentView == DashboardView.categories
+                    ? AppColors.background
+                    : AppColors.lettersAndIcons,
               ),
             ),
           ],

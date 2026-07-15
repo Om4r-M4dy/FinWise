@@ -206,7 +206,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
               ),
-              const Gap(50),
+              const Gap(24),
               Center(
                 child: MainButton(
                   text: 'Search',
@@ -226,7 +226,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   },
                 ),
               ),
-              const Gap(40),
+              const Gap(5),
               if (_isLoading)
                 const Center(
                   child: Padding(
@@ -238,10 +238,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               if (_showSearchResults && !_isLoading) ...[
                 Text('Results', style: TextStyles.bodyMedium),
-                const Gap(15),
                 _buildSearchResults(),
               ],
-              const Gap(70),
             ],
           ),
         ),
