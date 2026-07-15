@@ -3,10 +3,8 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
-import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
-import 'package:finwise/core/widgets/icon_with_text_button.dart';
 import 'package:finwise/core/widgets/icon_with_text_button.dart';
 import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
@@ -15,19 +13,16 @@ import 'package:finwise/features/Home/widgets/last_week_analysis.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
-import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
-import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
-import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/analysis/widgets/date_header.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
+
+// Import الـ Bottom Sheet الخاص بك
+import 'package:finwise/features/auth/persentation/page/complete_profile_bottom_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,21 +33,55 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
-
   String name = UserPrefs.getName() ?? "there";
+  bool _isBottomSheetOpen = false; // لمنع تكرار فتح البوتوم شيت عدة مرات
+
+  // دالة لفحص الداتا وعرض البوتوم شيت إذا لزم الأمر
+  void _checkUserProfile(UserState state) {
+    // إذا كان الدخل غير مسجل (يساوي صفر أو قيمة افتراضية) ولم يتم فتح الشيت بعد
+    if (state.income <= 0 && !_isBottomSheetOpen) {
+      _isBottomSheetOpen = true;
+
+      // نستخدم WidgetsBinding لضمان استدعاء الـ Bottom Sheet بعد انتهاء فلاتر من رسم الواجهة تماماً
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          enableDrag: false, // منع سحب الشيت لإغلاقها
+          isDismissible: false, // منع إغلاق الشيت بالضغط خارجها
+          backgroundColor: Colors.transparent,
+          builder: (context) => const CompleteProfileBottomSheet(),
+        );
+        
+        // عند إغلاق البوتوم شيت (بعد الحفظ بنجاح)، نعيد تعيين الحالة
+        _isBottomSheetOpen = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<TransactionCubit>().transactionsList;
 
-    return BlocBuilder<UserCubit, UserState>(
+    // نستخدم BlocConsumer بدلاً من BlocBuilder لنستمع للتغيرات ونعرض الـ Bottom Sheet في الـ listener
+    return BlocConsumer<UserCubit, UserState>(
+      listener: (context, userState) {
+        // نفحص حالة المستخدم في كل مرة تتغير فيها بيانات الـ UserCubit
+        _checkUserProfile(userState);
+      },
+      listenWhen: (previous, current) {
+        // نستمع فقط إذا تغيرت قيمة الـ income لتقليل العمليات غير الضرورية
+        return previous.income != current.income;
+      },
       builder: (context, userState) {
+        // نقوم بالفحص المبدئي عند أول بناء للشاشة أيضاً
+        _checkUserProfile(userState);
+
         final userName = userState.userName;
         final budget = userState.budget;
         final expense = userState.expense;
         final balance = userState.balance;
         final income = userState.income;
-
         final percentage = userState.budgetPercentage;
 
         final lastWeekData = _calculateLastWeekAnalysis(
@@ -88,7 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-
             const Gap(8),
             Expanded(
               child: MyBodyView(
@@ -113,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
                       ),
                       const Gap(26),
-
                       _transactionsWithDateFilters(),
                     ],
                   ),
@@ -126,6 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // بقية دوال الشاشة كما هي دون تغيير...
   Column _transactionsWithDateFilters() {
     return Column(
       children: [

@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_state.dart';
-import 'package:finwise/features/auth/persentation/page/complete_profile_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +24,7 @@ class LaunchScreen extends StatefulWidget {
 class _LaunchScreenState extends State<LaunchScreen>
     with TickerProviderStateMixin {
   late final AnimationController _textController;
+
   @override
   void initState() {
     super.initState();
@@ -32,28 +33,19 @@ class _LaunchScreenState extends State<LaunchScreen>
       vsync: this,
       duration: const Duration(seconds: 3),
     );
+
+    // البدء بفحص حالة المستخدم فوراً
     context.read<AuthCubit>().checkCurrentUser();
-    _startSequence();
+    _startAnimation();
   }
 
-  Future<void> _startSequence() async {
-    // Play splash animation
+  Future<void> _startAnimation() async {
+    // تشغيل أنيميشن اللوجو بالكامل أولاً لضمان تجربة مستخدم سلسة
     await _textController.forward();
+  }
 
-    if (!mounted) return;
-
-    // ── Check where to navigate ────────────────────────────────────
-    // 1. If user is already logged in → go straight to home
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null && UserPrefs.isLoggedIn()) {
-      await context.read<UserCubit>().loadUser(currentUser.uid);
-      if (mounted) {
-        replaceWith(context, Routes.bottomNavBar);
-      }
-      return;
-    }
-
-    // Check if user has seen OnBoarding before
+  // دالة موحدة للتعامل مع التوجيه في حالة عدم تسجيل الدخول
+  Future<void> _navigateToAuthOrOnboarding() async {
     final prefs = await SharedPreferences.getInstance();
     final bool seenOnBoarding = prefs.getBool('seen_onboarding') ?? false;
 
@@ -76,8 +68,7 @@ class _LaunchScreenState extends State<LaunchScreen>
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) async {
-        // استنى الأنيميشن يخلص
-
+        // ننتظر انتهاء الأنيميشن أولاً قبل الانتقال لأي شاشة
         if (_textController.status != AnimationStatus.completed) {
           await _textController.forward();
         }
@@ -85,24 +76,27 @@ class _LaunchScreenState extends State<LaunchScreen>
         if (!mounted) return;
 
         if (state is AuthSuccess) {
-          replaceWith(context, Routes.completedProfile);
-        }
-
-        if (state is AuthFailure && state.errorMessage == 'NOT_LOGGED_IN') {
-          final prefs = await SharedPreferences.getInstance();
-
-          final seenOnBoarding = prefs.getBool('seen_onboarding') ?? false;
-
-          if (!mounted) return;
-
-          if (seenOnBoarding) {
-            replaceWith(context, Routes.authScreen);
-          } else {
-            replaceWith(context, Routes.onBoarding);
+          // جلب بيانات المستخدم المسجل حالياً وتخزينها في الـ UserCubit
+          final currentUser = FirebaseAuth.instance.currentUser;
+          if (currentUser != null) {
+            await context.read<UserCubit>().loadUser(currentUser.uid);
           }
+          
+          if (!mounted) return;
+          
+          // الانتقال للشاشة الرئيسية أو استكمال الملف الشخصي بناءً على حالة البيانات
+          if (UserPrefs.isLoggedIn()) {
+            replaceWith(context, Routes.bottomNavBar);
+          } else {
+            replaceWith(context, Routes.completedProfile);
+          }
+        } 
+        
+        else if (state is AuthFailure) {
+          // إذا فشل تسجيل الدخول أو كان غير مسجل، نذهب لصفحة تسجيل الدخول أو الـ Onboarding
+          await _navigateToAuthOrOnboarding();
         }
       },
-
       child: Scaffold(
         backgroundColor: AppColors.mainGreen,
         body: Center(

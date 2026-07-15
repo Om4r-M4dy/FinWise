@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
@@ -6,6 +6,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class CompleteProfileBottomSheet extends StatefulWidget {
@@ -55,7 +56,7 @@ class _CompleteProfileBottomSheetState
     super.dispose();
   }
 
-  Future<void> _saveIncome() async {
+Future<void> _saveIncome() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
@@ -67,14 +68,18 @@ class _CompleteProfileBottomSheetState
         return;
       }
 
-      final income = double.parse(_incomeController.text.trim());
+      final monthlyTotalIncom = double.parse(_incomeController.text.trim());
 
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        'income': income,
-      });
+      // ── الحل السحري هنا ────────────────────────────────────────────────
+      // نستدعي الـ UserCubit ليتولى عملية التحديث محلياً وعلى الـ Firestore معاً
+      await context.read<UserCubit>().updateFinancials(
+            monthlyBudgetLimit: monthlyTotalIncom,
+            // إذا كنت تريد تعيين الرصيد المبدئي (totalBalance) ليكون مساوياً للدخل عند البداية:
+            totalBalance: monthlyTotalIncom, 
+          );
 
       if (mounted) {
-        Navigator.of(context).pop(); // close bottom sheet → user is on home
+        Navigator.of(context).pop(); // إغلاق البوتوم شيت والعودة للهوم شاشة فوراً
       }
     } catch (e) {
       showMyDialog(context, 'Failed to save. Please try again.');

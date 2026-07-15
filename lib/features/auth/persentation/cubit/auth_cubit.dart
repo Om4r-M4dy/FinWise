@@ -159,9 +159,8 @@ class AuthCubit extends Cubit<AuthState> {
 
       final userModel = await _getOrCreateUserModel(user);
 
-      final prefs = await SharedPreferences.getInstance();
-
-      await prefs.setString('user_name', userModel.username ?? '');
+      await UserPrefs.setName(userModel.username.toString());
+      await UserPrefs.setIsLoggedIn(true);
 
       bool isCompleteProfile = false;
 

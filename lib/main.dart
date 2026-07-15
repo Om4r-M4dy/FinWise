@@ -4,6 +4,7 @@ import 'package:finwise/core/routes/app_router.dart';
 import 'package:finwise/core/services/local/bloc_observer.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:finwise/core/styles/themes.dart';
+import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
@@ -32,8 +33,23 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<UserCubit>(
-      create: (_) => UserCubit(),
+    return MultiBlocProvider(
+      providers: [
+        // 1. هنا نقوم بتعريف الـ UserCubit كما كان سابقاً
+        BlocProvider<UserCubit>(
+          create: (_) => UserCubit(),
+        ),
+        // 2. هنا نضيف الـ AuthCubit الذي تحتاجه شاشة LaunchScreen
+        BlocProvider<AuthCubit>(
+          create: (_) => AuthCubit(), // تأكد من عمل import لـ AuthCubit في أعلى الملف
+        ),
+        // يمكنك أيضاً إضافة الـ TransactionCubit هنا إذا كنت تحتاجه بشكل عام في التطبيق
+        /*
+        BlocProvider<TransactionCubit>(
+          create: (_) => TransactionCubit(),
+        ),
+        */
+      ],
       child: MaterialApp.router(
         routerConfig: AppRouter.routes,
         debugShowCheckedModeBanner: false,
