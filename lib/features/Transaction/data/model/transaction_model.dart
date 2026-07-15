@@ -5,7 +5,7 @@ class TransactionModel {
   final String userId;
   final String title;
   final double amount;
-  final String type; // 'income' or 'expense'
+  final String type; // 'balance', 'income' or 'expense'
   final String categoryId;
   final String categoryName;
   final String note;

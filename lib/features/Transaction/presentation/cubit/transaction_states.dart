@@ -11,3 +11,5 @@ class TransactionErrorState extends TransactionStates {
 
   TransactionErrorState(this.errorMessage);
 }
+
+class TransactionFormUpdatedState extends TransactionStates {}

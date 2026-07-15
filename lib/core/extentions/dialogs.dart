@@ -1,5 +1,7 @@
+import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 enum DialogType { error, success, warning }
 
@@ -27,11 +29,7 @@ void showLoadingDialog(BuildContext context) {
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (context) => Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        // children: [Lottie.asset(AppAssets.loadingLottie, width: 250)],
-      ),
-    ),
+    builder: (context) =>
+        Center(child: Lottie.asset(AppAssets.loadingJson, width: 250)),
   );
 }

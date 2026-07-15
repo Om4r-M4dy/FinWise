@@ -72,5 +72,5 @@ class AppAssets {
   //lottie
   static const String logoJson = "assets/lottie/logo.json";
   static const String finwiseJson = "assets/lottie/finwise.json";
-  static const String loadingJson = "assets/lottie/loading.json";
+  static const String loadingJson = "assets/lottie/Loading.json";
 }

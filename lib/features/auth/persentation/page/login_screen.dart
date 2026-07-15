@@ -10,6 +10,7 @@ import 'package:finwise/features/auth/persentation/widgets/auth_layout.dart';
 import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/persentation/widgets/custom_auth_button.dart';
 import 'package:finwise/features/auth/persentation/widgets/socialbutton.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,8 +32,10 @@ class _LoginScreenState extends State<LoginScreen> {
       listener: (context, state) {
         if (state is AuthLoading) {
           showLoadingDialog(context);
-        }
-        if (state is AuthSuccess) {
+        } else if (state is AuthSuccess) {
+          pop(context); // Dismiss the loading dialog
+          // Hand the loaded user to the global UserCubit before navigating
+          context.read<UserCubit>().setUser(state.userModel);
           replaceWith(context, Routes.bottomNavBar);
         } else if (state is AuthFailure) {
           pop(context);
