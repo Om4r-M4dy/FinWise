@@ -5,7 +5,6 @@ import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_fonts.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/persentation/widgets/socialbutton.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/functions/navigations.dart';

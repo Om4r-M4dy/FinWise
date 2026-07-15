@@ -19,6 +19,7 @@ import 'package:finwise/features/auth/persentation/page/newPassword_screen.dart'
 import 'package:finwise/features/auth/persentation/page/securityPin_screen.dart';
 import 'package:finwise/features/auth/persentation/page/security_fingerprint_screen.dart';
 import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
+import 'package:finwise/features/categories/pages/transactions_by_category_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
@@ -26,7 +27,6 @@ import 'package:finwise/features/Transaction/presentation/pages/add_transaction.
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
 import 'package:finwise/features/categories/pages/entertainment_screen.dart';
-import 'package:finwise/features/categories/pages/food_screen.dart';
 import 'package:finwise/features/categories/pages/gifts_screen.dart';
 import 'package:finwise/features/categories/pages/groceries_screen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
@@ -52,6 +52,7 @@ import 'package:finwise/features/settings/delete_account/pages/delete_account_sc
 import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:finwise/features/settings/page/settings_screen.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/core/functions/get_category_id.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -69,130 +70,157 @@ class AppRouter {
         path: Routes.onBoarding,
         builder: (context, state) => const OnBoardingScreen(),
       ),
-      GoRoute(
-        path: Routes.categories,
-        builder: (context, state) => const MainCategories(),
+
+      // Shell route for all authenticated/authenticated-related screens requiring TransactionCubit
+      ShellRoute(
+        builder: (context, state, child) {
+          return BlocProvider<TransactionCubit>(
+            create: (context) => TransactionCubit(),
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            path: Routes.categories,
+            builder: (context, state) => const MainCategories(),
+          ),
+          GoRoute(
+            path: Routes.helpCenter,
+            builder: (context, state) => const HelpCenter(),
+          ),
+          GoRoute(
+            path: Routes.customerService,
+            builder: (context, state) => const CustomerService(),
+          ),
+          GoRoute(
+            path: Routes.chatScreen,
+            builder: (context, state) => const ChatScreen(),
+          ),
+          GoRoute(
+            path: Routes.foodScreen,
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>;
+              final categoryName = extra['categoryName'] as String;
+              return TransactionsByCategoryScreen(
+                categoryName: categoryName,
+              );
+            },
+          ),
+          GoRoute(
+            path: Routes.addTransaction,
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              final categoryName = extra?['category'] as String?;
+              final cubit = context.read<TransactionCubit>();
+              cubit.clearControllers();
+              if (categoryName != null) {
+                final categoryId = getCategoryId(categoryName);
+                cubit.setCategory(categoryId);
+              }
+              return const AddTransaction();
+            },
+          ),
+          GoRoute(
+            path: Routes.transportScreen,
+            builder: (context, state) => const TransportScreen(),
+          ),
+          GoRoute(
+            path: Routes.groceriesScreen,
+            builder: (context, state) => const GroceriesScreen(),
+          ),
+          GoRoute(
+            path: Routes.giftsScreen,
+            builder: (context, state) => const GiftsScreen(),
+          ),
+          GoRoute(
+            path: Routes.entertainmentScreen,
+            builder: (context, state) => const EntertainmentScreen(),
+          ),
+          GoRoute(
+            path: Routes.medicineScreen,
+            builder: (context, state) => const MedicineScreen(),
+          ),
+          GoRoute(
+            path: Routes.travel,
+            builder: (context, state) => const Travel(),
+          ),
+          GoRoute(
+            path: Routes.wedding,
+            builder: (context, state) => const Wedding(),
+          ),
+          GoRoute(path: Routes.car, builder: (context, state) => const Car()),
+          GoRoute(
+            path: Routes.newHouse,
+            builder: (context, state) => const NewHouse(),
+          ),
+          GoRoute(
+            path: Routes.savings,
+            builder: (context, state) => const Savings(),
+          ),
+          GoRoute(
+            path: Routes.addSavings,
+            builder: (context, state) => const AddSavings(),
+          ),
+          GoRoute(
+            path: Routes.analysisScreen,
+            builder: (context, state) => const AnalysisScreen(),
+          ),
+          GoRoute(
+            path: Routes.quickAnalysisScreen,
+            builder: (context, state) => const QuickAnalysisScreen(),
+          ),
+          GoRoute(
+            path: Routes.settingsScreen,
+            builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: Routes.notificationSettingsScreen,
+            builder: (context, state) => NotificationSettingsScreen(),
+          ),
+          GoRoute(
+            path: Routes.deleteAccountScreen,
+            builder: (context, state) => const DeleteAccountScreen(),
+          ),
+          GoRoute(
+            path: Routes.notificationScreen,
+            builder: (context, state) => const NotificationScreen(),
+          ),
+          GoRoute(
+            path: Routes.profileScreen,
+            builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: Routes.editProfileScreen,
+            builder: (context, state) => const EditProfileScreen(),
+          ),
+          GoRoute(
+            path: Routes.searchScreen,
+            builder: (context, state) => const SearchScreen(),
+          ),
+          GoRoute(
+            path: Routes.calendarScreen,
+            builder: (context, state) => const CalendarScreen(),
+          ),
+          GoRoute(
+            path: Routes.homeScreen,
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: Routes.bottomNavBar,
+            builder: (context, state) {
+              return const NavBar();
+            },
+          ),
+          GoRoute(
+            path: Routes.transactionScreen,
+            builder: (context, state) => TransactionScreen(),
+          ),
+        ],
       ),
+
       GoRoute(
         path: Routes.termsAndConditions,
         builder: (context, state) => const TermsAndConditions(),
-      ),
-      GoRoute(
-        path: Routes.helpCenter,
-        builder: (context, state) => const HelpCenter(),
-      ),
-      GoRoute(
-        path: Routes.customerService,
-        builder: (context, state) => const CustomerService(),
-      ),
-      GoRoute(
-        path: Routes.chatScreen,
-        builder: (context, state) => const ChatScreen(),
-      ),
-      GoRoute(
-        path: Routes.foodScreen,
-        builder: (context, state) => const FoodScreen(),
-      ),
-      GoRoute(
-        path: Routes.addExpenses,
-        builder: (context, state) {
-          context.read<TransactionCubit>().clearControllers();
-          return const AddTransaction();
-        },
-      ),
-      GoRoute(
-        path: Routes.transportScreen,
-        builder: (context, state) => const TransportScreen(),
-      ),
-      GoRoute(
-        path: Routes.groceriesScreen,
-        builder: (context, state) => const GroceriesScreen(),
-      ),
-      GoRoute(
-        path: Routes.giftsScreen,
-        builder: (context, state) => const GiftsScreen(),
-      ),
-      GoRoute(
-        path: Routes.entertainmentScreen,
-        builder: (context, state) => const EntertainmentScreen(),
-      ),
-      GoRoute(
-        path: Routes.medicineScreen,
-        builder: (context, state) => const MedicineScreen(),
-      ),
-      GoRoute(path: Routes.travel, builder: (context, state) => const Travel()),
-      GoRoute(
-        path: Routes.wedding,
-        builder: (context, state) => const Wedding(),
-      ),
-      GoRoute(path: Routes.car, builder: (context, state) => const Car()),
-      GoRoute(
-        path: Routes.newHouse,
-        builder: (context, state) => const NewHouse(),
-      ),
-      GoRoute(
-        path: Routes.savings,
-        builder: (context, state) => const Savings(),
-      ),
-      GoRoute(
-        path: Routes.addSavings,
-        builder: (context, state) => const AddSavings(),
-      ),
-      GoRoute(
-        path: Routes.analysisScreen,
-        builder: (context, state) => const AnalysisScreen(),
-      ),
-      GoRoute(
-        path: Routes.quickAnalysisScreen,
-        builder: (context, state) => const QuickAnalysisScreen(),
-      ),
-      GoRoute(
-        path: Routes.settingsScreen,
-        builder: (context, state) => const SettingsScreen(),
-      ),
-      GoRoute(
-        path: Routes.notificationSettingsScreen,
-        builder: (context, state) => NotificationSettingsScreen(),
-      ),
-      GoRoute(
-        path: Routes.deleteAccountScreen,
-        builder: (context, state) => const DeleteAccountScreen(),
-      ),
-      GoRoute(
-        path: Routes.notificationScreen,
-        builder: (context, state) => const NotificationScreen(),
-      ),
-      GoRoute(
-        path: Routes.profileScreen,
-        builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
-        path: Routes.editProfileScreen,
-        builder: (context, state) => const EditProfileScreen(),
-      ),
-      GoRoute(
-        path: Routes.searchScreen,
-        builder: (context, state) => const SearchScreen(),
-      ),
-      GoRoute(
-        path: Routes.calendarScreen,
-        builder: (context, state) => const CalendarScreen(),
-      ),
-      GoRoute(
-        path: Routes.homeScreen,
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
-        path: Routes.bottomNavBar,
-        builder: (context, state) {
-          final uid = context.read<UserCubit>().currentUser ?? '';
-          context.read<TransactionCubit>().getTransactions(uid);
-          return const NavBar();
-        },
-      ),
-      GoRoute(
-        path: Routes.transactionScreen,
-        builder: (context, state) => TransactionScreen(),
       ),
       // Security Routes
       GoRoute(

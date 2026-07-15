@@ -19,7 +19,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
   DateTime selectedDate = DateTime.now();
   String selectedType =
       TransactionTypeEnum.expense.value; // 'expense' or 'income'
-  String selectedCategory = 'other';
+  String selectedCategory = '8';
 
   void clearControllers() {
     titleController.clear();
@@ -27,7 +27,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
     noteController.clear();
     selectedDate = DateTime.now();
     selectedType = TransactionTypeEnum.expense.value;
-    selectedCategory = 'other';
+    selectedCategory = '8';
+    emit(TransactionInitialState());
   }
 
   void setType(String type) {
@@ -103,7 +104,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
       final categoryLabel =
           categories.firstWhere(
             (c) => c['key'] == selectedCategory,
-            orElse: () => {'key': 'other', 'label': 'Other'},
+            orElse: () => {'key': '8', 'label': 'Other'},
           )['label'] ??
           'Other';
 

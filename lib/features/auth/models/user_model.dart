@@ -87,8 +87,9 @@ class UserModel {
     if (totalExpense != null) data['totalExpense'] = totalExpense;
     if (totalIncome != null) data['totalIncome'] = totalIncome;
     if (dob != null) data['dob'] = dob;
-    if (monthlyBudgetLimit != null)
+    if (monthlyBudgetLimit != null) {
       data['monthlyBudgetLimit'] = monthlyBudgetLimit;
+    }
     if (settings != null) data['settings'] = settings;
     return data;
   }

@@ -104,7 +104,7 @@ class GroceriesScreen extends StatelessWidget {
                 child: MainButton(
                   text: "Add Expenses",
                   onPress: () {
-                    pushTo(context, Routes.addExpenses);
+                    pushTo(context, Routes.addTransaction);
                   },
                   textStyle: TextStyles.bodyMedium.copyWith(
                     color: AppColors.lettersAndIcons,

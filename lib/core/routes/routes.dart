@@ -1,4 +1,3 @@
-
 class Routes {
   // route names
   static const String launch = '/';
@@ -11,7 +10,7 @@ class Routes {
   static const String customerService = '/customer_service';
   static const String chatScreen = '/chat_screen';
   static const String foodScreen = '/foodScreen';
-  static const String addExpenses = '/add_expenses';
+  static const String addTransaction = '/add_transaction';
   static const String transportScreen = '/transport_screen';
   static const String groceriesScreen = '/groceries_screen';
   static const String giftsScreen = '/gifts_screen';
@@ -39,7 +38,8 @@ class Routes {
   static const String bottomNavBar = '/bottom_nav_bar';
   static const String transactionScreen = '/transaction_screen';
   static const String securitypinScreen = '/securityPin_screen';
-  static const String securityFingerprintScreen = '/security_fingerprint_screen';
+  static const String securityFingerprintScreen =
+      '/security_fingerprint_screen';
   // Auth Routes
   static const String signupScreen = '/signup_screen';
   static const String loginScreen = '/login_screen';

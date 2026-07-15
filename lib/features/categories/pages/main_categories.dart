@@ -1,5 +1,6 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/get_category_id.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
@@ -10,6 +11,7 @@ import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:gap/gap.dart';
 
 class MainCategories extends StatelessWidget {
@@ -19,34 +21,28 @@ class MainCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, userState) {
-        final txList = context.watch<TransactionCubit>().transactionsList;
-        final budget = userState is UserLoaded
-            ? userState.user?.monthlyBudgetLimit ?? 0
-            : 0.0;
-
-        // Calculate total expense
-        final totalExpense = txList
-            .where((tx) => tx.type == 'expense')
-            .fold(0.0, (sum, tx) => sum + tx.amount);
-
-        // Calculate percentage (avoid division by zero)
+        final transactionList = context
+            .watch<TransactionCubit>()
+            .transactionsList;
+        final user = userState is UserLoaded ? userState.user : null;
+        final budget = user?.monthlyBudgetLimit ?? 0.0;
+        final expense = user?.totalExpense ?? 0.0;
+        final balance = user?.totalBalance ?? 0.0;
         final percentage = budget > 0
-            ? (totalExpense / budget * 100).clamp(0.0, 100.0)
-            : 0.0;
-
-        final balance = userState is UserLoaded
-            ? userState.user?.totalBalance ?? 0.0
+            ? (expense / budget * 100).clamp(0.0, 100.0)
             : 0.0;
 
         return MyBodyView(
           clipBehavior: Clip.hardEdge,
+          noPadding: true,
           topSection: ProgressSection(
             percentage: percentage,
             totalAmount: budget,
-            totalExpense: totalExpense,
+            totalExpense: expense,
             totalBalance: balance,
           ),
           bottomSection: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 20),
             child: Column(
               children: [
                 Gap(13),
@@ -56,7 +52,17 @@ class MainCategories extends StatelessWidget {
                       icon: AppAssets.food,
                       label: "Food",
                       onTap: () {
-                        pushTo(context, Routes.foodScreen);
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Food'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Food',
+                            'transactions': filtered,
+                          },
+                        );
                       },
                     ),
                     Gap(21),
@@ -65,7 +71,17 @@ class MainCategories extends StatelessWidget {
                       label: "Transport",
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
-                        pushTo(context, Routes.transportScreen);
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Transport'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Transport',
+                            'transactions': filtered,
+                          },
+                        );
                       },
                     ),
                     Gap(21),
@@ -74,7 +90,17 @@ class MainCategories extends StatelessWidget {
                       label: "Medicine",
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
-                        pushTo(context, Routes.medicineScreen);
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Medicine'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Medicine',
+                            'transactions': filtered,
+                          },
+                        );
                       },
                     ),
                   ],
@@ -87,7 +113,17 @@ class MainCategories extends StatelessWidget {
                       label: "Groceries",
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
-                        pushTo(context, Routes.groceriesScreen);
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Groceries'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Groceries',
+                            'transactions': filtered,
+                          },
+                        );
                       },
                     ),
                     Gap(21),
@@ -97,7 +133,17 @@ class MainCategories extends StatelessWidget {
                       label: "Rent",
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
-                        pushTo(context, Routes.rentScreen);
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Rent'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Rent',
+                            'transactions': filtered,
+                          },
+                        );
                       },
                     ),
                     Gap(21),
@@ -106,7 +152,17 @@ class MainCategories extends StatelessWidget {
                       label: "Gifts",
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
-                        pushTo(context, Routes.giftsScreen);
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Gifts'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Gifts',
+                            'transactions': filtered,
+                          },
+                        );
                       },
                     ),
                   ],
@@ -129,14 +185,37 @@ class MainCategories extends StatelessWidget {
                       label: "Leisure",
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
-                        pushTo(context, Routes.entertainmentScreen);
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Leisure'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Leisure',
+                            'transactions': filtered,
+                          },
+                        );
                       },
                     ),
                     Gap(21),
                     CategoryItem(
                       icon: AppAssets.more,
-                      label: "More",
+                      label: "Other",
                       bgColor: AppColors.lightBlueButton,
+                      onTap: () {
+                        final filtered = transactionList
+                            .where((tx) => _isCategoryMatch(tx, 'Other'))
+                            .toList();
+                        pushTo(
+                          context,
+                          Routes.foodScreen,
+                          extra: {
+                            'categoryName': 'Other',
+                            'transactions': filtered,
+                          },
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -147,4 +226,11 @@ class MainCategories extends StatelessWidget {
       },
     );
   }
+}
+
+bool _isCategoryMatch(TransactionModel tx, String categoryName) {
+  final targetId = getCategoryId(categoryName);
+  final txCatName = tx.categoryName.toLowerCase().trim();
+  final targetName = categoryName.toLowerCase().trim();
+  return tx.categoryId == targetId || txCatName == targetName;
 }

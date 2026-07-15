@@ -19,7 +19,7 @@ import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
+import 'package:finwise/core/extentions/transaction_extension.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,75 +32,29 @@ class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
 
   String name = UserPrefs.getName() ?? "there";
-  // ── Helpers ──────────────────────────────────────────────────────────────
-
-  /// "18:27 - April 30"
-  String _formatDate(DateTime date) =>
-      DateFormat('HH:mm - MMMM dd').format(date);
-
-  /// Map category name → SVG asset path
-  String _iconFor(String categoryName) {
-    switch (categoryName.toLowerCase()) {
-      case 'salary':
-        return AppAssets.salary;
-      case 'groceries':
-        return AppAssets.groceries;
-      case 'food':
-        return AppAssets.food;
-      case 'transport':
-        return AppAssets.transport;
-      case 'entertainment':
-        return AppAssets.entertainment;
-      case 'medicine':
-        return AppAssets.medicine;
-      case 'travel':
-        return AppAssets.travel;
-      case 'car':
-        return AppAssets.car;
-      case 'gift':
-        return AppAssets.gift;
-      case 'rent':
-      case 'new house':
-      case 'newhouse':
-        return AppAssets.newHome;
-      case 'saving':
-      case 'savings':
-        return AppAssets.saving;
-      case 'income':
-        return AppAssets.income;
-      default:
-        return AppAssets.dollar;
-    }
-  }
-
-  /// "-$100.00" for expense, "$4,000.00" for income
-  String _formatAmount(TransactionModel t) {
-    final f = NumberFormat('#,##0.00').format(t.amount);
-    return t.type == 'expense' ? '-\$$f' : '\$$f';
-  }
-
-  Color? _amountColor(TransactionModel t) =>
-      t.type == 'expense' ? AppColors.oceanBlueButton : null;
-
-  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
+    final transactions = context.watch<TransactionCubit>().transactionsList;
+
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, userState) {
-        final user = userState is UserLoaded ? userState.user : null;
-        final userName = user?.username ?? UserPrefs.getName() ?? "there";
+        final userName = userState.userName;
+        final budget = userState.budget;
+        final expense = userState.expense;
+        final balance = userState.balance;
+        final income = userState.income;
 
-        final budget = user?.monthlyBudgetLimit ?? 0;
-        final expense = user?.totalExpense ?? 0;
-        final balance = user?.totalBalance ?? 0;
-        final percentage = budget > 0
-            ? (expense / budget * 100).clamp(0.0, 100.0)
-            : 0.0;
+        final percentage = userState.budgetPercentage;
+
+        final lastWeekData = _calculateLastWeekAnalysis(
+          transactions: transactions,
+          totalIncome: income,
+          totalExpense: expense,
+        );
 
         return Column(
           children: [
-            // ── AppBar ──────────────────────────────────────────────────────────
             AppBar(
               leadingWidth: 0,
               titleSpacing: 22.5,
@@ -112,7 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Hi, $userName ', style: TextStyles.bodyLarge),
-                    Text('Good Morning', style: TextStyles.bodySmall),
+                    Text(
+                      'What do you want to track ?',
+                      style: TextStyles.bodySmall,
+                    ),
                   ],
                 ),
               ),
@@ -125,10 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const Gap(8),
-
-            // ── Body ────────────────────────────────────────────────────────────
             Expanded(
               child: MyBodyView(
+                clipBehavior: Clip.hardEdge,
+                noPadding: true,
                 topSection: ProgressSection(
                   percentage: percentage,
                   totalAmount: budget,
@@ -136,90 +93,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   totalBalance: balance,
                 ),
                 bottomSection: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 37.0,
+                    vertical: 20,
+                  ),
                   child: Column(
                     children: [
-                      last_week_analysis(), // TODO: Implement Last Week Analysis
+                      LastWeekAnalysis(
+                        revenue: lastWeekData['revenue'] ?? 0.0,
+                        expenses: lastWeekData['expenses'] ?? 0.0,
+                        savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                      ),
                       const Gap(26),
 
-                      // ── Date filter ────────────────────────────────────
-                      //TODO: Implement Date Filter
-                      DateHeader(
-                        selectedIndex: index,
-                        labels: const ["Daily", "Weekly", "Monthly"],
-                        onUpdate: (value) => setState(() => index = value),
-                      ),
-                      const Gap(24),
-
-                      // ── Transaction list ───────────────────────────────
-                      BlocBuilder<TransactionCubit, TransactionStates>(
-                        builder: (context, txState) {
-                          // Loading
-                          if (txState is TransactionLoadingState) {
-                            return const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 32),
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          // Error
-                          if (txState is TransactionErrorState) {
-                            return Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Text(
-                                'Could not load transactions.',
-                                style: TextStyles.bodySmall,
-                              ),
-                            );
-                          }
-
-                          final all = context
-                              .read<TransactionCubit>()
-                              .transactionsList;
-
-                          // Empty
-                          if (all.isEmpty) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 32),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'No transactions yet.',
-                                    style: TextStyles.bodySmall,
-                                  ),
-                                  const Gap(8),
-                                  IconWithTextButton(
-                                    icon: Icons.add_rounded,
-                                    text: 'Add Transaction',
-                                    onPress: () {
-                                      pushTo(context, Routes.addExpenses);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-
-                          // Show latest 5
-                          final recent = all.take(5).toList();
-
-                          return Column(
-                            children: [
-                              for (int i = 0; i < recent.length; i++) ...[
-                                if (i > 0) const Gap(19),
-                                InfoRecord(
-                                  iconPath: _iconFor(recent[i].categoryName),
-                                  title: recent[i].title,
-                                  date: _formatDate(recent[i].date),
-                                  cat: recent[i].categoryName,
-                                  amount: _formatAmount(recent[i]),
-                                  amountColor: _amountColor(recent[i]),
-                                ),
-                              ],
-                              const Gap(8),
-                            ],
-                          );
-                        },
-                      ),
+                      _transactionsWithDateFilters(),
                     ],
                   ),
                 ),
@@ -229,5 +116,168 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  Column _transactionsWithDateFilters() {
+    return Column(
+      children: [
+        DateHeader(
+          selectedIndex: index,
+          labels: const ["Daily", "Weekly", "Monthly"],
+          onUpdate: (value) => setState(() => index = value),
+        ),
+
+        BlocBuilder<TransactionCubit, TransactionStates>(
+          builder: (context, txState) {
+            // Loading
+            if (txState is TransactionLoadingState) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 32),
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            // Error
+            if (txState is TransactionErrorState) {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'Could not load transactions.',
+                  style: TextStyles.bodySmall,
+                ),
+              );
+            }
+
+            final all = context.read<TransactionCubit>().transactionsList;
+
+            // Apply time filter
+            final now = DateTime.now();
+            final filtered = all.where((tx) {
+              if (index == 0) {
+                // Daily
+                return tx.date.year == now.year &&
+                    tx.date.month == now.month &&
+                    tx.date.day == now.day;
+              } else if (index == 1) {
+                // Weekly (last 7 days rolling)
+                final sevenDaysAgo = DateTime(
+                  now.year,
+                  now.month,
+                  now.day,
+                ).subtract(const Duration(days: 6));
+                return tx.date.isAfter(sevenDaysAgo) ||
+                    (tx.date.year == sevenDaysAgo.year &&
+                        tx.date.month == sevenDaysAgo.month &&
+                        tx.date.day == sevenDaysAgo.day);
+              } else if (index == 2) {
+                // Monthly
+                return tx.date.year == now.year && tx.date.month == now.month;
+              }
+              return true;
+            }).toList();
+
+            // Empty
+            if (filtered.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32),
+                child: Column(
+                  children: [
+                    Text(
+                      'No transactions found for this period.',
+                      style: TextStyles.bodySmall.copyWith(
+                        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    const Gap(8),
+                    IconWithTextButton(
+                      icon: Icons.add_rounded,
+                      text: 'Add Transaction',
+                      onPress: () {
+                        pushTo(context, Routes.addTransaction);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            // Show latest 5 of filtered list
+            final recent = filtered.take(10).toList();
+
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: recent.length,
+              itemBuilder: (context, index) {
+                final item = recent[index];
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: index == recent.length - 1 ? 8.0 : 19.0,
+                  ),
+                  child: InfoRecord(
+                    bgColor: item.type.toLowerCase() == 'expense'
+                        ? AppColors.lightBlueButton
+                        : AppColors.mainGreen.withValues(alpha: 0.6),
+                    title: item.title,
+                    date: item.formattedDate,
+                    cat: item.categoryName.isNotEmpty
+                        ? item.categoryName
+                        : 'General',
+                    amount: item.getFormattedAmount(showPlusForIncome: true),
+                    amountColor: item.getAmountColor(useGreenForIncome: true),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Map<String, dynamic> _calculateLastWeekAnalysis({
+    required List<TransactionModel> transactions,
+    required double totalIncome,
+    required double totalExpense,
+  }) {
+    final now = DateTime.now();
+    final sevenDaysAgo = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(const Duration(days: 6));
+
+    double revenueLastWeek = 0.0;
+    double expensesLastWeek = 0.0;
+
+    for (final tx in transactions) {
+      final isWithinLastWeek =
+          tx.date.isAfter(sevenDaysAgo) ||
+          (tx.date.year == sevenDaysAgo.year &&
+              tx.date.month == sevenDaysAgo.month &&
+              tx.date.day == sevenDaysAgo.day);
+
+      if (isWithinLastWeek) {
+        if (tx.type.toLowerCase() == 'income') {
+          revenueLastWeek += tx.amount;
+        } else if (tx.type.toLowerCase() == 'expense') {
+          expensesLastWeek += tx.amount;
+        }
+      }
+    }
+
+    double savingsPercent = 0.0;
+    if (totalIncome > 0) {
+      savingsPercent = ((totalIncome - totalExpense) / totalIncome * 100).clamp(
+        0.0,
+        100.0,
+      );
+    }
+
+    return {
+      'revenue': revenueLastWeek,
+      'expenses': expensesLastWeek,
+      'savingsPercent': savingsPercent,
+    };
   }
 }

@@ -1,4 +1,5 @@
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/category_icon_helper.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/app_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:gap/gap.dart';
 class InfoRecord extends StatelessWidget {
   const InfoRecord({
     super.key,
-    required this.iconPath,
+    this.iconPath,
     required this.title,
     required this.date,
     required this.cat,
@@ -15,7 +16,7 @@ class InfoRecord extends StatelessWidget {
     this.amountColor,
     this.bgColor,
   });
-  final String iconPath;
+  final String? iconPath;
   final String title;
   final String date;
   final String cat;
@@ -29,12 +30,13 @@ class InfoRecord extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         AppIconButton(
-          path: iconPath,
+          path: iconPath ?? getIconForCategory(cat),
           bgColor: bgColor ?? AppColors.lightBlueButton,
           iconColor: AppColors.background,
           iconWidth: 23,
-          bgWidth: 57,
-          bgHeight: 53,
+          bgWidth: 47,
+          bgHeight: 47,
+          borderRadius: 16,
         ),
         const Gap(10),
         SizedBox(

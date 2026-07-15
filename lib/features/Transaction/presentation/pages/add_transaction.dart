@@ -142,7 +142,7 @@ class AddTransaction extends StatelessWidget {
                       SizedBox(
                         height: 48,
                         child: DropdownButtonFormField<String>(
-                          value: cubit.selectedCategory,
+                          initialValue: cubit.selectedCategory,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColors.lightGreen,

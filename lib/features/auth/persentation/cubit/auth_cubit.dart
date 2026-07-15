@@ -1,8 +1,6 @@
 import 'package:finwise/core/services/firebase/firestore_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:finwise/core/functions/google_auth.dart';
 import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:finwise/features/auth/models/user_model.dart';

@@ -6,8 +6,17 @@ import 'package:finwise/core/widgets/target_card.dart';
 import 'package:finwise/features/Home/widgets/analysis_home.dart';
 import 'package:flutter/material.dart';
 
-class last_week_analysis extends StatelessWidget {
-  const last_week_analysis({super.key});
+class LastWeekAnalysis extends StatelessWidget {
+  final double revenue;
+  final double expenses;
+  final double savingsPercent;
+
+  const LastWeekAnalysis({
+    super.key,
+    required this.revenue,
+    required this.expenses,
+    required this.savingsPercent,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +36,7 @@ class last_week_analysis extends StatelessWidget {
                 TargetCard(
                   title: "Savings \nOn goals",
                   titelStyle: TextStyles.bodyMedium.copyWith(fontSize: 12),
-                  percent: 50,
+                  percent: savingsPercent,
                   center: CustomSvgPicture(path: AppAssets.car, width: 37),
                   radius: 34,
                 ),
@@ -36,13 +45,14 @@ class last_week_analysis extends StatelessWidget {
                   thickness: 1.5,
                   color: AppColors.background,
                 ),
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AnalysisHome(
                       icon: AppAssets.salary,
                       iconW: 31,
                       title: "Revenue Last Week",
-                      money: "\$4.000.00",
+                      money: "\$${revenue.toStringAsFixed(2)}",
                     ),
                     Container(
                       height: 1,
@@ -50,12 +60,11 @@ class last_week_analysis extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       color: AppColors.background,
                     ),
-
                     AnalysisHome(
                       icon: AppAssets.food,
                       iconW: 19,
-                      title: "Food Last Week",
-                      money: "-\$100.00",
+                      title: "Expenses Last Week",
+                      money: "-\$${expenses.toStringAsFixed(2)}",
                       moneyColor: AppColors.oceanBlueButton,
                     ),
                   ],

@@ -9,8 +9,6 @@ import 'package:finwise/features/analysis/widgets/date_header.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
@@ -34,13 +32,10 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, userState) {
-        final user = userState is UserLoaded ? userState.user : null;
-        final budget = user?.monthlyBudgetLimit ?? 0.0;
-        final expense = user?.totalExpense ?? 0.0;
-        final balance = user?.totalBalance ?? 0.0;
-        final percentage = budget > 0
-            ? (expense / budget * 100).clamp(0.0, 100.0)
-            : 0.0;
+        final budget = userState.budget;
+        final expense = userState.expense;
+        final balance = userState.balance;
+        final percentage = userState.budgetPercentage;
 
         return MyBodyView(
           clipBehavior: Clip.hardEdge,
