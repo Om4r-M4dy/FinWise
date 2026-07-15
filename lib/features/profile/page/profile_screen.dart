@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/functions/context_extensions.dart';
+import 'package:finwise/core/extentions/context_extensions.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
@@ -11,6 +11,9 @@ import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/features/profile/widget/profile_option.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,9 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not pick image: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not pick image: $e')));
       }
     }
   }
@@ -289,7 +292,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'Logout',
                     onTap: () async {
                       await FirebaseAuth.instance.signOut();
+                      await UserPrefs.clearAuthData();
                       if (context.mounted) {
+                        context.read<UserCubit>().clearUser();
                         removeUntil(context, Routes.loginScreen);
                       }
                     },

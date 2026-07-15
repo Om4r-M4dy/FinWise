@@ -7,77 +7,68 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 
 import 'package:finwise/features/Home/pages/home_screen.dart';
-import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
+import 'package:finwise/features/Transaction/presentation/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
 import 'package:finwise/features/profile/page/profile_screen.dart';
 
 final List<NavItemModel> navScreens = [
-  NavItemModel(
-    icon: AppAssets.home,
-    appBar: null,
-    page: HomeScreen(),
-  ),
+  NavItemModel(icon: AppAssets.home, appBar: null, page: HomeScreen()),
 
   NavItemModel(
     icon: AppAssets.analysis,
     appBar: (context) => AppBar(
-        backgroundColor: AppColors.mainGreen,
-        leading: SizedBox.shrink(),
-        title: Text("Analysis", style: TextStyles.bodyLarge),
-        actions: [
-          IconButton(
-            onPressed: () {
-              pushTo(context, Routes.notificationScreen);
-            },
-            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-          ),
-        ],
-      ),
+      backgroundColor: AppColors.mainGreen,
+      leading: SizedBox.shrink(),
+      title: Text("Analysis", style: TextStyles.bodyLarge),
+      actions: [
+        IconButton(
+          onPressed: () {
+            pushTo(context, Routes.notificationScreen);
+          },
+          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+        ),
+      ],
+    ),
     page: AnalysisScreen(),
   ),
 
   NavItemModel(
     icon: AppAssets.transactions,
     appBar: (context) => AppBar(
-        backgroundColor: AppColors.mainGreen,
-        leading: SizedBox.shrink(),
-        title: Text("Transactions", style: TextStyles.bodyLarge),
-        actions: [
-          IconButton(
-            onPressed: () {
-              pushTo(context, Routes.notificationScreen);
-            },
-            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-          ),
-        ],
-      ),
+      backgroundColor: AppColors.mainGreen,
+      leading: SizedBox.shrink(),
+      title: Text("Transactions", style: TextStyles.bodyLarge),
+      actions: [
+        IconButton(
+          onPressed: () {
+            pushTo(context, Routes.notificationScreen);
+          },
+          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+        ),
+      ],
+    ),
     page: TransactionScreen(),
   ),
   NavItemModel(
     icon: AppAssets.category,
     appBar: (context) => AppBar(
-        backgroundColor: AppColors.mainGreen,
-         leading:SizedBox.shrink(),
-        title: Text("Categories", style: TextStyles.bodyLarge),
-        actions: [
-          IconButton(
-            onPressed: () {
-              pushTo(context, Routes.notificationScreen);
-            },
-            icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-          ),
-        ],
-      ),
+      backgroundColor: AppColors.mainGreen,
+      leading: SizedBox.shrink(),
+      title: Text("Categories", style: TextStyles.bodyLarge),
+      actions: [
+        IconButton(
+          onPressed: () {
+            pushTo(context, Routes.notificationScreen);
+          },
+          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+        ),
+      ],
+    ),
     page: MainCategories(),
   ),
-  NavItemModel(
-    icon: AppAssets.profile,
-    appBar:null,
-    page: ProfileScreen(),
-  ),
+  NavItemModel(icon: AppAssets.profile, appBar: null, page: ProfileScreen()),
 ];
-
 
 class NavItemModel {
   final Widget page;
@@ -85,9 +76,5 @@ class NavItemModel {
 
   final String icon;
 
-  const NavItemModel({
-    required this.page,
-    required this.icon,
-    this.appBar,
-  });
+  const NavItemModel({required this.page, required this.icon, this.appBar});
 }

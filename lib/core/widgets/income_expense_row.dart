@@ -5,35 +5,47 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_state.dart';
+
 class IncomeExpenseRow extends StatelessWidget {
   const IncomeExpenseRow({super.key, this.bg});
   final Color? bg;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Info(
-            bg: bg,
-            icon: AppAssets.income,
-            color: AppColors.mainGreen,
-            title: "Income",
-            amount: "4,000.00",
-          ),
-        ),
-        Gap(15),
-        Expanded(
-          child: Info(
-            bg: bg,
-            icon: AppAssets.expense,
-            color: AppColors.oceanBlueButton,
-            title: "Expense",
-            amount: "1.187.40",
-            isExpense: true,
-          ),
-        ),
-      ],
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, userState) {
+        final user = userState is UserLoaded ? userState.user : null;
+        final income = user?.totalIncome ?? 0.0;
+        final expense = user?.totalExpense ?? 0.0;
+
+        return Row(
+          children: [
+            Expanded(
+              child: Info(
+                bg: bg,
+                icon: AppAssets.income,
+                color: AppColors.mainGreen,
+                title: "Income",
+                amount: income.toStringAsFixed(2),
+              ),
+            ),
+            Gap(15),
+            Expanded(
+              child: Info(
+                bg: bg,
+                icon: AppAssets.expense,
+                color: AppColors.oceanBlueButton,
+                title: "Expense",
+                amount: expense.toStringAsFixed(2),
+                isExpense: true,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

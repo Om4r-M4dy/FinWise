@@ -4,6 +4,9 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,23 +41,24 @@ class _LaunchScreenState extends State<LaunchScreen>
     if (!mounted) return;
 
     // ── Check where to navigate ────────────────────────────────────
-    // 1. If user is already logged in → go straight to home
-    // if (FirebaseAuth.instance.currentUser != null) {
-    //   replaceWith(context, Routes.bottomNavBar);
-    //   return;
-    // }
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null && UserPrefs.isLoggedIn()) {
+      await context.read<UserCubit>().loadUser(currentUser.uid);
+      if (mounted) {
+        replaceWith(context, Routes.bottomNavBar);
+      }
+      return;
+    }
 
-    // 2. Check if user has seen OnBoarding before
+    // Check if user has seen OnBoarding before
     final prefs = await SharedPreferences.getInstance();
     final bool seenOnBoarding = prefs.getBool('seen_onboarding') ?? false;
 
     if (!mounted) return;
 
     if (seenOnBoarding) {
-      // Not first time → skip OnBoarding, go to auth choice screen
       replaceWith(context, Routes.authScreen);
     } else {
-      // First time ever → show OnBoarding
       replaceWith(context, Routes.onBoarding);
     }
   }

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:finwise/core/functions/google_auth.dart';
 import 'package:finwise/core/functions/facebook_auth.dart';
 import 'package:finwise/features/auth/models/user_model.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'auth_state.dart';
 
@@ -31,6 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
         profilePicture: user.photoURL ?? '',
         totalBalance: 0.0,
         totalExpense: 0.0,
+        totalIncome: 0.0,
         dob: 0.0,
         monthlyBudgetLimit: 0.0,
         settings: {'pushNotifications': true, 'darkTheme': false},
@@ -49,18 +51,19 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
 
       final user = userCredential.user;
       if (user != null) {
         final userModel = await _getOrCreateUserModel(user);
 
-        // Save name to SharedPreferences
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_name', userModel.username ?? '');
+        // Save name and login state using UserPrefs
+        await UserPrefs.setName(userModel.username ?? '');
+        await UserPrefs.setIsLoggedIn(true);
 
         emit(AuthSuccess(userModel: userModel));
       } else {
@@ -88,8 +91,8 @@ class AuthCubit extends Cubit<AuthState> {
       if (userCredential != null && userCredential.user != null) {
         final userModel = await _getOrCreateUserModel(userCredential.user!);
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_name', userModel.username ?? '');
+        await UserPrefs.setName(userModel.username ?? '');
+        await UserPrefs.setIsLoggedIn(true);
 
         emit(AuthSuccess(userModel: userModel));
       } else {
@@ -103,12 +106,14 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> loginWithFacebook(BuildContext context) async {
     emit(AuthLoading());
     try {
-      final userCredential = await FacebookAuthService.signInWithFacebook(context);
+      final userCredential = await FacebookAuthService.signInWithFacebook(
+        context,
+      );
       if (userCredential != null && userCredential.user != null) {
         final userModel = await _getOrCreateUserModel(userCredential.user!);
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_name', userModel.username ?? '');
+        await UserPrefs.setName(userModel.username ?? '');
+        await UserPrefs.setIsLoggedIn(true);
 
         emit(AuthSuccess(userModel: userModel));
       } else {

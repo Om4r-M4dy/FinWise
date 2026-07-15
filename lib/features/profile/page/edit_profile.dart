@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/functions/context_extensions.dart';
+import 'package:finwise/core/extentions/context_extensions.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/app_icon_button.dart';
@@ -69,7 +69,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ],
               ),
             ),
-      
+
             Padding(
               padding: const EdgeInsets.only(
                 top: EditProfileScreen.profileImageRadius + 20.0,
@@ -77,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-      
+
                   children: [
                     Align(
                       alignment: Alignment.center,
@@ -94,7 +94,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
                     Gap(30),
-      
+
                     Text('Account Settings', style: TextStyles.bodyLarge),
                     Gap(30),
                     Text('Username', style: TextStyles.bodyMedium),
@@ -109,7 +109,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Gap(13),
                     CustomTextFormField(hintText: 'example@example.com'),
                     Gap(40),
-      
+
                     _rowCustomSwitch('push notifications', 0),
                     Gap(37),
                     _rowCustomSwitch('Turn dark Theme', 1),

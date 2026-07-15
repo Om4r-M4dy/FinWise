@@ -15,15 +15,18 @@ class GoogleAuth {
   static Future<UserCredential?> signInWithGoogle(BuildContext context) async {
     try {
       await _ensureInitialized();
-      
+
       // Trigger the authentication flow
-      final GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate();
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance
+          .authenticate();
 
       // Obtain the auth details (idToken)
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-      
+
       // Attempt to get access token if available without prompting, otherwise pass null
-      final GoogleSignInClientAuthorization? authz = await googleUser.authorizationClient.authorizationForScopes(['email', 'profile']);
+      final GoogleSignInClientAuthorization? authz = await googleUser
+          .authorizationClient
+          .authorizationForScopes(['email', 'profile']);
 
       // Create a new credential
       final AuthCredential credential = GoogleAuthProvider.credential(

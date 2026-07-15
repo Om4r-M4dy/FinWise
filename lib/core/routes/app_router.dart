@@ -10,7 +10,7 @@ import 'package:finwise/features/Security/pages/loading_deleted_fingerprint_scre
 import 'package:finwise/features/Security/pages/loadingChangePin_screen.dart';
 import 'package:finwise/features/Security/pages/security_screen.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
-import 'package:finwise/features/Transaction/pages/transaction_screen.dart';
+import 'package:finwise/features/Transaction/presentation/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/auth/persentation/page/confNewPassword_screen.dart';
 import 'package:finwise/features/auth/persentation/page/forgot_password.dart';
@@ -21,7 +21,8 @@ import 'package:finwise/features/auth/persentation/page/security_fingerprint_scr
 import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
-import 'package:finwise/features/categories/pages/add_expenses.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/Transaction/presentation/pages/add_transaction.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
 import 'package:finwise/features/categories/pages/entertainment_screen.dart';
@@ -50,6 +51,7 @@ import 'package:finwise/features/search/page/search_screen.dart';
 import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
 import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:finwise/features/settings/page/settings_screen.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -93,7 +95,10 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.addExpenses,
-        builder: (context, state) => const AddExpenses(),
+        builder: (context, state) {
+          context.read<TransactionCubit>().clearControllers();
+          return const AddTransaction();
+        },
       ),
       GoRoute(
         path: Routes.transportScreen,
@@ -177,7 +182,14 @@ class AppRouter {
         path: Routes.homeScreen,
         builder: (context, state) => const HomeScreen(),
       ),
-      GoRoute(path: Routes.bottomNavBar, builder: (context, state) => NavBar()),
+      GoRoute(
+        path: Routes.bottomNavBar,
+        builder: (context, state) {
+          final uid = context.read<UserCubit>().currentUser ?? '';
+          context.read<TransactionCubit>().getTransactions(uid);
+          return const NavBar();
+        },
+      ),
       GoRoute(
         path: Routes.transactionScreen,
         builder: (context, state) => TransactionScreen(),
@@ -202,7 +214,6 @@ class AppRouter {
           child: const LoginScreen(),
         ),
       ),
-
       GoRoute(
         path: Routes.forgotPasswordScreen,
         builder: (context, state) => ForgotPasswordScreen(),
@@ -215,7 +226,6 @@ class AppRouter {
         path: Routes.newPasswordScreen,
         builder: (context, state) => NewPasswordScreen(),
       ),
-
       // security
       GoRoute(
         path: Routes.securityScreen,
