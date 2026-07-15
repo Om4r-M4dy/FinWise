@@ -9,8 +9,6 @@ import 'package:finwise/features/analysis/widgets/date_header.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';

@@ -6,6 +6,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart';
 import 'package:finwise/features/auth/persentation/widgets/auth_layout.dart';
+import 'package:finwise/features/auth/persentation/widgets/loading_overlay.dart';
 import 'package:finwise/features/auth/persentation/widgets/custom_auth_button.dart';
 import 'package:finwise/features/auth/persentation/widgets/socialbutton.dart';
 import 'package:finwise/core/functions/google_auth.dart';
@@ -125,12 +126,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AuthLayout(
-      title: "Forgot Password",
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return Stack(
+      children: [
+        AuthLayout(
+          title: "Forgot Password",
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             const Gap(27),
             Text(
               "Reset Password?",
@@ -242,6 +245,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ],
         ),
       ),
+    ),
+
+        /// Full-screen loading overlay
+        LoadingOverlay(
+          isLoading: _isLoading,
+          message: "Sending reset link...",
+        ),
+      ],
     );
   }
 }

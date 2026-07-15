@@ -196,6 +196,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Gap(34),
                   ProfileOption(
+                    path: AppAssets.transactions,
+                    title: 'Transactions',
+                    onTap: () {
+                      pushTo(context, Routes.transactionScreen);
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
                     path: AppAssets.security,
                     title: 'Security',
                     onTap: () {

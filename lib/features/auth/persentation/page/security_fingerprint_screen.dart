@@ -71,7 +71,7 @@ class SecurityFingerprintScreen extends StatelessWidget {
                     ),
                     const Gap(16),
                     const Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing\nelit, sed do eiusmod tempor incididunt.",
+                      "Secure your account with your fingerprint for faster and safer access.",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 12, color: AppColors.gray39),
                     ),
@@ -102,9 +102,14 @@ class SecurityFingerprintScreen extends StatelessWidget {
                       ),
                     ),
                     const Gap(30),
-                    const Text(
-                      "¿Or prefer use pin code?",
-                      style: TextStyle(fontSize: 12, color: AppColors.gray39),
+                    GestureDetector(
+                      onTap: () {
+                        replaceWith(context, Routes.securitypinScreen);
+                      },
+                      child: const Text(
+                        "Or prefer using a pin code?",
+                        style: TextStyle(fontSize: 12, color: AppColors.gray39),
+                      ),
                     ),
                   ],
                 ),

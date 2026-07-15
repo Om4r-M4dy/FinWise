@@ -19,6 +19,7 @@ import 'package:finwise/features/auth/persentation/page/newPassword_screen.dart'
 import 'package:finwise/features/auth/persentation/page/securityPin_screen.dart';
 import 'package:finwise/features/auth/persentation/page/security_fingerprint_screen.dart';
 import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
+import 'package:finwise/features/auth/persentation/page/verify_screen.dart';
 import 'package:finwise/features/categories/pages/transactions_by_category_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
@@ -51,7 +52,6 @@ import 'package:finwise/features/search/page/search_screen.dart';
 import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
 import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:finwise/features/settings/page/settings_screen.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
 import 'package:go_router/go_router.dart';
 
@@ -243,6 +243,10 @@ class AppRouter {
       GoRoute(
         path: Routes.forgotPasswordScreen,
         builder: (context, state) => ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: Routes.verifyScreen,
+        builder: (context, state) => const VerifyScreen(),
       ),
       GoRoute(
         path: Routes.passwordChangedScreen,

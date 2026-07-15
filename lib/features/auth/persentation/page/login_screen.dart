@@ -149,17 +149,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Gap(20),
 
                 /// Fingerprint
-                const Center(
-                  child: Text.rich(
-                    TextSpan(
-                      text: "Use ",
-                      children: [
-                        TextSpan(
-                          text: "Fingerprint",
-                          style: TextStyle(color: AppColors.blueButton),
-                        ),
-                        TextSpan(text: " To Access"),
-                      ],
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      replaceWith(context, Routes.securityFingerprintScreen);
+                    },
+                    child: const Text.rich(
+                      TextSpan(
+                        text: "Use ",
+                        children: [
+                          TextSpan(
+                            text: "Fingerprint",
+                            style: TextStyle(color: AppColors.blueButton),
+                          ),
+                          TextSpan(text: " To Access"),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -188,7 +193,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const Gap(19),
-                const Center(child: Text("Don’t have an account? Sign Up")),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      replaceWith(context, Routes.signupScreen);
+                    },
+                    child: const Text.rich(
+                      TextSpan(
+                        text: "Don't have an account? ",
+                        style: TextStyle(color: AppColors.gray39),
+                        children: [
+                          TextSpan(
+                            text: "Sign Up",
+                            style: TextStyle(color: AppColors.lightBlueButton),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

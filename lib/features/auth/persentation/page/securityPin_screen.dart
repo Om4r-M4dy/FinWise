@@ -94,7 +94,22 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                         width: 207,
                         child: ElevatedButton(
                           onPressed: () {
-                            replaceWith(context, Routes.newPasswordScreen);
+                            if (otpCode.length == 6) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'PIN login not fully implemented yet.',
+                                  ),
+                                ),
+                              );
+                              replaceWith(context, Routes.loginScreen);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please enter a 6-digit PIN.'),
+                                ),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.mainGreen,

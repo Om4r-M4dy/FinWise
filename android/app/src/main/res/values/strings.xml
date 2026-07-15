@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FinWise</string>
+    <string name="facebook_app_id">1006129142272101</string>
+    <string name="facebook_client_token">acd71fc4fad383ddb9249dc7de7cd18b</string>
+    <string name="facebook_login_protocol_scheme">fb1006129142272101</string>
+</resources>

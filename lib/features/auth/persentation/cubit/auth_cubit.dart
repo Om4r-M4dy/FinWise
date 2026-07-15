@@ -121,4 +121,14 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure('Facebook sign-in error: $e'));
     }
   }
+
+  @override
+  Future<void> close() {
+    emailController.dispose();
+    passwordController.dispose();
+    phoneController.dispose();
+    passwordVerfiyController.dispose();
+    nameController.dispose();
+    return super.close();
+  }
 }
