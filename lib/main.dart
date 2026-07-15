@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:device_preview/device_preview.dart';
 import 'package:finwise/core/routes/app_router.dart';
+import 'package:finwise/core/services/local/bloc_observer.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:finwise/core/styles/themes.dart';
-import 'package:finwise/core/utils/bloc_observer.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';

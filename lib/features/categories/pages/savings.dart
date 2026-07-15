@@ -93,7 +93,9 @@ class Savings extends StatelessWidget {
                           label: "Car",
                           onTap: () {
                             final filtered = txList
-                                .where((tx) => _isCategoryMatch(tx, 'Transport'))
+                                .where(
+                                  (tx) => _isCategoryMatch(tx, 'Transport'),
+                                )
                                 .toList();
                             pushTo(
                               context,

@@ -101,9 +101,7 @@ class AppRouter {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>;
               final categoryName = extra['categoryName'] as String;
-              return TransactionsByCategoryScreen(
-                categoryName: categoryName,
-              );
+              return TransactionsByCategoryScreen(categoryName: categoryName);
             },
           ),
           GoRoute(
