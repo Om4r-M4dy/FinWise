@@ -10,10 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const DefaultAppBar({super.key, required this.title, this.noNotify = false});
+  const DefaultAppBar({
+    super.key,
+    required this.title,
+    this.noNotify = false,
+  });
 
   final String title;
   final bool noNotify;
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 

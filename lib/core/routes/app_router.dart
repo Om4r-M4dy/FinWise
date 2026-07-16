@@ -21,6 +21,9 @@ import 'package:finwise/features/auth/persentation/page/security_fingerprint_scr
 import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
 import 'package:finwise/features/auth/persentation/page/verify_screen.dart';
 import 'package:finwise/features/categories/pages/transactions_by_category_screen.dart';
+import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
+import 'package:finwise/features/profile/pages/edit_financial_info.dart';
+import 'package:finwise/features/profile/pages/edit_profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
@@ -45,14 +48,14 @@ import 'package:finwise/features/launch/launch_screen.dart';
 import 'package:finwise/features/notification/pages/notification_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
 import 'package:finwise/core/routes/routes.dart';
-import 'package:finwise/features/profile/page/edit_profile.dart';
-import 'package:finwise/features/profile/page/profile_screen.dart';
+import 'package:finwise/features/profile/pages/profile_screen.dart';
 import 'package:finwise/features/quick_analysis/page/quick_analysis_screen.dart';
 import 'package:finwise/features/search/page/search_screen.dart';
 import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
 import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:finwise/features/settings/page/settings_screen.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
+import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -109,13 +112,41 @@ class AppRouter {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>?;
               final categoryName = extra?['category'] as String?;
+              final title = extra?['title'] as String?;
+              final amount = extra?['amount'] as double?;
+              final note = extra?['note'] as String?;
+              final type = extra?['type'] as String?;
+
+              final transactionToEdit =
+                  extra?['transactionToEdit'] as TransactionModel?;
               final cubit = context.read<TransactionCubit>();
-              cubit.clearControllers();
-              if (categoryName != null) {
-                final categoryId = getCategoryId(categoryName);
-                cubit.setCategory(categoryId);
+              if (transactionToEdit != null) {
+                cubit.populateControllers(transactionToEdit);
+              } else {
+                cubit.clearControllers();
+
+                if (categoryName != null) {
+                  final categoryId = getCategoryId(categoryName);
+                  cubit.setCategory(categoryId);
+                }
+                if (title != null) {
+                  cubit.titleController.text = title;
+                }
+                if (amount != null) {
+                  cubit.amountController.text = amount.toStringAsFixed(2);
+                }
+                if (note != null) {
+                  cubit.noteController.text = note;
+                }
+                if (type != null) {
+                  if (type.toLowerCase() == 'income') {
+                    cubit.setType(TransactionTypeEnum.income.value);
+                  } else {
+                    cubit.setType(TransactionTypeEnum.expense.value);
+                  }
+                }
               }
-              return const AddTransaction();
+              return AddTransaction(transactionToEdit: transactionToEdit);
             },
           ),
           GoRoute(
@@ -190,6 +221,10 @@ class AppRouter {
           GoRoute(
             path: Routes.editProfileScreen,
             builder: (context, state) => const EditProfileScreen(),
+          ),
+          GoRoute(
+            path: Routes.editFinancialInfoScreen,
+            builder: (context, state) => const EditFinancialInfoScreen(),
           ),
           GoRoute(
             path: Routes.searchScreen,

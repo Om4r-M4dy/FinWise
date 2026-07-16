@@ -18,7 +18,9 @@ class ProfileOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.background,
+      // color: AppColors.background,
+      color: Colors.transparent,
+
       borderRadius: BorderRadius.circular(22),
       clipBehavior: Clip
           .antiAlias, // prevents the ripple from bleeding outside the rounded corners

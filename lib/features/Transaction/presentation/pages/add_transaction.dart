@@ -5,33 +5,111 @@ import 'package:finwise/core/constants/categories.dart';
 import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
 import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
+import 'package:finwise/core/widgets/ai_scanner_helper.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AddTransaction extends StatelessWidget {
-  const AddTransaction({super.key});
+  final TransactionModel? transactionToEdit;
+  final bool showAppBar;
+
+  const AddTransaction({
+    super.key,
+    this.transactionToEdit,
+    this.showAppBar = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
-      appBar: DefaultAppBar(title: "Add Transaction"),
+      appBar: showAppBar
+          ? DefaultAppBar(
+              title: transactionToEdit == null
+                  ? "Add Transaction"
+                  : "Edit Transaction",
+            )
+          : null,
       body: MyBodyView(
-        topSection: Container(height: 5),
-        bottomSection: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          child: SingleChildScrollView(
-            child: BlocConsumer<TransactionCubit, TransactionStates>(
+        topSection: InkWell(
+          onTap: () => AIScannerHelper.showAIScannerSheet(
+            context,
+            isAlreadyOnAddScreen: true,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.25),
+                width: 1.5,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.auto_awesome_rounded,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+                const Gap(12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Scan with AI",
+                        style: TextStyles.bodyLarge.copyWith(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "Fast fill transaction from image or receipt",
+                        style: TextStyles.bodySmall.copyWith(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.white,
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
+        ),
+        noPadding: true,
+        bottomSection: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 15.0),
+          child: BlocConsumer<TransactionCubit, TransactionStates>(
               listener: (context, state) {
                 if (state is TransactionLoadingState) {
                   showLoadingDialog(context);
@@ -39,10 +117,14 @@ class AddTransaction extends StatelessWidget {
                   pop(context);
                   showMyDialog(
                     context,
-                    'Transaction saved successfully!',
+                    transactionToEdit == null
+                        ? 'Transaction saved successfully!'
+                        : 'Transaction updated successfully!',
                     type: DialogType.success,
                   );
-                  pop(context);
+                  showAppBar
+                      ? pop(context)
+                      : pushTo(context, Routes.bottomNavBar, extra: 0);
                 } else if (state is TransactionErrorState) {
                   pop(context);
                   showMyDialog(context, state.errorMessage);
@@ -306,9 +388,17 @@ class AddTransaction extends StatelessWidget {
                       Center(
                         child: MainButton(
                           size: ButtonSize.small,
-                          text: "Save",
-                          onPress: () =>
-                              cubit.saveTransaction(context.read<UserCubit>()),
+                          text: transactionToEdit == null ? "Save" : "Update",
+                          onPress: () {
+                            if (transactionToEdit == null) {
+                              cubit.saveTransaction(context.read<UserCubit>());
+                            } else {
+                              cubit.editTransaction(
+                                userCubit: context.read<UserCubit>(),
+                                oldTransaction: transactionToEdit!,
+                              );
+                            }
+                          },
                           textStyle: TextStyles.bodyMedium.copyWith(
                             color: AppColors.lettersAndIcons,
                             fontWeight: FontWeight.bold,
@@ -322,8 +412,7 @@ class AddTransaction extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

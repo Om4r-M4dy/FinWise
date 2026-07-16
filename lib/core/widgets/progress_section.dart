@@ -72,11 +72,15 @@ class ProgressSection extends StatelessWidget {
     List<TransactionModel> txList,
     double percentage,
   ) {
+    final now = DateTime.now();
     final expenses = txList
-        .where((tx) => tx.type.toLowerCase() == 'expense')
+        .where((tx) =>
+            tx.type.toLowerCase() == 'expense' &&
+            tx.date.year == now.year &&
+            tx.date.month == now.month)
         .toList();
     if (expenses.isEmpty) {
-      return "Great job! You haven't recorded any expenses yet.";
+      return "Great job! You haven't recorded any expenses this month.";
     }
 
     // Group by category and sum amounts

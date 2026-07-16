@@ -1,6 +1,8 @@
 import 'package:finwise/features/auth/models/user_model.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
+
 abstract class UserState {}
 
 class UserInitial extends UserState {}
@@ -23,8 +25,7 @@ extension UserStateExtension on UserState {
   double get income => user?.totalIncome ?? 0.0;
 
   double get budgetPercentage {
-    final b = budget;
-    return b > 0 ? (expense / b * 100).clamp(0.0, 100.0) : 0.0;
+    return calculateBudgetPercentage(expense, budget);
   }
 
   String get userName {

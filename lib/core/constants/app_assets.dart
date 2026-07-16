@@ -68,6 +68,7 @@ class AppAssets {
   static const String controlMoney = "assets/imgs/controlMoney.png";
   static const String expenseManager = "assets/imgs/expenseManager.png";
   static const String profileImage = "assets/imgs/profile_image.png";
+  static const String defaultProfile = "assets/imgs/defaultProfile.png";
 
   //lottie
   static const String logoJson = "assets/lottie/logo.json";

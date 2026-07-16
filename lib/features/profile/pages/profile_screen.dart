@@ -56,7 +56,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return NetworkImage(imagePath);
       }
     }
-    return const AssetImage(AppAssets.profileImage);
+    return const AssetImage(AppAssets.defaultProfile);
+    // return const AssetImage(AppAssets.profileImage);
+  }
+
+  Future<void> _showLogoutConfirmationDialog() async {
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.background,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          title: Text(
+            'Logout',
+            style: TextStyles.bodyLarge.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.lettersAndIcons,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to log out of FinWise?',
+            style: TextStyles.bodyMedium.copyWith(
+              color: AppColors.lettersAndIcons.withValues(alpha: 0.8),
+            ),
+          ),
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'Cancel',
+                style: TextStyles.bodyMedium.copyWith(
+                  color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                'Logout',
+                style: TextStyles.bodyMedium.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true && mounted) {
+      try {
+        await FirebaseAuth.instance.signOut();
+      } catch (_) {
+        // Proceed with local logout even if network signOut throws an error
+      }
+      await UserPrefs.clearAuthData();
+      if (mounted) {
+        context.read<UserCubit>().clearUser();
+        removeUntil(context, Routes.loginScreen);
+      }
+    }
   }
 
   @override
@@ -91,21 +170,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+      noPadding: true,
       bottomSection: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: [
-          Positioned(
-            top: -profileImageRadius - 15,
-            child: CircleAvatar(
-              radius: profileImageRadius,
-              backgroundImage: _getProfileImage(displayImage),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(top: profileImageRadius + 20.0),
+          Positioned.fill(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                left: 37.0,
+                right: 37.0,
+                top: profileImageRadius + 20.0,
+                bottom: 20.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
 
@@ -120,6 +197,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       // Use GoRouter context.push directly to safely await the result
                       await context.push(Routes.editProfileScreen);
                       _loadUserData();
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.dollar,
+                    title: 'Edit Financial Info',
+                    onTap: () async {
+                      await context.push(Routes.editFinancialInfoScreen);
+                      _loadUserData();
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.transactions,
+                    title: 'Transactions',
+                    onTap: () {
+                      pushTo(context, Routes.transactionScreen);
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.analysis,
+                    title: 'Quick Analysis',
+                    onTap: () {
+                      pushTo(context, Routes.quickAnalysisScreen);
                     },
                   ),
                   Gap(34),
@@ -150,17 +252,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ProfileOption(
                     path: AppAssets.legout,
                     title: 'Logout',
-                    onTap: () async {
-                      await FirebaseAuth.instance.signOut();
-                      await UserPrefs.clearAuthData();
-                      if (context.mounted) {
-                        context.read<UserCubit>().clearUser();
-                        removeUntil(context, Routes.loginScreen);
-                      }
-                    },
+                    onTap: _showLogoutConfirmationDialog,
                   ),
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            top: -profileImageRadius - 15,
+            child: CircleAvatar(
+              radius: profileImageRadius,
+              backgroundImage: _getProfileImage(displayImage),
             ),
           ),
         ],

@@ -2,12 +2,15 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/category_icon_helper.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/app_icon_button.dart';
+import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
+import 'package:finwise/features/Transaction/presentation/widgets/transaction_details_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class InfoRecord extends StatelessWidget {
   const InfoRecord({
     super.key,
+    this.transaction,
     this.iconPath,
     required this.title,
     required this.date,
@@ -16,6 +19,8 @@ class InfoRecord extends StatelessWidget {
     this.amountColor,
     this.bgColor,
   });
+
+  final TransactionModel? transaction;
   final String? iconPath;
   final String title;
   final String date;
@@ -26,7 +31,7 @@ class InfoRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final recordRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         AppIconButton(
@@ -46,12 +51,16 @@ class InfoRecord extends StatelessWidget {
             children: [
               Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyles.bodyMedium.copyWith(
                   color: AppColors.lettersAndIcons,
                 ),
               ),
               Text(
                 date,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyles.bodySmall.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColors.oceanBlueButton,
@@ -72,6 +81,8 @@ class InfoRecord extends StatelessWidget {
           child: Text(
             cat,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyles.bodySmall.copyWith(
               fontWeight: FontWeight.w300,
               color: AppColors.lettersAndIcons,
@@ -88,6 +99,7 @@ class InfoRecord extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .19,
           child: Text(
             amount,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyles.bodyMedium.copyWith(
               color: amountColor ?? AppColors.lettersAndIcons,
@@ -96,5 +108,18 @@ class InfoRecord extends StatelessWidget {
         ),
       ],
     );
+
+    if (transaction != null) {
+      return InkWell(
+        onTap: () => showTransactionDetailsSheet(context, transaction!),
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: recordRow,
+        ),
+      );
+    }
+
+    return recordRow;
   }
 }

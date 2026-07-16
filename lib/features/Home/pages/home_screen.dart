@@ -1,3 +1,5 @@
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
+import 'package:finwise/core/functions/calculate_last_week_analysis.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
@@ -10,7 +12,6 @@ import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/progress_section.dart';
 import 'package:finwise/features/Home/widgets/last_week_analysis.dart';
-import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/analysis/widgets/date_header.dart';
@@ -20,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
+import 'package:finwise/features/profile/pages/complet_profile.dart';
+import 'package:finwise/core/widgets/ai_scanner_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,12 +35,53 @@ class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
 
   String name = UserPrefs.getName() ?? "there";
+  bool _isBottomSheetOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final userState = context.read<UserCubit>().state;
+        _checkUserProfile(userState);
+      }
+    });
+  }
+
+  void _checkUserProfile(UserState state) {
+    if (state.budget <= 0 && !_isBottomSheetOpen) {
+      _isBottomSheetOpen = true;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          enableDrag: false,
+          isDismissible: false,
+          backgroundColor: Colors.transparent,
+          builder: (context) => const CompleteProfileBottomSheet(),
+        );
+
+        if (mounted) {
+          setState(() {
+            _isBottomSheetOpen = false;
+          });
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<TransactionCubit>().transactionsList;
 
-    return BlocBuilder<UserCubit, UserState>(
+    return BlocConsumer<UserCubit, UserState>(
+      listener: (context, userState) {
+        _checkUserProfile(userState);
+      },
+      listenWhen: (previous, current) {
+        return previous.budget != current.budget;
+      },
       builder: (context, userState) {
         final userName = userState.userName;
         final budget = userState.budget;
@@ -45,74 +89,93 @@ class _HomeScreenState extends State<HomeScreen> {
         final balance = userState.balance;
         final income = userState.income;
 
-        final percentage = userState.budgetPercentage;
+        final monthlyExpense = context
+            .watch<TransactionCubit>()
+            .monthlyExpenses;
+        final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
-        final lastWeekData = _calculateLastWeekAnalysis(
+        final lastWeekData = calculateLastWeekAnalysis(
           transactions: transactions,
           totalIncome: income,
           totalExpense: expense,
         );
 
-        return Column(
-          children: [
-            AppBar(
-              leadingWidth: 0,
-              titleSpacing: 22.5,
-              automaticallyImplyLeading: false,
-              title: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Hi, $userName ', style: TextStyles.bodyLarge),
-                    Text(
-                      'What do you want to track ?',
-                      style: TextStyles.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () => pushTo(context, Routes.notificationScreen),
-                  icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-                ),
-              ],
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: AppColors.mainGreen,
+            shape: const CircleBorder(),
+            onPressed: () => AIScannerHelper.showAIScannerSheet(context),
+            child: const Icon(
+              Icons.auto_awesome_rounded,
+              color: Colors.white,
+              size: 28,
             ),
-
-            const Gap(8),
-            Expanded(
-              child: MyBodyView(
-                clipBehavior: Clip.hardEdge,
-                noPadding: true,
-                topSection: ProgressSection(
-                  percentage: percentage,
-                  totalAmount: budget,
-                  totalExpense: expense,
-                  totalBalance: balance,
-                ),
-                bottomSection: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 37.0,
-                    vertical: 20,
-                  ),
+          ),
+          body: Column(
+            children: [
+              AppBar(
+                leadingWidth: 0,
+                titleSpacing: 22.5,
+                automaticallyImplyLeading: false,
+                title: Align(
+                  alignment: Alignment.centerLeft,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      LastWeekAnalysis(
-                        revenue: lastWeekData['revenue'] ?? 0.0,
-                        expenses: lastWeekData['expenses'] ?? 0.0,
-                        savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                      Text('Hi, $userName ', style: TextStyles.bodyLarge),
+                      Text(
+                        'What do you want to track ?',
+                        style: TextStyles.bodySmall,
                       ),
-                      const Gap(26),
-
-                      _transactionsWithDateFilters(),
                     ],
                   ),
                 ),
+                actions: [
+                  IconButton(
+                    onPressed: () => pushTo(context, Routes.notificationScreen),
+                    icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const Gap(8),
+              Expanded(
+                child: MyBodyView(
+                  clipBehavior: Clip.hardEdge,
+                  noPadding: true,
+                  topSection: ProgressSection(
+                    percentage: percentage,
+                    totalAmount: budget,
+                    totalExpense: expense,
+                    totalBalance: balance,
+                  ),
+                  bottomSection: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 37.0,
+                      vertical: 20,
+                    ),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            pushTo(context, Routes.quickAnalysisScreen);
+                          },
+                          child: LastWeekAnalysis(
+                            revenue: lastWeekData['revenue'] ?? 0.0,
+                            expenses: lastWeekData['expenses'] ?? 0.0,
+                            savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                          ),
+                        ),
+                        const Gap(26),
+                        _transactionsWithDateFilters(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -215,6 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: index == recent.length - 1 ? 8.0 : 19.0,
                   ),
                   child: InfoRecord(
+                    transaction: item,
                     bgColor: item.type.toLowerCase() == 'expense'
                         ? AppColors.lightBlueButton
                         : AppColors.mainGreen.withValues(alpha: 0.6),
@@ -235,49 +299,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Map<String, dynamic> _calculateLastWeekAnalysis({
-    required List<TransactionModel> transactions,
-    required double totalIncome,
-    required double totalExpense,
-  }) {
-    final now = DateTime.now();
-    final sevenDaysAgo = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ).subtract(const Duration(days: 6));
 
-    double revenueLastWeek = 0.0;
-    double expensesLastWeek = 0.0;
-
-    for (final tx in transactions) {
-      final isWithinLastWeek =
-          tx.date.isAfter(sevenDaysAgo) ||
-          (tx.date.year == sevenDaysAgo.year &&
-              tx.date.month == sevenDaysAgo.month &&
-              tx.date.day == sevenDaysAgo.day);
-
-      if (isWithinLastWeek) {
-        if (tx.type.toLowerCase() == 'income') {
-          revenueLastWeek += tx.amount;
-        } else if (tx.type.toLowerCase() == 'expense') {
-          expensesLastWeek += tx.amount;
-        }
-      }
-    }
-
-    double savingsPercent = 0.0;
-    if (totalIncome > 0) {
-      savingsPercent = ((totalIncome - totalExpense) / totalIncome * 100).clamp(
-        0.0,
-        100.0,
-      );
-    }
-
-    return {
-      'revenue': revenueLastWeek,
-      'expenses': expensesLastWeek,
-      'savingsPercent': savingsPercent,
-    };
-  }
 }
