@@ -6,6 +6,7 @@ import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
@@ -24,7 +25,14 @@ import 'package:gap/gap.dart';
 
 class AddTransaction extends StatelessWidget {
   final TransactionModel? transactionToEdit;
+  final TransactionModel? transactionToEdit;
   final bool showAppBar;
+
+  const AddTransaction({
+    super.key,
+    this.transactionToEdit,
+    this.showAppBar = true,
+  });
 
   const AddTransaction({
     super.key,
@@ -44,8 +52,19 @@ class AddTransaction extends StatelessWidget {
                   : "Edit Transaction",
             )
           : null,
+      appBar: showAppBar
+          ? DefaultAppBar(
+              title: transactionToEdit == null
+                  ? "Add Transaction"
+                  : "Edit Transaction",
+            )
+          : null,
       body: MyBodyView(
         topSection: InkWell(
+          onTap: () => AIScannerHelper.showAIScannerSheet(
+            context,
+            isAlreadyOnAddScreen: true,
+          ),
           onTap: () => AIScannerHelper.showAIScannerSheet(
             context,
             isAlreadyOnAddScreen: true,
@@ -112,6 +131,10 @@ class AddTransaction extends StatelessWidget {
         bottomSection: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 15.0),
           child: BlocConsumer<TransactionCubit, TransactionStates>(
+        noPadding: true,
+        bottomSection: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 15.0),
+          child: BlocConsumer<TransactionCubit, TransactionStates>(
               listener: (context, state) {
                 if (state is TransactionLoadingState) {
                   showLoadingDialog(context);
@@ -122,8 +145,14 @@ class AddTransaction extends StatelessWidget {
                     transactionToEdit == null
                         ? 'Transaction saved successfully!'
                         : 'Transaction updated successfully!',
+                    transactionToEdit == null
+                        ? 'Transaction saved successfully!'
+                        : 'Transaction updated successfully!',
                     type: DialogType.success,
                   );
+                  showAppBar
+                      ? pop(context)
+                      : pushTo(context, Routes.bottomNavBar, extra: 0);
                   showAppBar
                       ? pop(context)
                       : pushTo(context, Routes.bottomNavBar, extra: 0);
@@ -513,6 +542,10 @@ class AddTransaction extends StatelessWidget {
                   ),
                 );
               },
+            ),
+          ),
+        ),
+      );
             ),
           ),
         ),

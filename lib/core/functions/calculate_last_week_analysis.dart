@@ -35,14 +35,15 @@ Map<String, dynamic> calculateLastWeekAnalysis({
       .where((tx) => tx.type.toLowerCase() == 'expense' && tx.categoryId == '2')
       .fold(0.0, (sum, tx) => sum + tx.amount);
 
-  final adjustedExpense = (totalExpense - totalSavings).clamp(0.0, double.infinity);
+  final adjustedExpense = (totalExpense - totalSavings).clamp(
+    0.0,
+    double.infinity,
+  );
 
   double savingsPercent = 0.0;
   if (totalIncome > 0) {
-    savingsPercent = ((totalIncome - adjustedExpense) / totalIncome * 100).clamp(
-      0.0,
-      100.0,
-    );
+    savingsPercent = ((totalIncome - adjustedExpense) / totalIncome * 100)
+        .clamp(0.0, 100.0);
   }
 
   return {

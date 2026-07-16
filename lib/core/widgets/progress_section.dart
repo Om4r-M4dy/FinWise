@@ -79,7 +79,6 @@ class ProgressSection extends StatelessWidget {
       ],
     );
   }
-  // TODO: Add it to a new transaction helper file to handle filtering monthly and yearly transactions and categories
 
   String _getEncouragingMessage(
     List<TransactionModel> txList,

@@ -13,11 +13,13 @@ class PlotsSections extends StatelessWidget {
   final double maxY;
   final String? plotTitle;
   final List<String>? bottomLabels;
+  final List<String>? bottomLabels;
   const PlotsSections({
     super.key,
     required this.chartData,
     this.maxY = 20,
     this.plotTitle,
+    this.bottomLabels,
     this.bottomLabels,
   });
   static const List<String> weekTitles = [
@@ -57,6 +59,7 @@ class PlotsSections extends StatelessWidget {
                   child: BarChart(
                     BarChartData(
                       maxY: maxY,
+                      maxY: maxY,
                       barTouchData: BarTouchData(enabled: true),
                       titlesData: FlTitlesData(
                         show: true,
@@ -82,6 +85,7 @@ class PlotsSections extends StatelessWidget {
                                 ),
                                 child: Text(
                                   text,
+                                  text,
                                   style: TextStyles.bodySmall.copyWith(
                                     color: AppColors.lightBlueButton,
                                     fontSize: isUnder1000 ? 9.5 : 12,
@@ -98,6 +102,8 @@ class PlotsSections extends StatelessWidget {
                               int index = value.toInt();
                               final labels = bottomLabels ?? weekTitles;
                               if (index >= 0 && index < labels.length) {
+                              final labels = bottomLabels ?? weekTitles;
+                              if (index >= 0 && index < labels.length) {
                                 return SideTitleWidget(
                                   meta: meta,
 
@@ -109,6 +115,7 @@ class PlotsSections extends StatelessWidget {
                                   ),
                                   space: 5,
                                   child: Text(
+                                    labels[index],
                                     labels[index],
                                     style: TextStyles.bodySmall.copyWith(
                                       color: AppColors.darkGreen,

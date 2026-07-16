@@ -27,23 +27,37 @@ class Savings extends StatelessWidget {
       builder: (context, userState) {
         final txList = context.watch<TransactionCubit>().transactionsList;
         final goalState = context.watch<GoalCubit>().state;
-        final List<GoalModel> goals = goalState is GoalLoadedState ? goalState.goals : [];
+        final List<GoalModel> goals = goalState is GoalLoadedState
+            ? goalState.goals
+            : [];
 
-        final double totalTarget = goals.fold(0.0, (sum, goal) => sum + goal.targetAmount);
-        final double totalSaved = goals.fold(0.0, (sum, goal) => sum + goal.currentAmount);
-        final double savingsPercentage = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0.0;
+        final double totalTarget = goals.fold(
+          0.0,
+          (sum, goal) => sum + goal.targetAmount,
+        );
+        final double totalSaved = goals.fold(
+          0.0,
+          (sum, goal) => sum + goal.currentAmount,
+        );
+        final double savingsPercentage = totalTarget > 0
+            ? (totalSaved / totalTarget) * 100
+            : 0.0;
 
         final balance = userState.balance;
 
         final String customMessage;
         if (goals.isEmpty) {
-          customMessage = "No savings goals created yet. Tap 'Add More' below to create a goal!";
+          customMessage =
+              "No savings goals created yet. Tap 'Add More' below to create a goal!";
         } else if (savingsPercentage >= 100) {
-          customMessage = "Congratulations! You have reached 100% of your total savings target!";
+          customMessage =
+              "Congratulations! You have reached 100% of your total savings target!";
         } else if (savingsPercentage == 0) {
-          customMessage = "You haven't started saving yet. Save money towards your goals to start!";
+          customMessage =
+              "You haven't started saving yet. Save money towards your goals to start!";
         } else {
-          customMessage = "You've reached ${savingsPercentage.toStringAsFixed(0)}% of your savings target. Keep up the great work!";
+          customMessage =
+              "You've reached ${savingsPercentage.toStringAsFixed(0)}% of your savings target. Keep up the great work!";
         }
 
         return Scaffold(
@@ -71,7 +85,9 @@ class Savings extends StatelessWidget {
                           "No savings goals created yet.\nTap 'Add More' below to create a goal!",
                           textAlign: TextAlign.center,
                           style: TextStyles.bodyMedium.copyWith(
-                            color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                            color: AppColors.lettersAndIcons.withValues(
+                              alpha: 0.6,
+                            ),
                           ),
                         ),
                       ),

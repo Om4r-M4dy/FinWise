@@ -1,6 +1,9 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
+import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/constants/app_assets.dart';
+import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/functions/plot_helper.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/income_expense_row.dart';
@@ -41,9 +44,13 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         final budget = userState.budget;
         final expense = userState.expense;
         final balance = userState.balance;
-        final transactionsList = context.watch<TransactionCubit>().transactionsList;
-        
-        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final transactionsList = context
+            .watch<TransactionCubit>()
+            .transactionsList;
+
+        final monthlyExpense = context
+            .watch<TransactionCubit>()
+            .monthlyExpenses;
         final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         if (transactionsList.isEmpty) {
@@ -57,7 +64,10 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
               totalBalance: balance,
             ),
             bottomSection: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 40),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 37.0,
+                vertical: 40,
+              ),
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +107,10 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.mainGreen,
                       foregroundColor: const Color(0xff093030),
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -143,6 +156,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                       DateHeader(
                         selectedIndex: index,
                         labels: const ["Daily", "Weekly", "Monthly"],
+                        labels: const ["Daily", "Weekly", "Monthly"],
                         onUpdate: (value) {
                           setState(() {
                             index = value;
@@ -151,6 +165,9 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                       ),
                       Gap(30),
                       PlotsSections(
+                        chartData: dynamicChart.chartData,
+                        maxY: dynamicChart.maxY,
+                        bottomLabels: dynamicChart.labels,
                         chartData: dynamicChart.chartData,
                         maxY: dynamicChart.maxY,
                         bottomLabels: dynamicChart.labels,
@@ -169,7 +186,9 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                 ),
                 BlocBuilder<GoalCubit, GoalState>(
                   builder: (context, goalState) {
-                    final goals = (goalState is GoalLoadedState) ? goalState.goals : <GoalModel>[];
+                    final goals = (goalState is GoalLoadedState)
+                        ? goalState.goals
+                        : <GoalModel>[];
                     return SizedBox(
                       height: 180,
                       child: ListView.builder(
@@ -190,17 +209,21 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                                       color: AppColors.lightGreen,
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
-                                        color: AppColors.mainGreen.withValues(alpha: 0.5),
+                                        color: AppColors.mainGreen.withValues(
+                                          alpha: 0.5,
+                                        ),
                                         width: 1.5,
                                       ),
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.all(8),
                                           decoration: BoxDecoration(
-                                            color: AppColors.mainGreen.withValues(alpha: 0.1),
+                                            color: AppColors.mainGreen
+                                                .withValues(alpha: 0.1),
                                             shape: BoxShape.circle,
                                           ),
                                           child: const Icon(
@@ -228,7 +251,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                           final goal = goals[i];
                           final double percent = goal.targetAmount <= 0
                               ? 0.0
-                              : ((goal.currentAmount / goal.targetAmount) * 100).clamp(0.0, 100.0);
+                              : ((goal.currentAmount / goal.targetAmount) * 100)
+                                    .clamp(0.0, 100.0);
 
                           return Padding(
                             padding: const EdgeInsets.only(left: 6, right: 6),
@@ -278,5 +302,4 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
       },
     );
   }
-
 }

@@ -1,3 +1,4 @@
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/category_icon_helper.dart';
@@ -18,6 +19,7 @@ import 'package:finwise/core/widgets/add_goal_bottom_sheet.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
@@ -42,7 +44,9 @@ class TransactionsByCategoryScreen extends StatelessWidget {
     final allTransactions = context.watch<TransactionCubit>().transactionsList;
     final transactions = goalId != null
         ? allTransactions.where((tx) => tx.goalId == goalId).toList()
-        : allTransactions.where((tx) => isCategoryMatch(tx, categoryName)).toList();
+        : allTransactions
+              .where((tx) => isCategoryMatch(tx, categoryName))
+              .toList();
 
     // Sort transactions by date descending
     final sortedTransactions = List<TransactionModel>.from(transactions)
@@ -72,7 +76,9 @@ class TransactionsByCategoryScreen extends StatelessWidget {
 
         if (isGoal) {
           final goalState = context.watch<GoalCubit>().state;
-          final List<GoalModel> goals = goalState is GoalLoadedState ? goalState.goals : [];
+          final List<GoalModel> goals = goalState is GoalLoadedState
+              ? goalState.goals
+              : [];
           final goal = goals.firstWhere(
             (g) => g.goalId == goalId,
             orElse: () => GoalModel(
@@ -86,22 +92,28 @@ class TransactionsByCategoryScreen extends StatelessWidget {
 
           totalAmount = goal.targetAmount;
           totalExpenseValue = goal.currentAmount;
-          percentage = totalAmount > 0 ? (totalExpenseValue / totalAmount) * 100 : 0.0;
+          percentage = totalAmount > 0
+              ? (totalExpenseValue / totalAmount) * 100
+              : 0.0;
           rightTitle = "Total Saved";
           isRightExpense = false;
 
           if (percentage >= 100) {
-            customMessage = "Congratulations! You have reached 100% of your target for $categoryName!";
+            customMessage =
+                "Congratulations! You have reached 100% of your target for $categoryName!";
           } else {
-            customMessage = "You've saved \$${totalExpenseValue.toStringAsFixed(2)} of your \$${totalAmount.toStringAsFixed(2)} target for $categoryName.";
+            customMessage =
+                "You've saved \$${totalExpenseValue.toStringAsFixed(2)} of your \$${totalAmount.toStringAsFixed(2)} target for $categoryName.";
           }
         } else {
           final now = DateTime.now();
           final categorySpent = transactions
-              .where((tx) =>
-                  tx.type.toLowerCase() == 'expense' &&
-                  tx.date.year == now.year &&
-                  tx.date.month == now.month)
+              .where(
+                (tx) =>
+                    tx.type.toLowerCase() == 'expense' &&
+                    tx.date.year == now.year &&
+                    tx.date.month == now.month,
+              )
               .fold(0.0, (sum, tx) => sum + tx.amount);
 
           percentage = budget > 0 ? (categorySpent / budget) * 100 : 0.0;
@@ -113,23 +125,29 @@ class TransactionsByCategoryScreen extends StatelessWidget {
           final catLower = categoryName.trim().toLowerCase();
           switch (catLower) {
             case 'food':
-              customMessage = "You've spent \$${categorySpent.toStringAsFixed(2)} on Food this month. Cooking at home could help save more!";
+              customMessage =
+                  "You've spent \$${categorySpent.toStringAsFixed(2)} on Food this month. Cooking at home could help save more!";
               break;
             case 'groceries':
-              customMessage = "You've spent \$${categorySpent.toStringAsFixed(2)} on Groceries. Try building shopping lists to avoid impulse buys!";
+              customMessage =
+                  "You've spent \$${categorySpent.toStringAsFixed(2)} on Groceries. Try building shopping lists to avoid impulse buys!";
               break;
             case 'transport':
-              customMessage = "You've spent \$${categorySpent.toStringAsFixed(2)} on Transport. Carpooling or walking could help lower this.";
+              customMessage =
+                  "You've spent \$${categorySpent.toStringAsFixed(2)} on Transport. Carpooling or walking could help lower this.";
               break;
             case 'medicine':
-              customMessage = "You've spent \$${categorySpent.toStringAsFixed(2)} on medicine. Keep tracking to stay on top of your wellness!";
+              customMessage =
+                  "You've spent \$${categorySpent.toStringAsFixed(2)} on medicine. Keep tracking to stay on top of your wellness!";
               break;
             case 'leisure':
             case 'entertainment':
-              customMessage = "You've spent \$${categorySpent.toStringAsFixed(2)} on Leisure. Watch out for impulse purchases!";
+              customMessage =
+                  "You've spent \$${categorySpent.toStringAsFixed(2)} on Leisure. Watch out for impulse purchases!";
               break;
             default:
-              customMessage = "You have spent \$${categorySpent.toStringAsFixed(2)} on $categoryName this month.";
+              customMessage =
+                  "You have spent \$${categorySpent.toStringAsFixed(2)} on $categoryName this month.";
           }
         }
 
@@ -139,7 +157,10 @@ class TransactionsByCategoryScreen extends StatelessWidget {
             actions: goalId != null
                 ? [
                     IconButton(
-                      icon: const Icon(Icons.edit, color: AppColors.lettersAndIcons),
+                      icon: const Icon(
+                        Icons.edit,
+                        color: AppColors.lettersAndIcons,
+                      ),
                       onPressed: () {
                         final goalState = context.read<GoalCubit>().state;
                         if (goalState is GoalLoadedState) {
@@ -263,5 +284,3 @@ class TransactionsByCategoryScreen extends StatelessWidget {
     );
   }
 }
-
-
