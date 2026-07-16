@@ -11,10 +11,12 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.noNotify = false,
+    this.actions,
   });
 
   final String title;
   final bool noNotify;
+  final List<Widget>? actions;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -30,16 +32,17 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: CustomSvgPicture(path: AppAssets.back),
       ),
       title: Center(child: Text(title, style: TextStyles.bodyLarge)),
-      actions: noNotify
-          ? null
-          : [
-              IconButton(
-                onPressed: () {
-                  pushTo(context, Routes.notificationScreen);
-                },
-                icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-              ),
-            ],
+      actions: actions ??
+          (noNotify
+              ? null
+              : [
+                  IconButton(
+                    onPressed: () {
+                      pushTo(context, Routes.notificationScreen);
+                    },
+                    icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+                  ),
+                ]),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/plots_section.dart';
 import 'package:finwise/core/widgets/progress_section.dart';
 import 'package:finwise/core/widgets/target_card.dart';
+import 'package:finwise/core/widgets/add_goal_bottom_sheet.dart';
 import 'package:finwise/features/analysis/widgets/date_header.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -16,8 +17,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
+import 'package:finwise/features/analysis/cubit/goal_state.dart';
+import 'package:finwise/features/analysis/data/model/goal_model.dart';
 import 'package:finwise/core/functions/calculate_budget_percentage.dart';
-import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 
@@ -115,41 +118,6 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
 
         final dynamicChart = getDynamicChartData(transactionsList, index);
 
-        double calculateTargetPercent(String categoryName, double goal) {
-          final total = transactionsList
-              .where((tx) => isCategoryMatch(tx, categoryName))
-              .fold(0.0, (sum, tx) => sum + tx.amount);
-          if (goal <= 0) return 0.0;
-          return ((total / goal) * 100).clamp(0.0, 100.0);
-        }
-
-        final targets = [
-          {
-            "title": "Travel",
-            "categoryKey": "Travel",
-            "percent": calculateTargetPercent("Travel", 20000.0),
-            "radius": 30.0
-          },
-          {
-            "title": "Car",
-            "categoryKey": "Transport",
-            "percent": calculateTargetPercent("Transport", 20000.0),
-            "radius": 30.0
-          },
-          {
-            "title": "New House",
-            "categoryKey": "Rent",
-            "percent": calculateTargetPercent("Rent", 20000.0),
-            "radius": 30.0
-          },
-          {
-            "title": "Wedding",
-            "categoryKey": "Other",
-            "percent": calculateTargetPercent("Other", 20000.0),
-            "radius": 30.0
-          },
-        ];
-
         return MyBodyView(
           clipBehavior: Clip.hardEdge,
           noPadding: true,
@@ -199,43 +167,109 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 180,
+                BlocBuilder<GoalCubit, GoalState>(
+                  builder: (context, goalState) {
+                    final goals = (goalState is GoalLoadedState) ? goalState.goals : <GoalModel>[];
+                    return SizedBox(
+                      height: 180,
+                      child: ListView.builder(
+                        itemCount: goals.length + 1,
+                        scrollDirection: Axis.horizontal,
+                        clipBehavior: Clip.none,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        itemBuilder: (context, i) {
+                          if (i == goals.length) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 6, right: 6),
+                              child: SizedBox(
+                                width: 150,
+                                child: GestureDetector(
+                                  onTap: () => showAddGoalBottomSheet(context),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.lightGreen,
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: AppColors.mainGreen.withValues(alpha: 0.5),
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.mainGreen.withValues(alpha: 0.1),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(
+                                            Icons.add_rounded,
+                                            color: AppColors.mainGreen,
+                                            size: 28,
+                                          ),
+                                        ),
+                                        const Gap(12),
+                                        Text(
+                                          "Add Target",
+                                          style: TextStyles.bodyMedium.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.lettersAndIcons,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
 
-                  child: ListView.builder(
-                    itemCount: targets.length,
-                    scrollDirection: Axis.horizontal,
-                    clipBehavior: Clip.none,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    itemBuilder: (context, i) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 6, right: 6),
-                        child: SizedBox(
-                          width: 150,
-                          child: GestureDetector(
-                            onTap: () {
-                              final filtered = transactionsList
-                                  .where((tx) => isCategoryMatch(tx, targets[i]["categoryKey"] as String))
-                                  .toList();
-                              pushTo(
-                                context,
-                                Routes.foodScreen,
-                                extra: {
-                                  'categoryName': targets[i]["title"] as String,
-                                  'transactions': filtered,
+                          final goal = goals[i];
+                          final double percent = goal.targetAmount <= 0
+                              ? 0.0
+                              : ((goal.currentAmount / goal.targetAmount) * 100).clamp(0.0, 100.0);
+
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 6, right: 6),
+                            child: SizedBox(
+                              width: 150,
+                              child: GestureDetector(
+                                onLongPress: () {
+                                  showAddGoalBottomSheet(context, goal: goal);
                                 },
-                              );
-                            },
-                            child: TargetCard(
-                              title: targets[i]["title"] as String,
-                              percent: targets[i]["percent"] as double,
-                              radius: targets[i]["radius"] as double,
+                                onTap: () {
+                                  final filtered = transactionsList
+                                      .where((tx) => tx.goalId == goal.goalId)
+                                      .toList();
+                                  pushTo(
+                                    context,
+                                    Routes.foodScreen,
+                                    extra: {
+                                      'categoryName': goal.title,
+                                      'transactions': filtered,
+                                      'goalId': goal.goalId,
+                                    },
+                                  );
+                                },
+                                child: TargetCard(
+                                  title: goal.title,
+                                  percent: percent,
+                                  radius: 30.0,
+                                  center: CustomSvgPicture(
+                                    path: goal.iconPath,
+                                    width: 25,
+                                    color: AppColors.lettersAndIcons,
+                                  ),
+                                  backgroundColor: AppColors.lightBlueButton,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -244,4 +278,5 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
       },
     );
   }
+
 }

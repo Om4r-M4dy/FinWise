@@ -24,25 +24,32 @@ class AnalysisHome extends StatelessWidget {
     return Row(
       children: [
         CustomSvgPicture(path: icon, width: iconW, color: AppColors.dark05),
-        Gap(17),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyles.bodySmall.copyWith(
-                color: AppColors.lettersAndIcons,
+        const Gap(12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyles.bodySmall.copyWith(
+                  color: AppColors.lettersAndIcons,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            Text(
-              money,
-              style: TextStyles.bodyMedium.copyWith(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: moneyColor ?? AppColors.lettersAndIcons,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  money,
+                  style: TextStyles.bodyMedium.copyWith(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: moneyColor ?? AppColors.lettersAndIcons,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

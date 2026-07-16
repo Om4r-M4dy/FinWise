@@ -51,7 +51,7 @@ double calculateMaxY(int index) {
       }
     }
   }
-  return maxVal == 0 ? 20000.0 : maxVal * 1.2;
+  return maxVal == 0 ? 20000.0 : maxVal;
 }
 
 class DynamicChartData {
@@ -170,7 +170,7 @@ DynamicChartData getDynamicChartData(List<TransactionModel> transactions, int in
       }
     }
   }
-  double maxYValue = maxVal == 0 ? 1000.0 : maxVal * 1.2;
+  double maxYValue = maxVal == 0 ? 1000.0 : maxVal;
 
   return DynamicChartData(
     chartData: chartData,

@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 
+import 'package:finwise/core/functions/format_amount.dart';
+
 class IncomeExpenseRow extends StatelessWidget {
   const IncomeExpenseRow({super.key, this.bg});
   final Color? bg;
@@ -29,7 +31,7 @@ class IncomeExpenseRow extends StatelessWidget {
                 icon: AppAssets.income,
                 color: AppColors.mainGreen,
                 title: "Income",
-                amount: income.toStringAsFixed(2),
+                amount: formatAmount(income),
               ),
             ),
             Gap(15),
@@ -39,7 +41,7 @@ class IncomeExpenseRow extends StatelessWidget {
                 icon: AppAssets.expense,
                 color: AppColors.oceanBlueButton,
                 title: "Expense",
-                amount: expense.toStringAsFixed(2),
+                amount: formatAmount(expense),
                 isExpense: true,
               ),
             ),
@@ -89,7 +91,7 @@ class Info extends StatelessWidget {
               ),
             ),
             Text(
-              '\$$amount',
+              amount,
               style: TextStyles.bodyLarge.copyWith(
                 fontWeight: FontWeight.w600,
                 color: isExpense ? color : AppColors.dark05,

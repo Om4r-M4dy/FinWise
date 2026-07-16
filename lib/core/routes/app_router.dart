@@ -27,6 +27,7 @@ import 'package:finwise/features/profile/pages/edit_profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/pages/add_transaction.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
@@ -74,11 +75,18 @@ class AppRouter {
         builder: (context, state) => const OnBoardingScreen(),
       ),
 
-      // Shell route for all authenticated/authenticated-related screens requiring TransactionCubit
+      // Shell route for all authenticated/authenticated-related screens requiring TransactionCubit and GoalCubit
       ShellRoute(
         builder: (context, state, child) {
-          return BlocProvider<TransactionCubit>(
-            create: (context) => TransactionCubit(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<TransactionCubit>(
+                create: (context) => TransactionCubit(),
+              ),
+              BlocProvider<GoalCubit>(
+                create: (context) => GoalCubit(),
+              ),
+            ],
             child: child,
           );
         },
@@ -104,7 +112,11 @@ class AppRouter {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>;
               final categoryName = extra['categoryName'] as String;
-              return TransactionsByCategoryScreen(categoryName: categoryName);
+              final goalId = extra['goalId'] as String?;
+              return TransactionsByCategoryScreen(
+                categoryName: categoryName,
+                goalId: goalId,
+              );
             },
           ),
           GoRoute(

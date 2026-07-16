@@ -12,6 +12,7 @@ String getIconForCategory(String category) {
     case 'transport':
       return AppAssets.transport;
     case 'entertainment':
+    case 'leisure':
       return AppAssets.entertainment;
     case 'medicine':
       return AppAssets.medicine;
@@ -20,6 +21,7 @@ String getIconForCategory(String category) {
     case 'car':
       return AppAssets.car;
     case 'gift':
+    case 'gifts':
       return AppAssets.gift;
     case 'rent':
     case 'new house':
@@ -27,7 +29,16 @@ String getIconForCategory(String category) {
       return AppAssets.newHome;
     case 'saving':
     case 'savings':
+    case 'saving & investments':
       return AppAssets.saving;
+    case 'car':
+      return AppAssets.car;
+    case 'new house':
+      return AppAssets.newHome;
+    case 'travel':
+      return AppAssets.travel;
+    case 'wedding':
+      return AppAssets.wedding;
     case 'income':
       return AppAssets.income;
     case 'other':

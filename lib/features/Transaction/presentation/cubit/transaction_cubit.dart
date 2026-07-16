@@ -4,6 +4,7 @@ import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/data/repo/transaction_repo.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
   String selectedType =
       TransactionTypeEnum.expense.value; // 'expense' or 'income'
   String selectedCategory = '8';
+  String? selectedGoalId;
 
   void clearControllers() {
     titleController.clear();
@@ -28,6 +30,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
     selectedDate = DateTime.now();
     selectedType = TransactionTypeEnum.expense.value;
     selectedCategory = '8';
+    selectedGoalId = null;
     emit(TransactionInitialState());
   }
 
@@ -41,6 +44,11 @@ class TransactionCubit extends Cubit<TransactionStates> {
     emit(TransactionFormUpdatedState());
   }
 
+  void setGoalId(String? goalId) {
+    selectedGoalId = goalId;
+    emit(TransactionFormUpdatedState());
+  }
+
   void setDate(DateTime date) {
     selectedDate = date;
     emit(TransactionFormUpdatedState());
@@ -51,20 +59,25 @@ class TransactionCubit extends Cubit<TransactionStates> {
   double get monthlyExpenses {
     final now = DateTime.now();
     return transactionsList
-        .where((tx) =>
-            tx.type.toLowerCase() == 'expense' &&
-            tx.date.year == now.year &&
-            tx.date.month == now.month)
+        .where(
+          (tx) =>
+              tx.type.toLowerCase() == 'expense' &&
+              tx.categoryId != '2' &&
+              tx.date.year == now.year &&
+              tx.date.month == now.month,
+        )
         .fold(0.0, (sum, tx) => sum + tx.amount);
   }
 
   double get monthlyIncome {
     final now = DateTime.now();
     return transactionsList
-        .where((tx) =>
-            tx.type.toLowerCase() == 'income' &&
-            tx.date.year == now.year &&
-            tx.date.month == now.month)
+        .where(
+          (tx) =>
+              tx.type.toLowerCase() == 'income' &&
+              tx.date.year == now.year &&
+              tx.date.month == now.month,
+        )
         .fold(0.0, (sum, tx) => sum + tx.amount);
   }
 
@@ -85,6 +98,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
     noteController.text = transaction.note;
     selectedDate = transaction.date;
     selectedType = transaction.type;
+    selectedGoalId = transaction.goalId;
 
     final found = categories.firstWhere(
       (c) =>
@@ -98,6 +112,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
   Future<void> deleteTransactionWithFinancials({
     required TransactionModel transaction,
     required UserCubit userCubit,
+    GoalCubit? goalCubit,
   }) async {
     emit(TransactionLoadingState());
     try {
@@ -115,7 +130,16 @@ class TransactionCubit extends Cubit<TransactionStates> {
         reverse: true,
       );
 
-      // 3. Refresh list
+      // 3. Reverse Goal savings if linked
+      if (transaction.goalId != null && goalCubit != null) {
+        await goalCubit.adjustGoalAmount(
+          goalId: transaction.goalId!,
+          amountDiff: -transaction.amount,
+          userId: transaction.userId,
+        );
+      }
+
+      // 4. Refresh list
       transactionsList = await transactionRepo.getTransactions(
         transaction.userId,
       );
@@ -128,6 +152,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
   Future<void> editTransaction({
     required UserCubit userCubit,
     required TransactionModel oldTransaction,
+    GoalCubit? goalCubit,
   }) async {
     if (!formKey.currentState!.validate()) return;
 
@@ -170,6 +195,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
         categoryName: categoryLabel,
         note: noteController.text.trim(),
         date: selectedDate,
+        goalId: selectedCategory == '2' ? selectedGoalId : null,
       );
 
       final transactionRepo = TransactionRepo();
@@ -189,7 +215,36 @@ class TransactionCubit extends Cubit<TransactionStates> {
       final isNewExpense = selectedType == TransactionTypeEnum.expense.value;
       await userCubit.applyTransaction(amount: amount, isExpense: isNewExpense);
 
-      // 3. Refresh list
+      // 3. Adjust Goal savings
+      if (goalCubit != null) {
+        if (oldTransaction.goalId != updatedTransaction.goalId) {
+          if (oldTransaction.goalId != null) {
+            await goalCubit.adjustGoalAmount(
+              goalId: oldTransaction.goalId!,
+              amountDiff: -oldTransaction.amount,
+              userId: userId,
+            );
+          }
+          if (updatedTransaction.goalId != null) {
+            await goalCubit.adjustGoalAmount(
+              goalId: updatedTransaction.goalId!,
+              amountDiff: amount,
+              userId: userId,
+            );
+          }
+        } else if (updatedTransaction.goalId != null) {
+          final difference = amount - oldTransaction.amount;
+          if (difference != 0) {
+            await goalCubit.adjustGoalAmount(
+              goalId: updatedTransaction.goalId!,
+              amountDiff: difference,
+              userId: userId,
+            );
+          }
+        }
+      }
+
+      // 4. Refresh list
       transactionsList = await transactionRepo.getTransactions(userId);
 
       emit(TransactionSuccessState());
@@ -198,7 +253,10 @@ class TransactionCubit extends Cubit<TransactionStates> {
     }
   }
 
-  Future<void> saveTransaction(UserCubit userCubit) async {
+  Future<void> saveTransaction(
+    UserCubit userCubit, {
+    GoalCubit? goalCubit,
+  }) async {
     if (!formKey.currentState!.validate()) return;
 
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -242,6 +300,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
         categoryName: categoryLabel,
         note: noteController.text.trim(),
         date: selectedDate,
+        goalId: selectedCategory == '2' ? selectedGoalId : null,
       );
 
       final transactionRepo = TransactionRepo();
@@ -253,7 +312,16 @@ class TransactionCubit extends Cubit<TransactionStates> {
       final isExpense = selectedType == TransactionTypeEnum.expense.value;
       await userCubit.applyTransaction(amount: amount, isExpense: isExpense);
 
-      // 3. Refresh transactions list
+      // 3. Update Goal savings if linked
+      if (newTransaction.goalId != null && goalCubit != null) {
+        await goalCubit.adjustGoalAmount(
+          goalId: newTransaction.goalId!,
+          amountDiff: isExpense ? amount : -amount,
+          userId: userId,
+        );
+      }
+
+      // 4. Refresh transactions list
       transactionsList = await transactionRepo.getTransactions(userId);
 
       emit(TransactionSuccessState());

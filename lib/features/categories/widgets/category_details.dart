@@ -13,6 +13,7 @@ class CategoryDetails extends StatelessWidget {
     this.leadingColor = AppColors.blueButton,
     this.verticalPadding = 13,
     this.horizontalPadding = 21,
+    this.onTap,
   });
   final String icon;
   final String title;
@@ -21,10 +22,12 @@ class CategoryDetails extends StatelessWidget {
   final double verticalPadding;
   final double horizontalPadding;
   final Color leadingColor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       leading: CategoryContainer(
         icon: icon,
         bgColor: leadingColor,

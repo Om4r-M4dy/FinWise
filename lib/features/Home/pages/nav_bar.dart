@@ -3,6 +3,7 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/features/Home/model/navBar_screens.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,12 @@ class _NavBarState extends State<NavBar> {
   @override
   void initState() {
     super.initState();
-    // Load transactions once — shared across Home, Analysis, Transaction tabs
+    // Load transactions and goals once — shared across Home, Analysis, Transaction tabs
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userState = context.read<UserCubit>().state;
       if (userState is UserLoaded) {
         context.read<TransactionCubit>().getTransactions(userState.user.uid!);
+        context.read<GoalCubit>().loadGoals(userState.user.uid!);
       }
     });
   }

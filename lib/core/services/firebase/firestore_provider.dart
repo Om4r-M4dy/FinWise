@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finwise/core/constants/firebase_constants.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/auth/models/user_model.dart';
+import 'package:finwise/features/analysis/data/model/goal_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreProvider {
@@ -104,6 +105,54 @@ class FirestoreProvider {
       await transactionsCollection
           .doc(transaction.transactionId)
           .update(transaction.toMap());
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  // Goals Methods
+
+  static Future<void> addGoal(GoalModel goal) async {
+    try {
+      await goalsCollection.doc(goal.goalId).set(goal.toMap());
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<List<GoalModel>> getGoals(String userId) async {
+    try {
+      final querySnapshot = await goalsCollection
+          .where('userId', isEqualTo: userId)
+          .get();
+      List<GoalModel> goalsList = [];
+      for (var doc in querySnapshot.docs) {
+        goalsList.add(
+          GoalModel.fromMap(doc.data() as Map<String, dynamic>),
+        );
+      }
+      goalsList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return goalsList;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<void> deleteGoal(String goalId) async {
+    try {
+      await goalsCollection.doc(goalId).delete();
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<void> updateGoal(GoalModel goal) async {
+    try {
+      await goalsCollection.doc(goal.goalId).update(goal.toMap());
     } catch (e) {
       log(e.toString());
       rethrow;
