@@ -10,6 +10,7 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
+import 'package:finwise/core/widgets/ai_scanner_helper.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
@@ -27,9 +28,68 @@ class AddTransaction extends StatelessWidget {
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
-      appBar: showAppBar ? DefaultAppBar(title: "Add Transaction") : null,
+      appBar: showAppBar ? const DefaultAppBar(title: "Add Transaction") : null,
       body: MyBodyView(
-        topSection: Container(height: 5),
+        topSection: InkWell(
+          onTap: () => AIScannerHelper.showAIScannerSheet(context, isAlreadyOnAddScreen: true),
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.25),
+                width: 1.5,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.auto_awesome_rounded,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+                const Gap(12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Scan with AI",
+                        style: TextStyles.bodyLarge.copyWith(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "Fast fill transaction from image or receipt",
+                        style: TextStyles.bodySmall.copyWith(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.white,
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
+        ),
         bottomSection: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15),
           child: SingleChildScrollView(

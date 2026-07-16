@@ -53,6 +53,7 @@ import 'package:finwise/features/settings/delete_account/pages/delete_account_sc
 import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:finwise/features/settings/page/settings_screen.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
+import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -109,11 +110,33 @@ class AppRouter {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>?;
               final categoryName = extra?['category'] as String?;
+              final title = extra?['title'] as String?;
+              final amount = extra?['amount'] as double?;
+              final note = extra?['note'] as String?;
+              final type = extra?['type'] as String?;
+              
               final cubit = context.read<TransactionCubit>();
               cubit.clearControllers();
+              
               if (categoryName != null) {
                 final categoryId = getCategoryId(categoryName);
                 cubit.setCategory(categoryId);
+              }
+              if (title != null) {
+                cubit.titleController.text = title;
+              }
+              if (amount != null) {
+                cubit.amountController.text = amount.toStringAsFixed(2);
+              }
+              if (note != null) {
+                cubit.noteController.text = note;
+              }
+              if (type != null) {
+                if (type.toLowerCase() == 'income') {
+                  cubit.setType(TransactionTypeEnum.income.value);
+                } else {
+                  cubit.setType(TransactionTypeEnum.expense.value);
+                }
               }
               return const AddTransaction();
             },
