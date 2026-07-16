@@ -4,7 +4,10 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
+import 'package:finwise/features/notification/cubit/notification_cubit.dart';
+import 'package:finwise/features/notification/cubit/notification_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   const DefaultAppBar({super.key, required this.title, this.noNotify = false});
@@ -28,11 +31,49 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: noNotify
           ? null
           : [
-              IconButton(
-                onPressed: () {
-                  pushTo(context, Routes.notificationScreen);
+              BlocBuilder<NotificationCubit, NotificationState>(
+                builder: (context, state) {
+                  int unreadCount = 0;
+                  if (state is NotificationLoaded) {
+                    unreadCount = state.unreadCount;
+                  }
+                  return Stack(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          pushTo(context, Routes.notificationScreen);
+                        },
+                        icon: CustomSvgPicture(
+                            path: AppAssets.appBarNotification),
+                      ),
+                      if (unreadCount > 0)
+                        Positioned(
+                          right: 6,
+                          top: 6,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 18,
+                              minHeight: 18,
+                            ),
+                            child: Text(
+                              unreadCount > 9 ? '9+' : '$unreadCount',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
                 },
-                icon: CustomSvgPicture(path: AppAssets.appBarNotification),
               ),
             ],
     );

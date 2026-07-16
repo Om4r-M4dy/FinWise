@@ -30,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
                 icon: AppAssets.passSettings,
                 title: "Password Settings",
                 onPress: () {
-                  pushTo(context, Routes.notificationSettingsScreen);
+                  pushTo(context, Routes.securityScreen);
                 },
               ),
               SettingChoice(

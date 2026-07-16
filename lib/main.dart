@@ -11,9 +11,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:finwise/features/notification/cubit/notification_cubit.dart';
+import 'package:finwise/core/services/notification/notification_service.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.init();
   await UserPrefs.init();
   Bloc.observer = MyBlocObserver();
   runApp(
@@ -30,8 +34,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<UserCubit>(
-      create: (_) => UserCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UserCubit>(create: (_) => UserCubit()),
+        BlocProvider<NotificationCubit>(create: (_) => NotificationCubit()),
+      ],
       child: MaterialApp.router(
         routerConfig: AppRouter.routes,
         debugShowCheckedModeBanner: false,
