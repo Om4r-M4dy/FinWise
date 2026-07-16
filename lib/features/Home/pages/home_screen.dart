@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
+import 'package:finwise/features/profile/page/complet_profile.dart';
+import 'package:finwise/core/widgets/ai_scanner_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,19 +34,51 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
 
+  String name = UserPrefs.getName() ?? "there";
+  bool _isBottomSheetOpen = false;
+
+  void _checkUserProfile(UserState state) {
+    if (state.budget <= 0 && !_isBottomSheetOpen) {
+      _isBottomSheetOpen = true;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          enableDrag: false,
+          isDismissible: false,
+          backgroundColor: Colors.transparent,
+          builder: (context) => const CompleteProfileBottomSheet(),
+        );
+
+        _isBottomSheetOpen = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<TransactionCubit>().transactionsList;
 
-    return BlocBuilder<UserCubit, UserState>(
+    return BlocConsumer<UserCubit, UserState>(
+      listener: (context, userState) {
+        _checkUserProfile(userState);
+      },
+      listenWhen: (previous, current) {
+        return previous.budget != current.budget;
+      },
       builder: (context, userState) {
+        _checkUserProfile(userState);
+
         final userName = userState.userName;
         final budget = userState.budget;
         final expense = userState.expense;
         final balance = userState.balance;
         final income = userState.income;
 
-        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final monthlyExpense = context
+            .watch<TransactionCubit>()
+            .monthlyExpenses;
         final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         final lastWeekData = _calculateLastWeekAnalysis(
@@ -53,66 +87,77 @@ class _HomeScreenState extends State<HomeScreen> {
           totalExpense: expense,
         );
 
-        return Column(
-          children: [
-            AppBar(
-              leadingWidth: 0,
-              titleSpacing: 22.5,
-              automaticallyImplyLeading: false,
-              title: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Hi, $userName ', style: TextStyles.bodyLarge),
-                    Text(
-                      'What do you want to track ?',
-                      style: TextStyles.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () => pushTo(context, Routes.notificationScreen),
-                  icon: CustomSvgPicture(path: AppAssets.appBarNotification),
-                ),
-              ],
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: AppColors.mainGreen,
+            shape: const CircleBorder(),
+            onPressed: () => AIScannerHelper.showAIScannerSheet(context),
+            child: const Icon(
+              Icons.auto_awesome_rounded,
+              color: Colors.white,
+              size: 28,
             ),
-
-            const Gap(8),
-            Expanded(
-              child: MyBodyView(
-                clipBehavior: Clip.hardEdge,
-                noPadding: true,
-                topSection: ProgressSection(
-                  percentage: percentage,
-                  totalAmount: budget,
-                  totalExpense: expense,
-                  totalBalance: balance,
-                ),
-                bottomSection: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 37.0,
-                    vertical: 20,
-                  ),
+          ),
+          body: Column(
+            children: [
+              AppBar(
+                leadingWidth: 0,
+                titleSpacing: 22.5,
+                automaticallyImplyLeading: false,
+                title: Align(
+                  alignment: Alignment.centerLeft,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      LastWeekAnalysis(
-                        revenue: lastWeekData['revenue'] ?? 0.0,
-                        expenses: lastWeekData['expenses'] ?? 0.0,
-                        savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                      Text('Hi, $userName ', style: TextStyles.bodyLarge),
+                      Text(
+                        'What do you want to track ?',
+                        style: TextStyles.bodySmall,
                       ),
-                      const Gap(26),
-
-                      _transactionsWithDateFilters(),
                     ],
                   ),
                 ),
+                actions: [
+                  IconButton(
+                    onPressed: () => pushTo(context, Routes.notificationScreen),
+                    icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const Gap(8),
+              Expanded(
+                child: MyBodyView(
+                  clipBehavior: Clip.hardEdge,
+                  noPadding: true,
+                  topSection: ProgressSection(
+                    percentage: percentage,
+                    totalAmount: budget,
+                    totalExpense: expense,
+                    totalBalance: balance,
+                  ),
+                  bottomSection: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 37.0,
+                      vertical: 20,
+                    ),
+                    child: Column(
+                      children: [
+                        LastWeekAnalysis(
+                          revenue: lastWeekData['revenue'] ?? 0.0,
+                          expenses: lastWeekData['expenses'] ?? 0.0,
+                          savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                        ),
+                        const Gap(26),
+                        _transactionsWithDateFilters(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

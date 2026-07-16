@@ -19,6 +19,7 @@ import 'package:finwise/features/auth/persentation/page/newPassword_screen.dart'
 import 'package:finwise/features/auth/persentation/page/securityPin_screen.dart';
 import 'package:finwise/features/auth/persentation/page/security_fingerprint_screen.dart';
 import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
+import 'package:finwise/features/auth/persentation/page/verify_screen.dart';
 import 'package:finwise/features/categories/pages/transactions_by_category_screen.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,6 +54,7 @@ import 'package:finwise/features/settings/delete_account/pages/delete_account_sc
 import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:finwise/features/settings/page/settings_screen.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
+import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -109,15 +111,38 @@ class AppRouter {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>?;
               final categoryName = extra?['category'] as String?;
-              final transactionToEdit = extra?['transactionToEdit'] as TransactionModel?;
+              final title = extra?['title'] as String?;
+              final amount = extra?['amount'] as double?;
+              final note = extra?['note'] as String?;
+              final type = extra?['type'] as String?;
+
+              final transactionToEdit =
+                  extra?['transactionToEdit'] as TransactionModel?;
               final cubit = context.read<TransactionCubit>();
               if (transactionToEdit != null) {
                 cubit.populateControllers(transactionToEdit);
               } else {
                 cubit.clearControllers();
+
                 if (categoryName != null) {
                   final categoryId = getCategoryId(categoryName);
                   cubit.setCategory(categoryId);
+                }
+                if (title != null) {
+                  cubit.titleController.text = title;
+                }
+                if (amount != null) {
+                  cubit.amountController.text = amount.toStringAsFixed(2);
+                }
+                if (note != null) {
+                  cubit.noteController.text = note;
+                }
+                if (type != null) {
+                  if (type.toLowerCase() == 'income') {
+                    cubit.setType(TransactionTypeEnum.income.value);
+                  } else {
+                    cubit.setType(TransactionTypeEnum.expense.value);
+                  }
                 }
               }
               return AddTransaction(transactionToEdit: transactionToEdit);
@@ -248,6 +273,10 @@ class AppRouter {
       GoRoute(
         path: Routes.forgotPasswordScreen,
         builder: (context, state) => ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: Routes.verifyScreen,
+        builder: (context, state) => const VerifyScreen(),
       ),
       GoRoute(
         path: Routes.passwordChangedScreen,

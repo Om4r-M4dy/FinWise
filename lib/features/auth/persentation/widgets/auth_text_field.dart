@@ -7,6 +7,7 @@ class AuthTextField extends StatefulWidget {
   final String? errorText;
   final TextInputType? keyboardType;
   final String? Function(String?)? validate;
+  final bool enabled;
 
   const AuthTextField({
     super.key,
@@ -16,6 +17,7 @@ class AuthTextField extends StatefulWidget {
     this.errorText,
     this.keyboardType, 
     this.validate,
+    this.enabled = true,
   });
 
   @override
@@ -39,6 +41,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          enabled: widget.enabled,
           validator: widget.validate,
           controller: widget.controller,
           obscureText: _obscureText,

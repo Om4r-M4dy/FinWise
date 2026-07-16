@@ -7,10 +7,15 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const DefaultAppBar({super.key, required this.title, this.noNotify = false});
+  const DefaultAppBar({
+    super.key,
+    required this.title,
+    this.noNotify = false,
+  });
 
   final String title;
   final bool noNotify;
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 

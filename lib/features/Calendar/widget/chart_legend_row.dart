@@ -1,23 +1,31 @@
-import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+
+/// A model representing a single legend entry (label + color).
+class LegendEntry {
+  final Color color;
+  final String text;
+  const LegendEntry({required this.color, required this.text});
+}
 
 /// Legend for the category chart representing color mapping.
 ///
-/// Kept minimal for consistency with visual chart values and fixed labels.
+/// Accepts a dynamic list of [LegendEntry] objects so the legend always
+/// matches the current data shown in the pie chart.
 class ChartLegendRow extends StatelessWidget {
-  const ChartLegendRow({super.key});
+  final List<LegendEntry> entries;
+
+  const ChartLegendRow({super.key, required this.entries});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        ChartIndicator(color: AppColors.oceanBlueButton, text: 'Others'),
-        Gap(37),
-        ChartIndicator(color: AppColors.blueButton, text: 'Groceries'),
-      ],
+    if (entries.isEmpty) return const SizedBox.shrink();
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 16,
+      runSpacing: 8,
+      children: entries.map((e) => ChartIndicator(color: e.color, text: e.text)).toList(),
     );
   }
 }

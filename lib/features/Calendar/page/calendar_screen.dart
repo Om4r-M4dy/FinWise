@@ -8,26 +8,38 @@ import 'package:gap/gap.dart';
 /// Screen for viewing and interacting with calendar-based expense data.
 ///
 /// Composes `MyBodyView` with a fixed top app bar and a scrollable bottom section.
-/// The `AppCalendar` callback is a placeholder for parent-level state updates.
-class CalendarScreen extends StatelessWidget {
+/// The selected day from `AppCalendar` is lifted up here and passed to `Dashboard`
+/// to drive filtering of transactions by the chosen date.
+class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
+
+  @override
+  State<CalendarScreen> createState() => _CalendarScreenState();
+}
+
+class _CalendarScreenState extends State<CalendarScreen> {
+  /// The day the user last tapped on the calendar. Null means no filter applied.
+  DateTime? _selectedDay;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: MyBodyView(
         topSection: Column(
-          children: [
-            SafeArea(child: RowAppBar(title: 'Calendar')),
-            Gap(70),
-          ],
+          children: [SafeArea(child: RowAppBar(title: 'Calendar'))],
         ),
         bottomSection: SingleChildScrollView(
           child: Column(
             children: [
-              AppCalendar(onDaySelected: (selectedDay, focusedDay) {}),
-              Gap(35),
-              Dashboard(),
+              AppCalendar(
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                  });
+                },
+              ),
+              const Gap(35),
+              Dashboard(selectedDay: _selectedDay),
             ],
           ),
         ),
