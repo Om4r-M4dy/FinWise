@@ -1,4 +1,5 @@
 import 'package:finwise/core/functions/calculate_budget_percentage.dart';
+import 'package:finwise/core/functions/calculate_last_week_analysis.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
@@ -11,7 +12,6 @@ import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/progress_section.dart';
 import 'package:finwise/features/Home/widgets/last_week_analysis.dart';
-import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/analysis/widgets/date_header.dart';
@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
-import 'package:finwise/features/profile/page/complet_profile.dart';
+import 'package:finwise/features/profile/pages/complet_profile.dart';
 import 'package:finwise/core/widgets/ai_scanner_helper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,6 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
   String name = UserPrefs.getName() ?? "there";
   bool _isBottomSheetOpen = false;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final userState = context.read<UserCubit>().state;
+        _checkUserProfile(userState);
+      }
+    });
+  }
+
   void _checkUserProfile(UserState state) {
     if (state.budget <= 0 && !_isBottomSheetOpen) {
       _isBottomSheetOpen = true;
@@ -51,7 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context) => const CompleteProfileBottomSheet(),
         );
 
-        _isBottomSheetOpen = false;
+        if (mounted) {
+          setState(() {
+            _isBottomSheetOpen = false;
+          });
+        }
       });
     }
   }
@@ -68,8 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return previous.budget != current.budget;
       },
       builder: (context, userState) {
-        _checkUserProfile(userState);
-
         final userName = userState.userName;
         final budget = userState.budget;
         final expense = userState.expense;
@@ -81,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
             .monthlyExpenses;
         final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
-        final lastWeekData = _calculateLastWeekAnalysis(
+        final lastWeekData = calculateLastWeekAnalysis(
           transactions: transactions,
           totalIncome: income,
           totalExpense: expense,
@@ -144,10 +157,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Column(
                       children: [
-                        LastWeekAnalysis(
-                          revenue: lastWeekData['revenue'] ?? 0.0,
-                          expenses: lastWeekData['expenses'] ?? 0.0,
-                          savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                        GestureDetector(
+                          onTap: () {
+                            pushTo(context, Routes.quickAnalysisScreen);
+                          },
+                          child: LastWeekAnalysis(
+                            revenue: lastWeekData['revenue'] ?? 0.0,
+                            expenses: lastWeekData['expenses'] ?? 0.0,
+                            savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                          ),
                         ),
                         const Gap(26),
                         _transactionsWithDateFilters(),
@@ -281,49 +299,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Map<String, dynamic> _calculateLastWeekAnalysis({
-    required List<TransactionModel> transactions,
-    required double totalIncome,
-    required double totalExpense,
-  }) {
-    final now = DateTime.now();
-    final sevenDaysAgo = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ).subtract(const Duration(days: 6));
 
-    double revenueLastWeek = 0.0;
-    double expensesLastWeek = 0.0;
-
-    for (final tx in transactions) {
-      final isWithinLastWeek =
-          tx.date.isAfter(sevenDaysAgo) ||
-          (tx.date.year == sevenDaysAgo.year &&
-              tx.date.month == sevenDaysAgo.month &&
-              tx.date.day == sevenDaysAgo.day);
-
-      if (isWithinLastWeek) {
-        if (tx.type.toLowerCase() == 'income') {
-          revenueLastWeek += tx.amount;
-        } else if (tx.type.toLowerCase() == 'expense') {
-          expensesLastWeek += tx.amount;
-        }
-      }
-    }
-
-    double savingsPercent = 0.0;
-    if (totalIncome > 0) {
-      savingsPercent = ((totalIncome - totalExpense) / totalIncome * 100).clamp(
-        0.0,
-        100.0,
-      );
-    }
-
-    return {
-      'revenue': revenueLastWeek,
-      'expenses': expensesLastWeek,
-      'savingsPercent': savingsPercent,
-    };
-  }
 }

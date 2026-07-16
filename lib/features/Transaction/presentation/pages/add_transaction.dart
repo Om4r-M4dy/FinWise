@@ -5,6 +5,7 @@ import 'package:finwise/core/constants/categories.dart';
 import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
 import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
@@ -34,11 +35,13 @@ class AddTransaction extends StatelessWidget {
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
-      appBar: DefaultAppBar(
-        title: transactionToEdit == null
-            ? "Add Transaction"
-            : "Edit Transaction",
-      ),
+      appBar: showAppBar
+          ? DefaultAppBar(
+              title: transactionToEdit == null
+                  ? "Add Transaction"
+                  : "Edit Transaction",
+            )
+          : null,
       body: MyBodyView(
         topSection: InkWell(
           onTap: () => AIScannerHelper.showAIScannerSheet(
@@ -103,10 +106,10 @@ class AddTransaction extends StatelessWidget {
             ),
           ),
         ),
-        bottomSection: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          child: SingleChildScrollView(
-            child: BlocConsumer<TransactionCubit, TransactionStates>(
+        noPadding: true,
+        bottomSection: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 15.0),
+          child: BlocConsumer<TransactionCubit, TransactionStates>(
               listener: (context, state) {
                 if (state is TransactionLoadingState) {
                   showLoadingDialog(context);
@@ -119,7 +122,9 @@ class AddTransaction extends StatelessWidget {
                         : 'Transaction updated successfully!',
                     type: DialogType.success,
                   );
-                  pop(context);
+                  showAppBar
+                      ? pop(context)
+                      : pushTo(context, Routes.bottomNavBar, extra: 0);
                 } else if (state is TransactionErrorState) {
                   pop(context);
                   showMyDialog(context, state.errorMessage);
@@ -407,8 +412,7 @@ class AddTransaction extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

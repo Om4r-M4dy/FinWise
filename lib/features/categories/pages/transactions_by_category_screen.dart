@@ -14,7 +14,7 @@ import 'package:finwise/features/categories/widgets/category_details.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
-import 'package:finwise/core/functions/get_category_id.dart';
+import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class TransactionsByCategoryScreen extends StatelessWidget {
     // Watch transaction list dynamically from TransactionCubit
     final allTransactions = context.watch<TransactionCubit>().transactionsList;
     final transactions = allTransactions
-        .where((tx) => _isCategoryMatch(tx, categoryName))
+        .where((tx) => isCategoryMatch(tx, categoryName))
         .toList();
 
     // Sort transactions by date descending
@@ -154,9 +154,4 @@ class TransactionsByCategoryScreen extends StatelessWidget {
   }
 }
 
-bool _isCategoryMatch(TransactionModel tx, String categoryName) {
-  final targetId = getCategoryId(categoryName);
-  final txCatName = tx.categoryName.toLowerCase().trim();
-  final targetName = categoryName.toLowerCase().trim();
-  return tx.categoryId == targetId || txCatName == targetName;
-}
+

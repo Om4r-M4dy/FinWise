@@ -1,21 +1,109 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/functions/calculate_last_week_analysis.dart';
+import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/core/functions/plot_helper.dart';
+import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/plots_section.dart';
 import 'package:finwise/core/widgets/target_card.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/core/extentions/transaction_extension.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:finwise/features/quick_analysis/widgets/analysis_row.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 class QuickAnalysisScreen extends StatelessWidget {
   const QuickAnalysisScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final transactionsList = context.watch<TransactionCubit>().transactionsList;
+    final userState = context.watch<UserCubit>().state;
+
+    if (transactionsList.isEmpty) {
+      return Scaffold(
+        appBar: DefaultAppBar(title: "Quickly Analysis"),
+        body: MyBodyView(
+          clipBehavior: Clip.hardEdge,
+          noPadding: true,
+          topSection: Container(),
+          bottomSection: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 40),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Gap(40),
+                Opacity(
+                  opacity: 0.15,
+                  child: CustomSvgPicture(
+                    path: AppAssets.analysis,
+                    width: 120,
+                    height: 120,
+                  ),
+                ),
+                const Gap(24),
+                Text(
+                  "No transactions to analyze",
+                  style: TextStyles.bodyLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.lettersAndIcons,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(12),
+                Text(
+                  "Add income or expense transactions to view quick analysis.",
+                  style: TextStyles.bodyMedium.copyWith(
+                    color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(30),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    final now = DateTime.now();
+
+    final lastWeekData = calculateLastWeekAnalysis(
+      transactions: transactionsList,
+      totalIncome: userState.income,
+      totalExpense: userState.expense,
+    );
+
+    final double savingsPercent = lastWeekData['savingsPercent'] as double;
+    final double revenueLastWeek = lastWeekData['revenue'] as double;
+
+    // Filter Food transactions to calculate Food Last Week
+    final foodTransactions = transactionsList
+        .where((tx) => isCategoryMatch(tx, 'Food'))
+        .toList();
+    final foodLastWeekData = calculateLastWeekAnalysis(
+      transactions: foodTransactions,
+      totalIncome: userState.income,
+      totalExpense: userState.expense,
+    );
+    final double foodLastWeek = foodLastWeekData['expenses'] as double;
+
+    final formattedRevenue = NumberFormat('#,##0.00').format(revenueLastWeek);
+    final formattedFood = NumberFormat('#,##0.00').format(foodLastWeek);
+
+    final currentMonthName = DateFormat('MMMM').format(now);
+    final dynamicChart = getDynamicChartData(transactionsList, 1);
+
     return Scaffold(
       appBar: DefaultAppBar(title: "Quickly Analysis"),
       body: MyBodyView(
@@ -25,8 +113,9 @@ class QuickAnalysisScreen extends StatelessWidget {
             children: [
               TargetCard(
                 title: "Savings \nOn goals",
-                percent: 50,
-                center: CustomSvgPicture(path: AppAssets.car, width: 50), radius: 48,
+                percent: savingsPercent,
+                center: CustomSvgPicture(path: AppAssets.car, width: 50),
+                radius: 48,
               ),
               VerticalDivider(
                 width: 20,
@@ -39,20 +128,19 @@ class QuickAnalysisScreen extends StatelessWidget {
                     icon: AppAssets.salary,
                     iconW: 38,
                     title: "Revenue Last Week",
-                    money: "\$4.000.00",
+                    money: "\$$formattedRevenue",
                   ),
                   Container(
                     height: 1,
-                    width: MediaQuery.of(context).size.width*.45,
+                    width: MediaQuery.of(context).size.width * .45,
                     margin: const EdgeInsets.symmetric(vertical: 15),
                     color: AppColors.background,
                   ),
-
                   AnalysisRow(
                     icon: AppAssets.food,
                     iconW: 23,
                     title: "Food Last Week",
-                    money: "-\$100.00",
+                    money: "-\$$formattedFood",
                     moneyColor: AppColors.oceanBlueButton,
                   ),
                 ],
@@ -63,22 +151,34 @@ class QuickAnalysisScreen extends StatelessWidget {
         bottomSection: SingleChildScrollView(
           child: Column(
             children: [
-          PlotsSections( 
-            plotTitle: "April Expenses",
-            chartData: getCurrentChartData(1),
-                maxY: calculateMaxY(1),
-           ),
-           Gap(26),
-           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-           Gap(19),
-           InfoRecord(iconPath:  AppAssets.groceries,title:"Groceries" ,date:"17:00 - April 24",cat: "Pantry",amount:"-\$100,00",amountColor: AppColors.oceanBlueButton,),
-             Gap(19),
-           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-             Gap(19),
-           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-             Gap(19),
-           InfoRecord(iconPath:  AppAssets.salary,title:"Salary" ,date:"18:27 - April 30",cat: "Monthly",amount: "\$4.000,00",),
-           
+              PlotsSections(
+                plotTitle: "$currentMonthName Expenses",
+                chartData: dynamicChart.chartData,
+                maxY: dynamicChart.maxY,
+                bottomLabels: dynamicChart.labels,
+              ),
+              Gap(26),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: transactionsList.length > 5 ? 5 : transactionsList.length,
+                itemBuilder: (context, index) {
+                  final tx = transactionsList[index];
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index == (transactionsList.length > 5 ? 4 : transactionsList.length - 1) ? 8.0 : 19.0,
+                    ),
+                    child: InfoRecord(
+                      transaction: tx,
+                      title: tx.title,
+                      date: tx.formattedDate,
+                      cat: tx.categoryName.isNotEmpty ? tx.categoryName : 'General',
+                      amount: tx.getFormattedAmount(showPlusForIncome: true),
+                      amountColor: tx.getAmountColor(useGreenForIncome: true),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

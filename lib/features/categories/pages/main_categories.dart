@@ -1,7 +1,7 @@
 import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/functions/get_category_id.dart';
+import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
@@ -12,7 +12,6 @@ import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:gap/gap.dart';
 
 class MainCategories extends StatelessWidget {
@@ -53,7 +52,7 @@ class MainCategories extends StatelessWidget {
                       label: "Food",
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Food'))
+                            .where((tx) => isCategoryMatch(tx, 'Food'))
                             .toList();
                         pushTo(
                           context,
@@ -72,7 +71,7 @@ class MainCategories extends StatelessWidget {
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Transport'))
+                            .where((tx) => isCategoryMatch(tx, 'Transport'))
                             .toList();
                         pushTo(
                           context,
@@ -91,7 +90,7 @@ class MainCategories extends StatelessWidget {
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Medicine'))
+                            .where((tx) => isCategoryMatch(tx, 'Medicine'))
                             .toList();
                         pushTo(
                           context,
@@ -114,7 +113,7 @@ class MainCategories extends StatelessWidget {
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Groceries'))
+                            .where((tx) => isCategoryMatch(tx, 'Groceries'))
                             .toList();
                         pushTo(
                           context,
@@ -134,7 +133,7 @@ class MainCategories extends StatelessWidget {
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Rent'))
+                            .where((tx) => isCategoryMatch(tx, 'Rent'))
                             .toList();
                         pushTo(
                           context,
@@ -153,7 +152,7 @@ class MainCategories extends StatelessWidget {
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Gifts'))
+                            .where((tx) => isCategoryMatch(tx, 'Gifts'))
                             .toList();
                         pushTo(
                           context,
@@ -186,7 +185,7 @@ class MainCategories extends StatelessWidget {
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Leisure'))
+                            .where((tx) => isCategoryMatch(tx, 'Leisure'))
                             .toList();
                         pushTo(
                           context,
@@ -205,7 +204,7 @@ class MainCategories extends StatelessWidget {
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
-                            .where((tx) => _isCategoryMatch(tx, 'Other'))
+                            .where((tx) => isCategoryMatch(tx, 'Other'))
                             .toList();
                         pushTo(
                           context,
@@ -226,11 +225,4 @@ class MainCategories extends StatelessWidget {
       },
     );
   }
-}
-
-bool _isCategoryMatch(TransactionModel tx, String categoryName) {
-  final targetId = getCategoryId(categoryName);
-  final txCatName = tx.categoryName.toLowerCase().trim();
-  final targetName = categoryName.toLowerCase().trim();
-  return tx.categoryId == targetId || txCatName == targetName;
 }

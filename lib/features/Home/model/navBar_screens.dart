@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:finwise/features/Home/pages/home_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
 import 'package:finwise/features/categories/pages/main_categories.dart';
-import 'package:finwise/features/profile/page/profile_screen.dart';
+import 'package:finwise/features/profile/pages/profile_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final List<NavItemModel> navScreens = [

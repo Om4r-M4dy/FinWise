@@ -22,6 +22,8 @@ import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
 import 'package:finwise/features/auth/persentation/page/verify_screen.dart';
 import 'package:finwise/features/categories/pages/transactions_by_category_screen.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
+import 'package:finwise/features/profile/pages/edit_financial_info.dart';
+import 'package:finwise/features/profile/pages/edit_profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
@@ -46,8 +48,7 @@ import 'package:finwise/features/launch/launch_screen.dart';
 import 'package:finwise/features/notification/pages/notification_screen.dart';
 import 'package:finwise/features/on_boarding/page/on_boarding.dart';
 import 'package:finwise/core/routes/routes.dart';
-import 'package:finwise/features/profile/page/edit_profile.dart';
-import 'package:finwise/features/profile/page/profile_screen.dart';
+import 'package:finwise/features/profile/pages/profile_screen.dart';
 import 'package:finwise/features/quick_analysis/page/quick_analysis_screen.dart';
 import 'package:finwise/features/search/page/search_screen.dart';
 import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
@@ -220,6 +221,10 @@ class AppRouter {
           GoRoute(
             path: Routes.editProfileScreen,
             builder: (context, state) => const EditProfileScreen(),
+          ),
+          GoRoute(
+            path: Routes.editFinancialInfoScreen,
+            builder: (context, state) => const EditFinancialInfoScreen(),
           ),
           GoRoute(
             path: Routes.searchScreen,

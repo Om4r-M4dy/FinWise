@@ -90,7 +90,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         return NetworkImage(_profileImagePath!);
       }
     }
-    return const AssetImage(AppAssets.profileImage);
+    return const AssetImage(AppAssets.defaultProfile);
+
+    // return const AssetImage(AppAssets.profileImage);
   }
 
   // ── Pick Image from Gallery/Camera ─────────────────────────────────────
@@ -299,7 +301,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (!mounted) return;
       LoadingDialog.hide(context);
       CustomSnackBar.showSuccess(context, "Profile updated successfully!");
-      
+
       // Update cubit and pop screen after a micro-delay to prevent Navigator lock
       Future.delayed(const Duration(milliseconds: 50), () {
         if (mounted) {
@@ -332,56 +334,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: RowAppBar(title: 'Edit my Profile'),
           ),
         ),
+        noPadding: true,
         bottomSection: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
-            Positioned(
-              top: -EditProfileScreen.profileImageRadius - 15,
-              child: GestureDetector(
-                onTap: _showImagePickerSheet,
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    CircleAvatar(
-                      radius: EditProfileScreen.profileImageRadius,
-                      backgroundImage: _getProfileImage(),
-                    ),
-                    Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: AppColors.mainGreen,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(
-                top: EditProfileScreen.profileImageRadius + 20.0,
-              ),
+            Positioned.fill(
               child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  left: 37.0,
+                  right: 37.0,
+                  top: EditProfileScreen.profileImageRadius + 20.0,
+                  bottom: 20.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
 
@@ -433,6 +398,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       child: MainButton(
                         text: 'Update Profile',
                         onPress: _updateProfile,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: -EditProfileScreen.profileImageRadius - 15,
+              child: GestureDetector(
+                onTap: _showImagePickerSheet,
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: EditProfileScreen.profileImageRadius,
+                      backgroundImage: _getProfileImage(),
+                    ),
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: AppColors.mainGreen,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 16,
+                        ),
                       ),
                     ),
                   ],
