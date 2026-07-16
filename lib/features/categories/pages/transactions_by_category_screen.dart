@@ -1,3 +1,4 @@
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/category_icon_helper.dart';
@@ -54,9 +55,8 @@ class TransactionsByCategoryScreen extends StatelessWidget {
         final budget = user?.monthlyBudgetLimit ?? 0.0;
         final expense = user?.totalExpense ?? 0.0;
         final balance = user?.totalBalance ?? 0.0;
-        final percentage = budget > 0
-            ? (expense / budget * 100).clamp(0.0, 100.0)
-            : 0.0;
+        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return Scaffold(
           appBar: DefaultAppBar(title: categoryName),

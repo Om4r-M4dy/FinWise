@@ -1,12 +1,11 @@
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
-import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
-import 'package:finwise/core/widgets/icon_with_text_button.dart';
 import 'package:finwise/core/widgets/icon_with_text_button.dart';
 import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
@@ -15,16 +14,10 @@ import 'package:finwise/features/Home/widgets/last_week_analysis.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
-import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
-import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
-import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/analysis/widgets/date_header.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
@@ -39,8 +32,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
 
-  String name = UserPrefs.getName() ?? "there";
-
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<TransactionCubit>().transactionsList;
@@ -53,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
         final balance = userState.balance;
         final income = userState.income;
 
-        final percentage = userState.budgetPercentage;
+        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         final lastWeekData = _calculateLastWeekAnalysis(
           transactions: transactions,
@@ -223,6 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: index == recent.length - 1 ? 8.0 : 19.0,
                   ),
                   child: InfoRecord(
+                    transaction: item,
                     bgColor: item.type.toLowerCase() == 'expense'
                         ? AppColors.lightBlueButton
                         : AppColors.mainGreen.withValues(alpha: 0.6),

@@ -1,3 +1,4 @@
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
@@ -28,7 +29,8 @@ class Savings extends StatelessWidget {
         final budget = userState.budget;
         final expense = userState.expense;
         final balance = userState.balance;
-        final percentage = userState.budgetPercentage;
+        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return Scaffold(
           appBar: const DefaultAppBar(title: "Savings"),

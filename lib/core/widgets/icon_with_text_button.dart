@@ -8,11 +8,16 @@ class IconWithTextButton extends StatelessWidget {
     required this.icon,
     required this.text,
     required this.onPress,
+    this.backgroundColor,
+    this.foregroundColor,
   });
 
   final IconData icon;
   final String text;
   final VoidCallback onPress;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
@@ -20,8 +25,8 @@ class IconWithTextButton extends StatelessWidget {
       icon: Icon(icon, size: 20),
       label: Text(text),
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.mainGreen,
-        foregroundColor: Colors.white,
+        backgroundColor: backgroundColor ?? AppColors.mainGreen,
+        foregroundColor: foregroundColor ?? Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         textStyle: TextStyles.bodyMedium.copyWith(

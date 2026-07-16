@@ -9,11 +9,11 @@ import 'package:finwise/features/analysis/widgets/date_header.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 
 class AnalysisScreen extends StatefulWidget {
   const AnalysisScreen({super.key});
@@ -37,7 +37,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         final budget = userState.budget;
         final expense = userState.expense;
         final balance = userState.balance;
-        final percentage = userState.budgetPercentage;
+        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return MyBodyView(
           clipBehavior: Clip.hardEdge,

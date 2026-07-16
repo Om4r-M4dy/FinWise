@@ -1,3 +1,4 @@
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
@@ -42,7 +43,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
         final income = userState.income;
         final expense = userState.expense;
         final budget = userState.budget;
-        final percentage = userState.budgetPercentage;
+        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return MyBodyView(
           clipBehavior: Clip.hardEdge,
@@ -284,6 +286,7 @@ class TransactionsListSection extends StatelessWidget {
                   final isExpense = tx.type.toLowerCase() == 'expense';
 
                   return InfoRecord(
+                    transaction: tx,
                     bgColor: isExpense
                         ? AppColors.lightBlueButton
                         : AppColors.mainGreen.withValues(alpha: 0.6),

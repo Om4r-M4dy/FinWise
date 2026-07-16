@@ -13,19 +13,22 @@ import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AddTransaction extends StatelessWidget {
-  const AddTransaction({super.key});
+  final TransactionModel? transactionToEdit;
+
+  const AddTransaction({super.key, this.transactionToEdit});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
-      appBar: DefaultAppBar(title: "Add Transaction"),
+      appBar: DefaultAppBar(title: transactionToEdit == null ? "Add Transaction" : "Edit Transaction"),
       body: MyBodyView(
         topSection: Container(height: 5),
         bottomSection: Padding(
@@ -39,7 +42,9 @@ class AddTransaction extends StatelessWidget {
                   pop(context);
                   showMyDialog(
                     context,
-                    'Transaction saved successfully!',
+                    transactionToEdit == null
+                        ? 'Transaction saved successfully!'
+                        : 'Transaction updated successfully!',
                     type: DialogType.success,
                   );
                   pop(context);
@@ -306,9 +311,17 @@ class AddTransaction extends StatelessWidget {
                       Center(
                         child: MainButton(
                           size: ButtonSize.small,
-                          text: "Save",
-                          onPress: () =>
-                              cubit.saveTransaction(context.read<UserCubit>()),
+                          text: transactionToEdit == null ? "Save" : "Update",
+                          onPress: () {
+                            if (transactionToEdit == null) {
+                              cubit.saveTransaction(context.read<UserCubit>());
+                            } else {
+                              cubit.editTransaction(
+                                userCubit: context.read<UserCubit>(),
+                                oldTransaction: transactionToEdit!,
+                              );
+                            }
+                          },
                           textStyle: TextStyles.bodyMedium.copyWith(
                             color: AppColors.lettersAndIcons,
                             fontWeight: FontWeight.bold,

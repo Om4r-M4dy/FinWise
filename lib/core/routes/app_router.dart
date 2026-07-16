@@ -20,6 +20,7 @@ import 'package:finwise/features/auth/persentation/page/securityPin_screen.dart'
 import 'package:finwise/features/auth/persentation/page/security_fingerprint_screen.dart';
 import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
 import 'package:finwise/features/categories/pages/transactions_by_category_screen.dart';
+import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
@@ -51,7 +52,6 @@ import 'package:finwise/features/search/page/search_screen.dart';
 import 'package:finwise/features/settings/delete_account/pages/delete_account_screen.dart';
 import 'package:finwise/features/settings/notification_settings/pages/notification_settings_screen.dart';
 import 'package:finwise/features/settings/page/settings_screen.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
 import 'package:go_router/go_router.dart';
 
@@ -109,13 +109,18 @@ class AppRouter {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>?;
               final categoryName = extra?['category'] as String?;
+              final transactionToEdit = extra?['transactionToEdit'] as TransactionModel?;
               final cubit = context.read<TransactionCubit>();
-              cubit.clearControllers();
-              if (categoryName != null) {
-                final categoryId = getCategoryId(categoryName);
-                cubit.setCategory(categoryId);
+              if (transactionToEdit != null) {
+                cubit.populateControllers(transactionToEdit);
+              } else {
+                cubit.clearControllers();
+                if (categoryName != null) {
+                  final categoryId = getCategoryId(categoryName);
+                  cubit.setCategory(categoryId);
+                }
               }
-              return const AddTransaction();
+              return AddTransaction(transactionToEdit: transactionToEdit);
             },
           ),
           GoRoute(
