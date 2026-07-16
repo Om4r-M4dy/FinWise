@@ -1,14 +1,19 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
+import 'package:finwise/core/constants/categories.dart';
+import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/custom_text_form_field.dart';
+import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/row_app_bar.dart';
-import 'package:finwise/features/search/widget/expense_card.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -20,6 +25,19 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TransactionType _selectedTransactionType = TransactionType.expense;
   bool _showSearchResults = false;
+  bool _isLoading = false;
+  String _selectedCategoryKey = 'all';
+  DateTime? _selectedDate;
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    _titleController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,63 +45,160 @@ class _SearchScreenState extends State<SearchScreen> {
         topSection: Column(
           children: [
             SafeArea(child: RowAppBar(title: 'Search')),
-            Gap(30),
+            const Gap(30),
             CustomTextFormField(
-              hintText: 'Search...',
+              controller: _titleController,
+              hintText: 'Search by title...',
               fillColor: AppColors.background,
               radius: 30,
-              readOnly: true,
+              onChange: (value) {
+                setState(() {
+                  _showSearchResults = false;
+                });
+              },
             ),
-            Gap(24),
+            const Gap(24),
           ],
         ),
-  
         bottomSection: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Categories', style: TextStyles.bodyMedium),
-              Gap(7),
-              CustomTextFormField(
-                hintText: 'Select the category',
-                suffixIcon: UnconstrainedBox(
-                  child: CustomSvgPicture(
-                    path: AppAssets.arrowDown,
-                    width: 5,
-                    height: 9,
+              const Gap(7),
+              DropdownButtonFormField<String>(
+                initialValue: _selectedCategoryKey,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.lightGreen,
+                  suffixIcon: Container(
+                    margin: const EdgeInsets.all(8),
+                    child: const CustomSvgPicture(
+                      path: AppAssets.arrowDown,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 16,
                   ),
                 ),
-                readOnly: true,
+                items: [
+                  DropdownMenuItem<String>(
+                    value: 'all',
+                    child: Text(
+                      'All Categories',
+                      style: TextStyles.bodyMedium.copyWith(
+                        color: AppColors.lettersAndIcons,
+                      ),
+                    ),
+                  ),
+                  ...categories.map((category) {
+                    return DropdownMenuItem<String>(
+                      value: category['key'],
+                      child: Text(
+                        category['label']!,
+                        style: TextStyles.bodyMedium.copyWith(
+                          color: AppColors.lettersAndIcons,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedCategoryKey = value;
+                      _showSearchResults = false;
+                    });
+                  }
+                },
               ),
-              Gap(30),
+              const Gap(30),
               Text('Date', style: TextStyles.bodyMedium),
-              Gap(7),
+              const Gap(7),
               CustomTextFormField(
-                hintText: '30 /APR/2023',
-                suffixIcon: UnconstrainedBox(
-                  child: CustomSvgPicture(
-                    path: AppAssets.calender,
-                    width: 24,
-                    height: 22,
-                  ),
+                controller: _dateController,
+                hintText: 'Select Date',
+                fillColor: AppColors.lightGreen,
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (_selectedDate != null)
+                      IconButton(
+                        icon: const Icon(Icons.clear, size: 20, color: AppColors.lettersAndIcons),
+                        onPressed: () {
+                          setState(() {
+                            _selectedDate = null;
+                            _dateController.clear();
+                            _showSearchResults = false;
+                          });
+                        },
+                      ),
+                    UnconstrainedBox(
+                      child: const CustomSvgPicture(
+                        path: AppAssets.calender,
+                        width: 24,
+                        height: 22,
+                      ),
+                    ),
+                    const Gap(12),
+                  ],
                 ),
                 readOnly: true,
+                onTap: () async {
+                  final pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: _selectedDate ?? DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    builder: (context, child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: const ColorScheme.light(
+                            primary: AppColors.mainGreen,
+                            onPrimary: Colors.white,
+                            onSurface: AppColors.lettersAndIcons,
+                          ),
+                        ),
+                        child: child!,
+                      );
+                    },
+                  );
+                  if (pickedDate != null) {
+                    setState(() {
+                      _selectedDate = pickedDate;
+                      _dateController.text = DateFormat('dd / MMM / yyyy').format(pickedDate).toUpperCase();
+                      _showSearchResults = false;
+                    });
+                  }
+                },
               ),
-              Gap(40),
+              const Gap(40),
               //Radio Button
               Text('Report', style: TextStyles.bodyMedium),
-              Gap(9),
+              const Gap(9),
               RadioGroup<TransactionType>(
-                //is ther any problem with this widget?
                 groupValue: _selectedTransactionType,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedTransactionType = value;
+                      _showSearchResults = false;
+                    });
+                  }
+                },
                 child: Row(
                   children: [
                     _radioButtonBuilder(
                       title: 'Income',
                       value: TransactionType.income,
                     ),
-                    Gap(55),
+                    const Gap(55),
                     _radioButtonBuilder(
                       title: 'Expense',
                       value: TransactionType.expense,
@@ -91,23 +206,121 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
               ),
-              Gap(50),
+              const Gap(24),
               Center(
                 child: MainButton(
                   text: 'Search',
                   onPress: () {
                     setState(() {
-                      _showSearchResults = true;
+                      _isLoading = true;
+                      _showSearchResults = false;
+                    });
+                    Future.delayed(const Duration(milliseconds: 600), () {
+                      if (mounted) {
+                        setState(() {
+                          _isLoading = false;
+                          _showSearchResults = true;
+                        });
+                      }
                     });
                   },
                 ),
               ),
-              Gap(70),
-              if (_showSearchResults) ExpenseCard(),
+              const Gap(5),
+              if (_isLoading)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24.0),
+                    child: CircularProgressIndicator(
+                      color: AppColors.mainGreen,
+                    ),
+                  ),
+                ),
+              if (_showSearchResults && !_isLoading) ...[
+                Text('Results', style: TextStyles.bodyMedium),
+                _buildSearchResults(),
+              ],
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSearchResults() {
+    final allTransactions = context.watch<TransactionCubit>().transactionsList;
+    
+    final filtered = allTransactions.where((tx) {
+      // 1. Filter by Title
+      final titleQuery = _titleController.text.trim().toLowerCase();
+      if (titleQuery.isNotEmpty) {
+        if (!tx.title.toLowerCase().contains(titleQuery)) {
+          return false;
+        }
+      }
+
+      // 2. Filter by Category
+      if (_selectedCategoryKey != 'all') {
+        if (tx.categoryId != _selectedCategoryKey) {
+          return false;
+        }
+      }
+
+      // 3. Filter by Date
+      if (_selectedDate != null) {
+        if (tx.date.year != _selectedDate!.year ||
+            tx.date.month != _selectedDate!.month ||
+            tx.date.day != _selectedDate!.day) {
+          return false;
+        }
+      }
+
+      // 4. Filter by Transaction Type (Income / Expense)
+      final txType = tx.type.toLowerCase();
+      if (_selectedTransactionType == TransactionType.income && txType != 'income') {
+        return false;
+      }
+      if (_selectedTransactionType == TransactionType.expense && txType != 'expense') {
+        return false;
+      }
+
+      return true;
+    }).toList();
+
+    if (filtered.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24.0),
+          child: Text(
+            'No matching transactions found.',
+            style: TextStyles.bodyMedium.copyWith(
+              color: AppColors.oceanBlueButton,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: filtered.length,
+      separatorBuilder: (context, index) => const Gap(19),
+      itemBuilder: (context, index) {
+        final tx = filtered[index];
+        final isExpense = tx.type.toLowerCase() == 'expense';
+
+        return InfoRecord(
+          bgColor: isExpense
+              ? AppColors.lightBlueButton
+              : AppColors.mainGreen.withValues(alpha: 0.6),
+          title: tx.title,
+          date: tx.formattedDate,
+          cat: tx.categoryName.isNotEmpty ? tx.categoryName : 'General',
+          amount: tx.getFormattedAmount(showPlusForIncome: true),
+          amountColor: tx.getAmountColor(useGreenForIncome: true),
+        );
+      },
     );
   }
 
@@ -119,12 +332,12 @@ class _SearchScreenState extends State<SearchScreen> {
       onTap: () {
         setState(() {
           _selectedTransactionType = value;
+          _showSearchResults = false;
         });
       },
       child: Row(
         children: [
           Radio<TransactionType>(
-            //to remove the radio button constraines
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             visualDensity: const VisualDensity(
               horizontal: VisualDensity.minimumDensity,
@@ -133,7 +346,7 @@ class _SearchScreenState extends State<SearchScreen> {
             value: value,
             activeColor: AppColors.mainGreen,
           ),
-          Gap(12),
+          const Gap(12),
           Text(title, style: TextStyles.bodyMedium),
         ],
       ),
@@ -141,5 +354,4 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 }
 
-//transaction type to the Radio button
 enum TransactionType { income, expense }
