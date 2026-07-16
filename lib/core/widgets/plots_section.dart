@@ -12,11 +12,13 @@ class PlotsSections extends StatelessWidget {
   final List<BarChartGroupData> chartData;
   final double maxY;
   final String? plotTitle;
+  final List<String>? bottomLabels;
   const PlotsSections({
     super.key,
     required this.chartData,
     this.maxY = 20,
     this.plotTitle,
+    this.bottomLabels,
   });
   static const List<String> weekTitles = [
     "1st Week",
@@ -48,13 +50,13 @@ class PlotsSections extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   width:
-                      chartData.length * 80.0 <
+                      chartData.length * 48.0 <
                           MediaQuery.of(context).size.width
                       ? MediaQuery.of(context).size.width - 60
-                      : chartData.length * 80.0,
+                      : chartData.length * 48.0,
                   child: BarChart(
                     BarChartData(
-                      maxY: 20,
+                      maxY: maxY,
                       barTouchData: BarTouchData(enabled: true),
                       titlesData: FlTitlesData(
                         show: true,
@@ -69,6 +71,9 @@ class PlotsSections extends StatelessWidget {
                             showTitles: true,
                             reservedSize: 35,
                             getTitlesWidget: (value, meta) {
+                              final text = maxY >= 1000
+                                  ? '${(value / 1000).toInt()}k'
+                                  : '\$${value.toInt()}';
                               return SideTitleWidget(
                                 meta: meta,
 
@@ -76,7 +81,7 @@ class PlotsSections extends StatelessWidget {
                                   meta,
                                 ),
                                 child: Text(
-                                  '${value.toInt()}k',
+                                  text,
                                   style: TextStyles.bodySmall.copyWith(
                                     color: AppColors.lightBlueButton,
                                   ),
@@ -90,7 +95,8 @@ class PlotsSections extends StatelessWidget {
                             showTitles: true,
                             getTitlesWidget: (value, meta) {
                               int index = value.toInt();
-                              if (index >= 0 && index < weekTitles.length) {
+                              final labels = bottomLabels ?? weekTitles;
+                              if (index >= 0 && index < labels.length) {
                                 return SideTitleWidget(
                                   meta: meta,
 
@@ -102,7 +108,7 @@ class PlotsSections extends StatelessWidget {
                                   ),
                                   space: 5,
                                   child: Text(
-                                    weekTitles[index],
+                                    labels[index],
                                     style: TextStyles.bodySmall.copyWith(
                                       color: AppColors.darkGreen,
                                     ),

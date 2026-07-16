@@ -15,7 +15,6 @@ import 'package:image_picker/image_picker.dart';
 
 class AIScannerHelper {
   static void showAIScannerSheet(BuildContext context, {bool isAlreadyOnAddScreen = false}) {
-    final aiNotesController = TextEditingController();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Resize sheet when keyboard opens
@@ -24,133 +23,12 @@ class AIScannerHelper {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (sheetContext) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
-          ),
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: AppColors.lettersAndIcons.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const Gap(16),
-                    Text(
-                      'AI Scanner',
-                      style: TextStyles.bodyLarge.copyWith(fontSize: 18),
-                    ),
-                    const Gap(16),
-                    TextFormField(
-                      controller: aiNotesController,
-                      maxLines: 2,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: AppColors.lightGreen,
-                        hintText: "Add instruction or hint for the AI (optional)...",
-                        hintStyle: TextStyles.bodySmall.copyWith(
-                          color: AppColors.lettersAndIcons.withValues(alpha: 0.5),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
-                        ),
-                      ),
-                      style: TextStyles.bodyMedium.copyWith(
-                        color: AppColors.lettersAndIcons,
-                      ),
-                    ),
-                    const Gap(16),
-                    ListTile(
-                      leading: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: AppColors.mainGreen.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.camera_alt_rounded,
-                          color: AppColors.mainGreen,
-                        ),
-                      ),
-                      title: const Text(
-                        'Camera',
-                        style: TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      subtitle: Text(
-                        'Scan document / record using camera',
-                        style: TextStyle(
-                          color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
-                          fontSize: 12,
-                        ),
-                      ),
-                      onTap: () {
-                        final userInstructions = aiNotesController.text;
-                        Navigator.pop(sheetContext);
-                        _scanImage(
-                          context,
-                          ImageSource.camera,
-                          isAlreadyOnAddScreen: isAlreadyOnAddScreen,
-                          userInstructions: userInstructions,
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: AppColors.mainGreen.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.photo_library_rounded,
-                          color: AppColors.mainGreen,
-                        ),
-                      ),
-                      title: const Text(
-                        'Gallery',
-                        style: TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      subtitle: Text(
-                        'Upload image from gallery',
-                        style: TextStyle(
-                          color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
-                          fontSize: 12,
-                        ),
-                      ),
-                      onTap: () {
-                        final userInstructions = aiNotesController.text;
-                        Navigator.pop(sheetContext);
-                        _scanImage(
-                          context,
-                          ImageSource.gallery,
-                          isAlreadyOnAddScreen: isAlreadyOnAddScreen,
-                          userInstructions: userInstructions,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        return _AIScannerSheetContent(
+          parentContext: context,
+          isAlreadyOnAddScreen: isAlreadyOnAddScreen,
         );
       },
-    ).whenComplete(() => aiNotesController.dispose());
+    );
   }
 
   static Future<void> _scanImage(
@@ -236,5 +114,163 @@ class AIScannerHelper {
         CustomSnackBar.showError(context, 'Could not pick image: $e');
       }
     }
+  }
+}
+
+class _AIScannerSheetContent extends StatefulWidget {
+  final BuildContext parentContext;
+  final bool isAlreadyOnAddScreen;
+
+  const _AIScannerSheetContent({
+    required this.parentContext,
+    required this.isAlreadyOnAddScreen,
+  });
+
+  @override
+  State<_AIScannerSheetContent> createState() => _AIScannerSheetContentState();
+}
+
+class _AIScannerSheetContentState extends State<_AIScannerSheetContent> {
+  late final TextEditingController _aiNotesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _aiNotesController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _aiNotesController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.lettersAndIcons.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const Gap(16),
+                Text(
+                  'AI Scanner',
+                  style: TextStyles.bodyLarge.copyWith(fontSize: 18),
+                ),
+                const Gap(16),
+                TextFormField(
+                  controller: _aiNotesController,
+                  maxLines: 2,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.lightGreen,
+                    hintText: "Add instruction or hint for the AI (optional)...",
+                    hintStyle: TextStyles.bodySmall.copyWith(
+                      color: AppColors.lettersAndIcons.withValues(alpha: 0.5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                  ),
+                  style: TextStyles.bodyMedium.copyWith(
+                    color: AppColors.lettersAndIcons,
+                  ),
+                ),
+                const Gap(16),
+                ListTile(
+                  leading: Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: AppColors.mainGreen.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt_rounded,
+                      color: AppColors.mainGreen,
+                    ),
+                  ),
+                  title: const Text(
+                    'Camera',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  subtitle: Text(
+                    'Scan document / record using camera',
+                    style: TextStyle(
+                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                      fontSize: 12,
+                    ),
+                  ),
+                  onTap: () {
+                    final userInstructions = _aiNotesController.text;
+                    Navigator.pop(context);
+                    AIScannerHelper._scanImage(
+                      widget.parentContext,
+                      ImageSource.camera,
+                      isAlreadyOnAddScreen: widget.isAlreadyOnAddScreen,
+                      userInstructions: userInstructions,
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: AppColors.mainGreen.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.photo_library_rounded,
+                      color: AppColors.mainGreen,
+                    ),
+                  ),
+                  title: const Text(
+                    'Gallery',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  subtitle: Text(
+                    'Upload image from gallery',
+                    style: TextStyle(
+                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                      fontSize: 12,
+                    ),
+                  ),
+                  onTap: () {
+                    final userInstructions = _aiNotesController.text;
+                    Navigator.pop(context);
+                    AIScannerHelper._scanImage(
+                      widget.parentContext,
+                      ImageSource.gallery,
+                      isAlreadyOnAddScreen: widget.isAlreadyOnAddScreen,
+                      userInstructions: userInstructions,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

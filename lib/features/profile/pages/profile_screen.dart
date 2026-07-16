@@ -56,7 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return NetworkImage(imagePath);
       }
     }
-    return const AssetImage(AppAssets.profileImage);
+    return const AssetImage(AppAssets.defaultProfile);
+    // return const AssetImage(AppAssets.profileImage);
   }
 
   Future<void> _showLogoutConfirmationDialog() async {
@@ -81,7 +82,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.lettersAndIcons.withValues(alpha: 0.8),
             ),
           ),
-          actionsPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -101,7 +105,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
               ),
               onPressed: () => Navigator.of(context).pop(true),
               child: Text(
@@ -163,21 +170,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+      noPadding: true,
       bottomSection: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: [
-          Positioned(
-            top: -profileImageRadius - 15,
-            child: CircleAvatar(
-              radius: profileImageRadius,
-              backgroundImage: _getProfileImage(displayImage),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(top: profileImageRadius + 20.0),
+          Positioned.fill(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                left: 37.0,
+                right: 37.0,
+                top: profileImageRadius + 20.0,
+                bottom: 20.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
 
@@ -196,10 +201,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Gap(34),
                   ProfileOption(
+                    path: AppAssets.dollar,
+                    title: 'Edit Financial Info',
+                    onTap: () async {
+                      await context.push(Routes.editFinancialInfoScreen);
+                      _loadUserData();
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
                     path: AppAssets.transactions,
                     title: 'Transactions',
                     onTap: () {
                       pushTo(context, Routes.transactionScreen);
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.analysis,
+                    title: 'Quick Analysis',
+                    onTap: () {
+                      pushTo(context, Routes.quickAnalysisScreen);
                     },
                   ),
                   Gap(34),
@@ -234,6 +256,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            top: -profileImageRadius - 15,
+            child: CircleAvatar(
+              radius: profileImageRadius,
+              backgroundImage: _getProfileImage(displayImage),
             ),
           ),
         ],

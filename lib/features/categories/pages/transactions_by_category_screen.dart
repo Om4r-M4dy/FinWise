@@ -1,3 +1,4 @@
+import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/category_icon_helper.dart';
@@ -13,7 +14,7 @@ import 'package:finwise/features/categories/widgets/category_details.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
-import 'package:finwise/core/functions/get_category_id.dart';
+import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class TransactionsByCategoryScreen extends StatelessWidget {
     // Watch transaction list dynamically from TransactionCubit
     final allTransactions = context.watch<TransactionCubit>().transactionsList;
     final transactions = allTransactions
-        .where((tx) => _isCategoryMatch(tx, categoryName))
+        .where((tx) => isCategoryMatch(tx, categoryName))
         .toList();
 
     // Sort transactions by date descending
@@ -54,9 +55,8 @@ class TransactionsByCategoryScreen extends StatelessWidget {
         final budget = user?.monthlyBudgetLimit ?? 0.0;
         final expense = user?.totalExpense ?? 0.0;
         final balance = user?.totalBalance ?? 0.0;
-        final percentage = budget > 0
-            ? (expense / budget * 100).clamp(0.0, 100.0)
-            : 0.0;
+        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return Scaffold(
           appBar: DefaultAppBar(title: categoryName),
@@ -154,9 +154,4 @@ class TransactionsByCategoryScreen extends StatelessWidget {
   }
 }
 
-bool _isCategoryMatch(TransactionModel tx, String categoryName) {
-  final targetId = getCategoryId(categoryName);
-  final txCatName = tx.categoryName.toLowerCase().trim();
-  final targetName = categoryName.toLowerCase().trim();
-  return tx.categoryId == targetId || txCatName == targetName;
-}
+

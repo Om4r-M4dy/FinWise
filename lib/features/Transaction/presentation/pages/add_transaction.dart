@@ -5,6 +5,7 @@ import 'package:finwise/core/constants/categories.dart';
 import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
 import 'package:finwise/core/functions/navigations.dart';
+import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
@@ -14,24 +15,39 @@ import 'package:finwise/core/widgets/ai_scanner_helper.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AddTransaction extends StatelessWidget {
+  final TransactionModel? transactionToEdit;
   final bool showAppBar;
-  
-  const AddTransaction({super.key, this.showAppBar = true});
+
+  const AddTransaction({
+    super.key,
+    this.transactionToEdit,
+    this.showAppBar = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
-      appBar: showAppBar ? const DefaultAppBar(title: "Add Transaction") : null,
+      appBar: showAppBar
+          ? DefaultAppBar(
+              title: transactionToEdit == null
+                  ? "Add Transaction"
+                  : "Edit Transaction",
+            )
+          : null,
       body: MyBodyView(
         topSection: InkWell(
-          onTap: () => AIScannerHelper.showAIScannerSheet(context, isAlreadyOnAddScreen: true),
+          onTap: () => AIScannerHelper.showAIScannerSheet(
+            context,
+            isAlreadyOnAddScreen: true,
+          ),
           borderRadius: BorderRadius.circular(20),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -90,10 +106,10 @@ class AddTransaction extends StatelessWidget {
             ),
           ),
         ),
-        bottomSection: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          child: SingleChildScrollView(
-            child: BlocConsumer<TransactionCubit, TransactionStates>(
+        noPadding: true,
+        bottomSection: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 15.0),
+          child: BlocConsumer<TransactionCubit, TransactionStates>(
               listener: (context, state) {
                 if (state is TransactionLoadingState) {
                   showLoadingDialog(context);
@@ -101,10 +117,14 @@ class AddTransaction extends StatelessWidget {
                   pop(context);
                   showMyDialog(
                     context,
-                    'Transaction saved successfully!',
+                    transactionToEdit == null
+                        ? 'Transaction saved successfully!'
+                        : 'Transaction updated successfully!',
                     type: DialogType.success,
                   );
-                  pop(context);
+                  showAppBar
+                      ? pop(context)
+                      : pushTo(context, Routes.bottomNavBar, extra: 0);
                 } else if (state is TransactionErrorState) {
                   pop(context);
                   showMyDialog(context, state.errorMessage);
@@ -368,9 +388,17 @@ class AddTransaction extends StatelessWidget {
                       Center(
                         child: MainButton(
                           size: ButtonSize.small,
-                          text: "Save",
-                          onPress: () =>
-                              cubit.saveTransaction(context.read<UserCubit>()),
+                          text: transactionToEdit == null ? "Save" : "Update",
+                          onPress: () {
+                            if (transactionToEdit == null) {
+                              cubit.saveTransaction(context.read<UserCubit>());
+                            } else {
+                              cubit.editTransaction(
+                                userCubit: context.read<UserCubit>(),
+                                oldTransaction: transactionToEdit!,
+                              );
+                            }
+                          },
                           textStyle: TextStyles.bodyMedium.copyWith(
                             color: AppColors.lettersAndIcons,
                             fontWeight: FontWeight.bold,
@@ -384,8 +412,7 @@ class AddTransaction extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

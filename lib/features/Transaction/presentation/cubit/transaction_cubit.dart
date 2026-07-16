@@ -48,6 +48,26 @@ class TransactionCubit extends Cubit<TransactionStates> {
 
   List<TransactionModel> transactionsList = [];
 
+  double get monthlyExpenses {
+    final now = DateTime.now();
+    return transactionsList
+        .where((tx) =>
+            tx.type.toLowerCase() == 'expense' &&
+            tx.date.year == now.year &&
+            tx.date.month == now.month)
+        .fold(0.0, (sum, tx) => sum + tx.amount);
+  }
+
+  double get monthlyIncome {
+    final now = DateTime.now();
+    return transactionsList
+        .where((tx) =>
+            tx.type.toLowerCase() == 'income' &&
+            tx.date.year == now.year &&
+            tx.date.month == now.month)
+        .fold(0.0, (sum, tx) => sum + tx.amount);
+  }
+
   Future<void> getTransactions(String userId) async {
     emit(TransactionLoadingState());
     try {
@@ -59,22 +79,119 @@ class TransactionCubit extends Cubit<TransactionStates> {
     }
   }
 
-  Future<void> deleteTransaction(String transactionId) async {
+  void populateControllers(TransactionModel transaction) {
+    titleController.text = transaction.title;
+    amountController.text = transaction.amount.toString();
+    noteController.text = transaction.note;
+    selectedDate = transaction.date;
+    selectedType = transaction.type;
+
+    final found = categories.firstWhere(
+      (c) =>
+          c['label']?.toLowerCase() == transaction.categoryName.toLowerCase(),
+      orElse: () => {'key': '8'},
+    );
+    selectedCategory = found['key'] ?? '8';
+    emit(TransactionFormUpdatedState());
+  }
+
+  Future<void> deleteTransactionWithFinancials({
+    required TransactionModel transaction,
+    required UserCubit userCubit,
+  }) async {
     emit(TransactionLoadingState());
     try {
       final transactionRepo = TransactionRepo();
-      await transactionRepo.deleteTransaction(transactionId);
+      // 1. Delete from Firestore
+      await transactionRepo.deleteTransaction(transaction.transactionId);
+
+      // 2. Reverse financials
+      final isExpense =
+          transaction.type.toLowerCase() ==
+          TransactionTypeEnum.expense.value.toLowerCase();
+      await userCubit.applyTransaction(
+        amount: transaction.amount,
+        isExpense: isExpense,
+        reverse: true,
+      );
+
+      // 3. Refresh list
+      transactionsList = await transactionRepo.getTransactions(
+        transaction.userId,
+      );
       emit(TransactionSuccessState());
     } catch (e) {
       emit(TransactionErrorState(e.toString()));
     }
   }
 
-  Future<void> updateTransaction(TransactionModel transaction) async {
+  Future<void> editTransaction({
+    required UserCubit userCubit,
+    required TransactionModel oldTransaction,
+  }) async {
+    if (!formKey.currentState!.validate()) return;
+
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      emit(TransactionErrorState('User not authenticated.'));
+      return;
+    }
+
+    final double? amount = double.tryParse(amountController.text.trim());
+    if (amount == null || amount <= 0) {
+      emit(TransactionErrorState('Please enter a valid amount.'));
+      return;
+    }
+
     emit(TransactionLoadingState());
+
     try {
+      final categoryLabel =
+          categories.firstWhere(
+            (c) => c['key'] == selectedCategory,
+            orElse: () => {'key': '8', 'label': 'Other'},
+          )['label'] ??
+          'Other';
+
+      final categoryIndex = categories.indexWhere(
+        (c) => c['key'] == selectedCategory,
+      );
+      final categoryIdString = categoryIndex != -1
+          ? categoryIndex.toString()
+          : '8';
+
+      final updatedTransaction = TransactionModel(
+        transactionId: oldTransaction.transactionId,
+        userId: userId,
+        title: titleController.text.trim(),
+        amount: amount,
+        type: selectedType,
+        categoryId: categoryIdString,
+        categoryName: categoryLabel,
+        note: noteController.text.trim(),
+        date: selectedDate,
+      );
+
       final transactionRepo = TransactionRepo();
-      await transactionRepo.updateTransaction(transaction);
+
+      // 1. Update in Firestore
+      await transactionRepo.updateTransaction(updatedTransaction);
+
+      // 2. Adjust financials: reverse old first, then apply new
+      final isOldExpense =
+          oldTransaction.type.toLowerCase() ==
+          TransactionTypeEnum.expense.value.toLowerCase();
+      await userCubit.applyTransaction(
+        amount: oldTransaction.amount,
+        isExpense: isOldExpense,
+        reverse: true,
+      );
+      final isNewExpense = selectedType == TransactionTypeEnum.expense.value;
+      await userCubit.applyTransaction(amount: amount, isExpense: isNewExpense);
+
+      // 3. Refresh list
+      transactionsList = await transactionRepo.getTransactions(userId);
+
       emit(TransactionSuccessState());
     } catch (e) {
       emit(TransactionErrorState(e.toString()));
