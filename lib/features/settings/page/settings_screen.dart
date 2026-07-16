@@ -1,4 +1,6 @@
 import 'package:finwise/core/constants/app_assets.dart';
+import 'package:finwise/core/styles/theme_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
@@ -24,6 +26,18 @@ class SettingsScreen extends StatelessWidget {
                 title: "Notification Settings",
                 onPress: () {
                   pushTo(context, Routes.notificationSettingsScreen);
+                },
+              ),
+              BlocBuilder<ThemeCubit, bool>(
+                builder: (context, isDark) {
+                  return SettingSwitch(
+                    icon: AppAssets.eye,
+                    title: "Dark Theme",
+                    value: isDark,
+                    onChanged: (value) {
+                      context.read<ThemeCubit>().toggleTheme();
+                    },
+                  );
                 },
               ),
               SettingChoice(
@@ -80,6 +94,42 @@ class SettingChoice extends StatelessWidget {
           weight: 7,
           color: AppColors.lettersAndIcons,
         ),
+      ),
+    );
+  }
+}
+
+class SettingSwitch extends StatelessWidget {
+  const SettingSwitch({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.onChanged,
+  });
+  final String icon;
+  final String title;
+  final bool value;
+  final void Function(bool) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        height: 31,
+        width: 31,
+        padding: EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppColors.mainGreen,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: CustomSvgPicture(path: icon),
+      ),
+      title: Text(title, style: TextStyles.bodyMedium),
+      trailing: Switch(
+        value: value,
+        onChanged: onChanged,
+        activeColor: AppColors.mainGreen,
       ),
     );
   }

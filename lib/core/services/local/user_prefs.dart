@@ -6,6 +6,7 @@ class UserPrefs {
   static const _keyDob = 'user_dob';
   static const _keyProfileImage = 'profile_image_path';
   static const _keyIsLoggedIn = 'is_logged_in';
+  static const _keyIsDarkMode = 'is_dark_mode';
 
   static late final SharedPreferences prefs;
 
@@ -38,12 +39,18 @@ class UserPrefs {
     await prefs.setBool(_keyIsLoggedIn, val);
   }
 
+  // Save dark mode state
+  static Future<void> setIsDarkMode(bool val) async {
+    await prefs.setBool(_keyIsDarkMode, val);
+  }
+
   // Getters
   static String? getName() => prefs.getString(_keyName);
   static String? getPhone() => prefs.getString(_keyPhone);
   static String? getDob() => prefs.getString(_keyDob);
   static String? getProfileImagePath() => prefs.getString(_keyProfileImage);
   static bool isLoggedIn() => prefs.getBool(_keyIsLoggedIn) ?? false;
+  static bool isDarkMode() => prefs.getBool(_keyIsDarkMode) ?? false;
 
   // Clear all auth related prefs (used on logout)
   static Future<void> clearAuthData() async {
