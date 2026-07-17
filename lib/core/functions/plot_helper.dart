@@ -1,11 +1,8 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
-import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl.dart';
 
 BarChartGroupData _buildGroup(int x, double y1, double y2) {
   return BarChartGroupData(
@@ -25,42 +22,6 @@ BarChartGroupData _buildGroup(int x, double y1, double y2) {
       ),
     ],
   );
-}
-
-BarChartGroupData _buildGroup(int x, double y1, double y2) {
-  return BarChartGroupData(
-    x: x,
-    barRods: [
-      BarChartRodData(
-        toY: y1,
-        color: AppColors.mainGreen,
-        width: 8,
-        borderRadius: BorderRadius.circular(2),
-      ),
-      BarChartRodData(
-        toY: y2,
-        color: AppColors.oceanBlueButton,
-        width: 8,
-        borderRadius: BorderRadius.circular(2),
-      ),
-    ],
-  );
-}
-
-List<BarChartGroupData> getCurrentChartData(int index) {
-  switch (index) {
-    case 0: // Day
-      return [_buildGroup(0, 5000, 2000), _buildGroup(1, 3000, 8000)];
-    case 1: // Week
-      return [
-        _buildGroup(0, 10000, 12000),
-        _buildGroup(1, 15000, 5000),
-        _buildGroup(2, 10000, 12000),
-        _buildGroup(5, 15000, 5000),
-      ];
-    default:
-      return [];
-  }
 }
 
 List<BarChartGroupData> getCurrentChartData(int index) {
