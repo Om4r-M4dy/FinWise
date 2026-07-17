@@ -327,6 +327,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     return Scaffold(
       body: MyBodyView(
+        clipBehavior: Clip.none,
         topSection: SafeArea(
           bottom: false,
           child: SizedBox(
@@ -341,14 +342,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           alignment: Alignment.topCenter,
           children: [
             Positioned.fill(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  left: 37.0,
-                  right: 37.0,
-                  top: EditProfileScreen.profileImageRadius + 20.0,
-                  bottom: 20.0,
-                ),
-                child: Column(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(70.0)),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    left: 37.0,
+                    right: 37.0,
+                    top: EditProfileScreen.profileImageRadius + 12.0,
+                    bottom: 20.0,
+                  ),
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
@@ -363,10 +366,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         style: TextStyles.bodySmall,
                       ),
                     ),
-                    const Gap(30),
+                    const Gap(20),
 
                     Text('Account Settings', style: TextStyles.bodyLarge),
-                    const Gap(30),
+                    const Gap(20),
                     Text('Username', style: TextStyles.bodyMedium),
                     const Gap(13),
                     CustomTextFormField(
@@ -391,10 +394,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     const Gap(40),
 
-                    _rowCustomSwitch('push notifications', 0),
+                    _rowCustomSwitch('push notifications'),
                     const Gap(37),
-                    _rowCustomSwitch('Turn dark Theme', 1),
-                    const Gap(36),
                     Center(
                       child: MainButton(
                         text: 'Update Profile',
@@ -405,6 +406,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
+          ),
 
             Positioned(
               top: -EditProfileScreen.profileImageRadius - 15,
@@ -452,18 +454,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Row _rowCustomSwitch(String title, int targetSwitch) {
+  Row _rowCustomSwitch(String title) {
     return Row(
       children: [
         Text(title, style: TextStyles.bodyMedium),
         const Spacer(),
         Switch(
-          value: targetSwitch == 0 ? isActiveNotification : isActiveDarkThem,
+          value: isActiveNotification,
           onChanged: (value) {
             setState(() {
-              targetSwitch == 0
-                  ? isActiveNotification = value
-                  : isActiveDarkThem = value;
+              isActiveNotification = value;
             });
           },
 

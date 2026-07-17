@@ -171,7 +171,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             actions: [
               IconButton(
                 onPressed: () {
-                  context.read<ThemeCubit>().toggleTheme();
+                  final themeCubit = context.read<ThemeCubit>();
+                  final userCubit = context.read<UserCubit>();
+                  themeCubit.toggleTheme();
+                  if (userCubit.user != null) {
+                    userCubit.updateSettings(darkTheme: themeCubit.state);
+                  }
                 },
                 icon: Container(
                   width: 30,
@@ -224,7 +229,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.only(
                   left: 37.0,
                   right: 37.0,
-                  top: profileImageRadius + 20.0,
+                  top: profileImageRadius + 12.0,
                   bottom: 110.0,
                 ),
               child: Column(
@@ -233,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Text(displayName, style: TextStyles.bodyLarge),
                   Text(displayEmail, style: TextStyles.bodySmall),
-                  Gap(60),
+                  Gap(25),
                   ProfileOption(
                     path: AppAssets.profile,
                     title: 'Edit Profile',
