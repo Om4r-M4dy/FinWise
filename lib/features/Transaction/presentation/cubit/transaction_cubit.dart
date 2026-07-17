@@ -142,9 +142,9 @@ class TransactionCubit extends Cubit<TransactionStates> {
         );
       }
 
-      // 4. Refresh list
-      transactionsList = await transactionRepo.getTransactions(
-        transaction.userId,
+      // 4. Refresh list locally (remove deleted transaction)
+      transactionsList.removeWhere(
+        (t) => t.transactionId == transaction.transactionId,
       );
       emit(TransactionSuccessState());
     } catch (e) {
@@ -247,8 +247,13 @@ class TransactionCubit extends Cubit<TransactionStates> {
         }
       }
 
-      // 4. Refresh list
-      transactionsList = await transactionRepo.getTransactions(userId);
+      // 4. Update list locally
+      final index = transactionsList.indexWhere(
+        (t) => t.transactionId == updatedTransaction.transactionId,
+      );
+      if (index != -1) {
+        transactionsList[index] = updatedTransaction;
+      }
 
       emit(TransactionSuccessState());
     } catch (e) {
@@ -344,8 +349,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
         body: transactionDetail,
       );
 
-      // 5. Refresh transactions list
-      transactionsList = await transactionRepo.getTransactions(userId);
+      // 5. Add to list locally
+      transactionsList.insert(0, newTransaction);
 
       emit(TransactionSuccessState());
     } catch (e) {
