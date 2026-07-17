@@ -1,40 +1,93 @@
-import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/features/notification/data/notify_lists.dart';
+import 'package:finwise/features/notification/cubit/notification_cubit.dart';
+import 'package:finwise/features/notification/cubit/notification_state.dart';
+import 'package:finwise/features/notification/models/notification_model.dart';
 import 'package:finwise/features/notification/widgets/notification_element.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Mark all notifications as read when entering screen
+    context.read<NotificationCubit>().markAllAsRead();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Notification", noNotify: true),
+      appBar: const DefaultAppBar(title: "Notification", noNotify: true),
       body: MyBodyView(
-        bottomSection: SingleChildScrollView(
-          child: Column(
-            children: [
-              CompleteNotifySection(
-                sectionName: "Today",
-                notifyList: todayNotifyList,
-              ),
-              Gap(25),
-              CompleteNotifySection(
-                sectionName: "Yesterday",
-                notifyList: yesterdayNotifyList,
-              ),
-              Gap(25),
-              CompleteNotifySection(
-                sectionName: "This Weekend",
-                notifyList: thisWeekendNotifyList,
-              ),
-            ],
-          ),
+        bottomSection: BlocBuilder<NotificationCubit, NotificationState>(
+          builder: (context, state) {
+            if (state is NotificationLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.mainGreen),
+              );
+            } else if (state is NotificationError) {
+              return Center(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            } else if (state is NotificationLoaded) {
+              final hasToday = state.todayList.isNotEmpty;
+              final hasYesterday = state.yesterdayList.isNotEmpty;
+              final hasOlder = state.olderList.isNotEmpty;
+
+              if (!hasToday && !hasYesterday && !hasOlder) {
+                return Center(
+                  child: Text(
+                    "No notifications yet",
+                    style: TextStyles.bodyMedium,
+                  ),
+                );
+              }
+
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (hasToday) ...[
+                      CompleteNotifySection(
+                        sectionName: "Today",
+                        notifyList: state.todayList,
+                      ),
+                      const Gap(25),
+                    ],
+                    if (hasYesterday) ...[
+                      CompleteNotifySection(
+                        sectionName: "Yesterday",
+                        notifyList: state.yesterdayList,
+                      ),
+                      const Gap(25),
+                    ],
+                    if (hasOlder) ...[
+                      CompleteNotifySection(
+                        sectionName: "Older",
+                        notifyList: state.olderList,
+                      ),
+                      const Gap(25),
+                    ],
+                  ],
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );
@@ -48,7 +101,8 @@ class CompleteNotifySection extends StatelessWidget {
     required this.notifyList,
   });
   final String sectionName;
-  final List<NotifyModel> notifyList;
+  final List<NotificationModel> notifyList;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -58,18 +112,18 @@ class CompleteNotifySection extends StatelessWidget {
           sectionName,
           style: TextStyles.bodySmall.copyWith(fontWeight: FontWeight.w400),
         ),
-        Gap(7),
-
+        const Gap(7),
         ListView.separated(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            NotifyModel model = notifyList[index];
+            final model = notifyList[index];
+            final formattedDate = DateFormat('HH:mm - MMMM dd').format(model.date);
             return NotificationElement(
-              iconPath: model.iconPath ?? AppAssets.notification,
-              title: model.title ?? "",
-              subTitle: model.subTitle ?? "",
-              date: model.date ?? "",
+              iconPath: model.iconPath.isEmpty ? 'assets/icons/notification.svg' : model.iconPath,
+              title: model.title,
+              subTitle: model.subTitle,
+              date: formattedDate,
               transactionDetails: model.transactionDetails,
             );
           },

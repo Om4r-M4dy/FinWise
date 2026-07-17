@@ -27,4 +27,35 @@ abstract class AppThemes {
       ),
     ),
   );
+
+  static ThemeData get darkTheme => ThemeData(
+    fontFamily: AppFonts.poppins,
+    scaffoldBackgroundColor: AppColors.voidColor,
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.voidColor,
+      elevation: 0,
+      centerTitle: true,
+      surfaceTintColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.mainGreen,
+      brightness: Brightness.dark,
+      onSurface: Colors.white,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      fillColor: AppColors.darkGreen,
+      filled: true,
+      hintStyle: TextStyles.bodySmall.copyWith(color: AppColors.lightGreen),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
+      ),
+    ),
+  );
 }

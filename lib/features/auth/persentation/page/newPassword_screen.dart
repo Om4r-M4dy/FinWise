@@ -9,6 +9,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import 'package:finwise/core/services/firebase/firestore_provider.dart';
+import 'package:finwise/core/services/notification/notification_service.dart';
+
 class NewPasswordScreen extends StatefulWidget {
   const NewPasswordScreen({super.key});
 
@@ -51,6 +54,22 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await user.updatePassword(password);
+        
+        final notificationData = {
+          'title': 'Security Update',
+          'subTitle': 'Your password has been changed successfully.',
+          'iconPath': 'assets/icons/Security.svg',
+          'date': DateTime.now(),
+          'isRead': false,
+        };
+        await FirestoreProvider.addNotification(user.uid, notificationData);
+
+        // Show instant system notification
+        await NotificationService.showInstantNotification(
+          title: 'Security Update',
+          body: 'Your password has been changed successfully.',
+        );
+
         if (mounted) {
           replaceWith(context, Routes.passwordChangedScreen);
         }

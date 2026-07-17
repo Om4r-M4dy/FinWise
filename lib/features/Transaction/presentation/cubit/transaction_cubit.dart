@@ -8,6 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
+import 'package:finwise/core/services/firebase/firestore_provider.dart';
+import 'package:finwise/core/services/notification/notification_service.dart';
+
 class TransactionCubit extends Cubit<TransactionStates> {
   TransactionCubit() : super(TransactionInitialState());
 
@@ -253,7 +256,25 @@ class TransactionCubit extends Cubit<TransactionStates> {
       final isExpense = selectedType == TransactionTypeEnum.expense.value;
       await userCubit.applyTransaction(amount: amount, isExpense: isExpense);
 
-      // 3. Refresh transactions list
+      // 3. Add notification about this transaction
+      final notificationData = {
+        'title': 'Transactions',
+        'subTitle': 'A new transaction has been registered',
+        'iconPath': 'assets/icons/Dollar.svg',
+        'date': DateTime.now(),
+        'transactionDetails': '$categoryLabel | ${newTransaction.title} | ${isExpense ? '-' : '+'}\$${amount.toStringAsFixed(2)}',
+        'isRead': false,
+      };
+      await FirestoreProvider.addNotification(userId, notificationData);
+
+      // 4. Show instant system notification banner
+      final transactionDetail = notificationData['transactionDetails'] as String;
+      await NotificationService.showInstantNotification(
+        title: 'New Transaction',
+        body: transactionDetail,
+      );
+
+      // 5. Refresh transactions list
       transactionsList = await transactionRepo.getTransactions(userId);
 
       emit(TransactionSuccessState());
