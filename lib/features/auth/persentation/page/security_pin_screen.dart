@@ -5,6 +5,7 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/auth/persentation/widgets/socialbutton.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:verification_code_field/verification_code_field.dart';
@@ -95,14 +96,15 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (otpCode.length == 6) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'PIN login not fully implemented yet.',
+                              if (otpCode == UserPrefs.getPin()) {
+                                replaceWith(context, Routes.bottomNavBar);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Incorrect PIN.'),
                                   ),
-                                ),
-                              );
-                              replaceWith(context, Routes.loginScreen);
+                                );
+                              }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

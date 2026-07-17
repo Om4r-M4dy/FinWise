@@ -76,7 +76,7 @@ class LastWeekAnalysis extends StatelessWidget {
                   iconW: 19,
                   title: "Expenses Last Week",
                   money: formatAmount(expenses, isExpense: true),
-                  moneyColor: AppColors.oceanBlueButton,
+                  moneyColor: useDarkThemeColors ? AppColors.lightBlueButton : AppColors.oceanBlueButton,
                   textColor: textColor,
                   iconColor: iconColor,
                 ),

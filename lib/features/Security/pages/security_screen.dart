@@ -84,7 +84,9 @@ class SecurityOption extends StatelessWidget {
         icon: Icon(
           Icons.arrow_forward_ios,
           weight: 7,
-          color: AppColors.lettersAndIcons,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : AppColors.lettersAndIcons,
         ),
       ),
     );

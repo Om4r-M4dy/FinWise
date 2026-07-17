@@ -71,7 +71,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
-                      color: AppColors.lightGreen,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                     ),
                     child: Text(
                       """This action will permanently delete all of your data, and you will not be able to recover it. Please keep the following in mind before proceeding:
@@ -83,6 +83,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             • This action cannot be undone.
                                     """,
                       style: TextStyles.bodySmall.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.w300,
                       ),
                     ),

@@ -176,6 +176,8 @@ class TotalMoney extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -199,7 +201,7 @@ class TotalMoney extends StatelessWidget {
             formatAmount(total, isExpense: isExpense),
             style: TextStyles.headlineLarge.copyWith(
               color: isExpense
-                  ? AppColors.oceanBlueButton
+                  ? (isDark ? AppColors.lightBlueButton : AppColors.oceanBlueButton)
                   : AppColors.background,
             ),
           ),

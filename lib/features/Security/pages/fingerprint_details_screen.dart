@@ -7,6 +7,7 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -15,8 +16,11 @@ class FingerprintDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fingerprintName = UserPrefs.getFingerprintName() ?? "Fingerprint";
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: const DefaultAppBar(title: "Jhon Fingerprint"),
+      appBar: DefaultAppBar(title: fingerprintName),
       body: MyBodyView(
         bottomSection: Column(
           children: [
@@ -39,21 +43,26 @@ class FingerprintDetailsScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
-                color: const Color(0xffE9F6ED),
+                color: isDark ? AppColors.darkGreen : const Color(0xffE9F6ED),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Center(
                 child: Text(
-                  "Jhon Fingerprint",
-                  style: TextStyles.bodyMedium,
+                  fingerprintName,
+                  style: TextStyles.bodyMedium.copyWith(
+                    color: isDark ? Colors.white : AppColors.lettersAndIcons,
+                  ),
                 ),
               ),
             ),
             const Gap(40),
             MainButton(
               text: "Delete",
-              onPress: () {
-                replaceWith(context, Routes.loadingDeletedFingerprintScreen);
+              onPress: () async {
+                await UserPrefs.deleteFingerprint();
+                if (context.mounted) {
+                  replaceWith(context, Routes.loadingDeletedFingerprintScreen);
+                }
               },
             ),
           ],

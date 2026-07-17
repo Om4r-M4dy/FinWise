@@ -49,6 +49,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
             .monthlyExpenses;
         final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+
         return Scaffold(
           appBar: const DefaultAppBar(title: 'Transactions'),
           body: MyBodyView(
@@ -62,7 +64,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).brightness == Brightness.dark
+                      color: isDark
                           ? AppColors.darkGreen.withValues(alpha: 0.7)
                           : AppColors.lightGreen,
                       borderRadius: BorderRadius.circular(14),
@@ -73,11 +75,21 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('Total Balance', style: TextStyles.bodyMedium),
+                        Text(
+                          'Total Balance',
+                          style: TextStyles.bodyMedium.copyWith(
+                            color: isDark
+                                ? Colors.white
+                                : AppColors.lettersAndIcons,
+                          ),
+                        ),
                         Text(
                           '\$${balance.toStringAsFixed(2)}',
                           style: TextStyles.headlineLarge.copyWith(
                             fontWeight: FontWeight.w700,
+                            color: isDark
+                                ? Colors.white
+                                : AppColors.lettersAndIcons,
                           ),
                         ),
                       ],
@@ -107,8 +119,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         titel: 'Expense',
                         balance: expense.toStringAsFixed(2),
                         pathIcon: AppAssets.expense,
-                        iconColor: AppColors.oceanBlueButton,
-                        balanceColor: AppColors.oceanBlueButton,
+                        iconColor: isDark
+                            ? AppColors.lightBlueButton
+                            : AppColors.oceanBlueButton,
+                        balanceColor: isDark
+                            ? AppColors.lightBlueButton
+                            : AppColors.oceanBlueButton,
                         isSelected: isExpenseSelected,
                         onTap: () {
                           setState(() {
