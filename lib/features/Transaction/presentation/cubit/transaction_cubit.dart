@@ -282,7 +282,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
     emit(TransactionLoadingState());
 
     try {
-      final transactionId = DateTime.now().millisecondsSinceEpoch.toString();
+      final transactionId = FirestoreProvider.transactionsCollection.doc().id;
 
       final categoryLabel =
           categories.firstWhere(
@@ -356,5 +356,13 @@ class TransactionCubit extends Cubit<TransactionStates> {
     } catch (e) {
       emit(TransactionErrorState(e.toString()));
     }
+  }
+
+  @override
+  Future<void> close() {
+    titleController.dispose();
+    amountController.dispose();
+    noteController.dispose();
+    return super.close();
   }
 }

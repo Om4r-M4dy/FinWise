@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:finwise/core/constants/api_keys.dart';
+import 'package:finwise/core/constants/categories.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class GeminiService {
@@ -29,18 +30,8 @@ class GeminiService {
     // 3. Read image file as bytes
     final imageBytes = await File(imagePath).readAsBytes();
 
-    // 4. Predefined categories in FinWise
-    final categoriesList = [
-      'Food',
-      'Medicine',
-      'Travel',
-      'Transport',
-      'Gifts',
-      'Rent',
-      'Leisure',
-      'Groceries',
-      'Other',
-    ];
+    // 4. Predefined categories in FinWise (mapped dynamically from the app's categories config)
+    final categoriesList = categories.map((c) => c['label']!).toList();
 
     // 5. Build prompt
     final prompt =
