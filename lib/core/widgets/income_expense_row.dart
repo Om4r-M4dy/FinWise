@@ -94,7 +94,11 @@ class Info extends StatelessWidget {
               amount,
               style: TextStyles.bodyLarge.copyWith(
                 fontWeight: FontWeight.w600,
-                color: isExpense ? color : AppColors.dark05,
+                color: isExpense
+                    ? color
+                    : (Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : AppColors.dark05),
               ),
             ),
           ],

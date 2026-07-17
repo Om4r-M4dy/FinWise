@@ -110,7 +110,9 @@ class _DashboardState extends State<Dashboard> {
             Text(
               'No transactions for this day',
               style: TextStyle(
-                color: AppColors.lettersAndIcons.withValues(alpha: 0.5),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.5),
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),

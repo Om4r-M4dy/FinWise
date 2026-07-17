@@ -158,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         'What do you want to track ?',
                         style: TextStyles.bodySmall.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -210,7 +212,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: LastWeekAnalysis(
                             revenue: lastWeekData['revenue'] ?? 0.0,
                             expenses: lastWeekData['expenses'] ?? 0.0,
-                            savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                            savingsPercent:
+                                lastWeekData['savingsPercent'] ?? 0.0,
                           ),
                         ),
                         const Gap(26),
@@ -294,7 +297,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       'No transactions found for this period.',
                       style: TextStyles.bodySmall.copyWith(
-                        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                     const Gap(8),
@@ -344,8 +349,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
-
 }
 
 class _OffsetFabLocation extends FloatingActionButtonLocation {
@@ -353,7 +356,8 @@ class _OffsetFabLocation extends FloatingActionButtonLocation {
 
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry geometry) {
-    final Offset standardOffset = FloatingActionButtonLocation.endFloat.getOffset(geometry);
+    final Offset standardOffset = FloatingActionButtonLocation.endFloat
+        .getOffset(geometry);
     return Offset(standardOffset.dx, standardOffset.dy - 75.0);
   }
 }

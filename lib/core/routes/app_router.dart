@@ -83,9 +83,7 @@ class AppRouter {
               BlocProvider<TransactionCubit>(
                 create: (context) => TransactionCubit(),
               ),
-              BlocProvider<GoalCubit>(
-                create: (context) => GoalCubit(),
-              ),
+              BlocProvider<GoalCubit>(create: (context) => GoalCubit()),
             ],
             child: child,
           );
@@ -108,7 +106,7 @@ class AppRouter {
             builder: (context, state) => const ChatScreen(),
           ),
           GoRoute(
-            path: Routes.foodScreen,
+            path: Routes.addTransactionByCategory,
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>;
               final categoryName = extra['categoryName'] as String;

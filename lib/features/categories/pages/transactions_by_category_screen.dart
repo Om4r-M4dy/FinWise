@@ -155,9 +155,9 @@ class TransactionsByCategoryScreen extends StatelessWidget {
             actions: goalId != null
                 ? [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.edit,
-                        color: AppColors.lettersAndIcons,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       onPressed: () {
                         final goalState = context.read<GoalCubit>().state;
@@ -212,13 +212,17 @@ class TransactionsByCategoryScreen extends StatelessWidget {
                               path: AppAssets.transactions,
                               width: 200,
                               height: 200,
-                              color: AppColors.gray39.withValues(alpha: 0.05),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.05),
                             ),
                             const Gap(16),
                             Text(
                               'No transactions in this category',
                               style: TextStyles.bodyMedium.copyWith(
-                                color: AppColors.gray39.withValues(alpha: 0.5),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.5),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -235,10 +239,15 @@ class TransactionsByCategoryScreen extends StatelessWidget {
                             entry.key,
                             style: TextStyles.bodyMedium.copyWith(
                               fontWeight: FontWeight.w500,
-                              color: AppColors.lettersAndIcons,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                          CustomSvgPicture(path: AppAssets.calender),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     pushTo(context, Routes.calendarScreen);
+                          //   },
+                          //   child: CustomSvgPicture(path: AppAssets.calender),
+                          // ),
                         ],
                       ),
                       const Gap(5),

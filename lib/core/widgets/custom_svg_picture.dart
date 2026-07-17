@@ -1,3 +1,4 @@
+import 'package:finwise/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -28,14 +29,15 @@ class CustomSvgPicture extends StatelessWidget {
     required this.path,
     this.width,
     this.height,
+    this.autoTint = true,
   });
 
   /// The relative path to the SVG asset (e.g., 'assets/icons/food.svg').
   final String path;
 
-  /// An optional color to tint the SVG image. 
-  /// 
-  /// If provided, it applies a [BlendMode.srcIn] color filter, completely 
+  /// An optional color to tint the SVG image.
+  ///
+  /// If provided, it applies a [BlendMode.srcIn] color filter, completely
   /// replacing the original colors of the SVG with this specified color.
   final Color? color;
 
@@ -45,14 +47,49 @@ class CustomSvgPicture extends StatelessWidget {
   /// The custom height of the SVG image. If null, it uses the SVG's height.
   final double? height;
 
+  /// Whether to automatically tint the SVG in dark mode if no [color] is specified.
+  ///
+  /// Avoids tinting multi-color brand logos and illustrations by default.
+  final bool autoTint;
+
+  bool get _shouldAutoTint {
+    if (!autoTint) return false;
+    final lowerPath = path.toLowerCase();
+    if (lowerPath.contains('logo') ||
+        lowerPath.contains('google') ||
+        lowerPath.contains('facebook') ||
+        lowerPath.contains('instagram') ||
+        lowerPath.contains('whatsapp') ||
+        lowerPath.contains('website') ||
+        lowerPath.contains('calender') ||
+        lowerPath.contains('analysis') ||
+        lowerPath.contains('search') ||
+        lowerPath.contains('bot_') ||
+        lowerPath.contains('lottie') ||
+        lowerPath.contains('banner') ||
+        lowerPath.contains('illustration')) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final resolvedColor =
+        color ??
+        (isDark && _shouldAutoTint
+            ? path.toLowerCase().contains('income')
+                  ? AppColors.mainGreen
+                  : Theme.of(context).colorScheme.onSurface
+            : null);
+
     return SvgPicture.asset(
       path,
       width: width,
       height: height,
-      colorFilter: color != null
-          ? ColorFilter.mode(color!, BlendMode.srcIn)
+      colorFilter: resolvedColor != null
+          ? ColorFilter.mode(resolvedColor, BlendMode.srcIn)
           : null,
     );
   }

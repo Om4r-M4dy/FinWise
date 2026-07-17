@@ -54,7 +54,7 @@ class QuickAnalysisScreen extends StatelessWidget {
                   "No transactions to analyze",
                   style: TextStyles.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.lettersAndIcons,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   textAlign: TextAlign.center,
                 ),

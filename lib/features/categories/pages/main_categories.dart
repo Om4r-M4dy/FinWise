@@ -28,7 +28,9 @@ class MainCategories extends StatelessWidget {
         final budget = user?.monthlyBudgetLimit ?? 0.0;
         final expense = user?.totalExpense ?? 0.0;
         final balance = user?.totalBalance ?? 0.0;
-        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final monthlyExpense = context
+            .watch<TransactionCubit>()
+            .monthlyExpenses;
         final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return MyBodyView(
@@ -61,7 +63,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Food',
                             'transactions': filtered,
@@ -80,7 +82,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Transport',
                             'transactions': filtered,
@@ -99,7 +101,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Medicine',
                             'transactions': filtered,
@@ -122,7 +124,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Groceries',
                             'transactions': filtered,
@@ -142,7 +144,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Rent',
                             'transactions': filtered,
@@ -161,7 +163,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Gifts',
                             'transactions': filtered,
@@ -194,7 +196,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Leisure',
                             'transactions': filtered,
@@ -213,7 +215,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Other',
                             'transactions': filtered,

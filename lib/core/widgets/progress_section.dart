@@ -71,7 +71,11 @@ class ProgressSection extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.check_box_outlined, color: AppColors.dark05, size: 14),
+            Icon(
+              Icons.check_box_outlined,
+              color: Theme.of(context).colorScheme.onSurface,
+              size: 14,
+            ),
             const Gap(6),
             Expanded(child: Text(message, style: TextStyles.bodyMedium)),
           ],

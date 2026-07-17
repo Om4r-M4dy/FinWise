@@ -13,6 +13,7 @@ class TargetCard extends StatelessWidget {
     required this.radius,
     this.titelStyle,
     this.backgroundColor,
+    this.circleBackgroundColor,
   });
   final String title;
   final double percent;
@@ -20,10 +21,14 @@ class TargetCard extends StatelessWidget {
   final Widget? center;
   final TextStyle? titelStyle;
   final Color? backgroundColor;
+  final Color? circleBackgroundColor;
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -39,25 +44,26 @@ class TargetCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularPercentIndicator(
-            backgroundColor: AppColors.background,
+            backgroundColor: circleBackgroundColor ?? (isDark ? AppColors.darkGreen : AppColors.background),
             radius: radius,
             lineWidth: 5.0,
             percent: percent / 100,
             center:
                 center ??
-                Text("${(percent).toInt()}%", style: TextStyles.bodyLarge),
+                Text("${(percent).toInt()}%", style: TextStyles.bodyLarge.copyWith(
+                  color: isDark ? Colors.white : AppColors.dark05,
+                )),
             progressColor: AppColors.oceanBlueButton,
           ),
-          Gap(10),
+          const Gap(10),
           Text(
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-
             style: titelStyle ?? TextStyles.bodyMedium.copyWith(
                     color: center != null
-                        ? AppColors.dark05
-                        : Color(0xffF1FFF3),
+                        ? (isDark ? Colors.white : AppColors.dark05)
+                        : const Color(0xffF1FFF3),
                   ),
           ),
         ],

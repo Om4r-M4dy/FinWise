@@ -23,21 +23,35 @@ class LastWeekAnalysis extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final bool useDarkThemeColors = isDarkTheme && !showBackground;
+
+    final Color textColor = useDarkThemeColors ? Colors.white : AppColors.lettersAndIcons;
+    final Color? iconColor = useDarkThemeColors ? Colors.white : null;
+
     final content = IntrinsicHeight(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           TargetCard(
             title: "Savings \nOn goals",
-            titelStyle: TextStyles.bodyMedium.copyWith(fontSize: 12),
+            titelStyle: TextStyles.bodyMedium.copyWith(
+              fontSize: 12,
+              color: textColor,
+            ),
             percent: savingsPercent,
-            center: CustomSvgPicture(path: AppAssets.car, width: 37),
+            center: CustomSvgPicture(
+              path: AppAssets.car,
+              width: 37,
+              color: iconColor,
+            ),
             radius: 34,
+            circleBackgroundColor: useDarkThemeColors ? AppColors.darkGreen : AppColors.background,
           ),
           VerticalDivider(
             width: 15,
             thickness: 1.5,
-            color: AppColors.background,
+            color: useDarkThemeColors ? AppColors.darkGreen : AppColors.background,
           ),
           Expanded(
             child: Column(
@@ -49,11 +63,13 @@ class LastWeekAnalysis extends StatelessWidget {
                   iconW: 31,
                   title: "Revenue Last Week",
                   money: formatAmount(revenue),
+                  textColor: textColor,
+                  iconColor: iconColor,
                 ),
                 Container(
                   height: 1,
                   margin: const EdgeInsets.symmetric(vertical: 15),
-                  color: AppColors.background,
+                  color: useDarkThemeColors ? AppColors.darkGreen : AppColors.background,
                 ),
                 AnalysisHome(
                   icon: AppAssets.food,
@@ -61,6 +77,8 @@ class LastWeekAnalysis extends StatelessWidget {
                   title: "Expenses Last Week",
                   money: formatAmount(expenses, isExpense: true),
                   moneyColor: AppColors.oceanBlueButton,
+                  textColor: textColor,
+                  iconColor: iconColor,
                 ),
               ],
             ),

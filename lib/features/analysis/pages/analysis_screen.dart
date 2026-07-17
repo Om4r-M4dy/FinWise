@@ -84,7 +84,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                     "No transactions to analyze",
                     style: TextStyles.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.lettersAndIcons,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -261,7 +261,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                                       .toList();
                                   pushTo(
                                     context,
-                                    Routes.foodScreen,
+                                    Routes.addTransactionByCategory,
                                     extra: {
                                       'categoryName': goal.title,
                                       'transactions': filtered,

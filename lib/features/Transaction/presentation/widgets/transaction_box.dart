@@ -27,11 +27,15 @@ class TransactionBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.oceanBlueButton
+                : Theme.of(context).brightness == Brightness.dark
+                ? AppColors.dark05.withValues(alpha: 0.7)
                 : AppColors.background,
             borderRadius: BorderRadius.circular(14),
           ),
@@ -51,15 +55,13 @@ class TransactionBox extends StatelessWidget {
                 style: TextStyles.bodyMedium.copyWith(
                   color: isSelected
                       ? AppColors.background
-                      : AppColors.lettersAndIcons,
+                      : Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               Text(
                 '\$$balance',
                 style: TextStyles.bodyLarge.copyWith(
-                  color: isSelected
-                      ? AppColors.background
-                      : balanceColor,
+                  color: isSelected ? AppColors.background : balanceColor,
                 ),
               ),
             ],
