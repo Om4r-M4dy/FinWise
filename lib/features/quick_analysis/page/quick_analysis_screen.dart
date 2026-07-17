@@ -7,12 +7,14 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/core/widgets/plots_section.dart';
+import 'package:finwise/core/widgets/sections/plots_section.dart';
+import 'package:finwise/core/widgets/shimmer/shimmer_loading.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
-import 'package:finwise/features/Home/widgets/last_week_analysis.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
+import 'package:finwise/features/Home/persentation/widgets/last_week_analysis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -23,7 +25,18 @@ class QuickAnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final transactionsList = context.watch<TransactionCubit>().transactionsList;
+    final txState = context.watch<TransactionCubit>().state;
+    if (txState is TransactionLoadingState ||
+        txState is TransactionInitialState) {
+      return const Scaffold(
+        appBar: DefaultAppBar(title: "Quickly Analysis"),
+        body: QuickAnalysisShimmer(),
+      );
+    }
+
+    final transactionsList = context
+        .watch<TransactionCubit>()
+        .statsTransactionsList;
     final userState = context.watch<UserCubit>().state;
 
     if (transactionsList.isEmpty) {

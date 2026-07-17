@@ -26,6 +26,17 @@ class TransactionModel {
   });
 
   factory TransactionModel.fromMap(Map<String, dynamic> map) {
+    DateTime parsedDate = DateTime.now();
+    final rawDate = map['date'];
+    if (rawDate != null) {
+      if (rawDate is Timestamp) {
+        parsedDate = rawDate.toDate();
+      } else if (rawDate is String) {
+        parsedDate = DateTime.tryParse(rawDate) ?? DateTime.now();
+      } else if (rawDate is int) {
+        parsedDate = DateTime.fromMillisecondsSinceEpoch(rawDate);
+      }
+    }
     return TransactionModel(
       transactionId: map['transactionId'] ?? '',
       userId: map['userId'] ?? '',
@@ -35,7 +46,7 @@ class TransactionModel {
       categoryId: map['categoryId'] ?? '',
       categoryName: map['categoryName'] ?? '',
       note: map['note'] ?? '',
-      date: (map['date'] as Timestamp).toDate(),
+      date: parsedDate,
       goalId: map['goalId'],
     );
   }

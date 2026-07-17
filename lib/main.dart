@@ -5,15 +5,15 @@ import 'package:finwise/core/services/local/bloc_observer.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:finwise/core/styles/themes.dart';
 import 'package:finwise/core/styles/theme_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
 import 'package:finwise/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:finwise/features/notification/cubit/notification_cubit.dart';
+import 'package:finwise/features/notification/persentation/cubit/notification_cubit.dart';
 import 'package:finwise/core/services/notification/notification_service.dart';
 
 Future<void> main() async {

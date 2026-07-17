@@ -5,21 +5,22 @@ import 'package:finwise/core/functions/plot_helper.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/income_expense_row.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/core/widgets/plots_section.dart';
-import 'package:finwise/core/widgets/progress_section.dart';
+import 'package:finwise/core/widgets/sections/plots_section.dart';
+import 'package:finwise/core/widgets/sections/progress_section.dart';
 import 'package:finwise/core/widgets/target_card.dart';
 import 'package:finwise/core/widgets/add_goal_bottom_sheet.dart';
+import 'package:finwise/core/widgets/shimmer/shimmer_loading.dart';
 import 'package:finwise/features/analysis/widgets/date_header.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
-import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
-import 'package:finwise/features/analysis/cubit/goal_state.dart';
-import 'package:finwise/features/analysis/data/model/goal_model.dart';
+import 'package:finwise/features/saving_goals/persentation/cubit/goal_cubit.dart';
+import 'package:finwise/features/saving_goals/persentation/cubit/goal_state.dart';
+import 'package:finwise/features/saving_goals/data/model/goal_model.dart';
 import 'package:finwise/core/functions/calculate_budget_percentage.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
@@ -43,7 +44,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         final balance = userState.balance;
         final transactionsList = context
             .watch<TransactionCubit>()
-            .transactionsList;
+            .statsTransactionsList;
 
         final monthlyExpense = context
             .watch<TransactionCubit>()
@@ -179,6 +180,9 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                 ),
                 BlocBuilder<GoalCubit, GoalState>(
                   builder: (context, goalState) {
+                    if (goalState is GoalLoadingState) {
+                      return const GoalsListShimmer();
+                    }
                     final goals = (goalState is GoalLoadedState)
                         ? goalState.goals
                         : <GoalModel>[];

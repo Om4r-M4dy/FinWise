@@ -1,4 +1,4 @@
-import 'package:finwise/features/auth/models/user_model.dart';
+import 'package:finwise/features/profile/data/models/user_model.dart';
 
 abstract class AuthState {}
 

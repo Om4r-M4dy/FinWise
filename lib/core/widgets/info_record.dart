@@ -1,7 +1,7 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/category_icon_helper.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/app_icon_button.dart';
+import 'package:finwise/core/widgets/buttons/app_icon_button.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/widgets/transaction_details_sheet.dart';
 import 'package:flutter/material.dart';

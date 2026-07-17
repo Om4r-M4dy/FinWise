@@ -1,7 +1,7 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/info_record.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/features/Calendar/widget/categories_chart.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
@@ -39,7 +39,9 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final allTransactions = context.watch<TransactionCubit>().transactionsList;
+    final allTransactions = context
+        .watch<TransactionCubit>()
+        .statsTransactionsList;
     final filtered = _filterTransactions(allTransactions);
 
     return Column(

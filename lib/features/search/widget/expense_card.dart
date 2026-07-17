@@ -1,7 +1,7 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/app_icon_button.dart';
+import 'package:finwise/core/widgets/buttons/app_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

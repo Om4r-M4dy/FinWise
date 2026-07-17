@@ -1,7 +1,7 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/features/settings/delete_account/cubit/delete_account_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

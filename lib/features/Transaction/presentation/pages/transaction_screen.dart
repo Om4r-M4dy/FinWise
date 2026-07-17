@@ -6,11 +6,12 @@ import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/dialogs/custom_snackbar.dart';
-import 'package:finwise/core/widgets/dialogs/loading_dialog.dart';
-import 'package:finwise/core/widgets/icon_with_text_button.dart';
+import 'package:finwise/core/extentions/dialogs.dart';
+import 'package:finwise/core/widgets/buttons/icon_with_text_button.dart';
 import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/core/widgets/progress_section.dart';
+import 'package:finwise/core/widgets/shimmer/shimmer_loading.dart';
+import 'package:finwise/core/widgets/sections/progress_section.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
@@ -21,8 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -35,6 +36,19 @@ class _TransactionScreenState extends State<TransactionScreen> {
   final FlipCardController flipController = FlipCardController();
   bool isIncomeSelected = false;
   bool isExpenseSelected = false;
+
+  void _updateFilter() {
+    final userId = context.read<UserCubit>().currentUser;
+    if (userId != null) {
+      String? filter;
+      if (isIncomeSelected && !isExpenseSelected) {
+        filter = 'income';
+      } else if (isExpenseSelected && !isIncomeSelected) {
+        filter = 'expense';
+      }
+      context.read<TransactionCubit>().changeFilter(userId, filter);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +113,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         onTap: () {
                           setState(() {
                             isIncomeSelected = !isIncomeSelected;
+                            if (isIncomeSelected) {
+                              isExpenseSelected = false;
+                            }
                           });
+                          _updateFilter();
                         },
                       ),
                       Gap(15),
@@ -113,7 +131,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         onTap: () {
                           setState(() {
                             isExpenseSelected = !isExpenseSelected;
+                            if (isExpenseSelected) {
+                              isIncomeSelected = false;
+                            }
                           });
+                          _updateFilter();
                         },
                       ),
                     ],
@@ -138,7 +160,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   }
 }
 
-class TransactionsListSection extends StatelessWidget {
+class TransactionsListSection extends StatefulWidget {
   const TransactionsListSection({
     super.key,
     required this.isIncomeSelected,
@@ -149,8 +171,56 @@ class TransactionsListSection extends StatelessWidget {
   final bool isExpenseSelected;
 
   @override
+  State<TransactionsListSection> createState() =>
+      _TransactionsListSectionState();
+}
+
+class _TransactionsListSectionState extends State<TransactionsListSection> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isInitialLoad = true;
+  bool _isLoadingDialogShowing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    _isInitialLoad = true;
+    _isLoadingDialogShowing = false;
+  }
+
+  @override
+  void didUpdateWidget(TransactionsListSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isIncomeSelected != widget.isIncomeSelected ||
+        oldWidget.isExpenseSelected != widget.isExpenseSelected) {
+      _isInitialLoad = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (currentScroll >= (maxScroll * 0.9)) {
+      final userId = context.read<UserCubit>().currentUser;
+      final cubit = context.read<TransactionCubit>();
+      if (userId != null && cubit.hasMore && !cubit.isLoadingMore) {
+        cubit.loadMoreTransactions(userId);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: _scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,34 +240,74 @@ class TransactionsListSection extends StatelessWidget {
           const Gap(20),
           BlocConsumer<TransactionCubit, TransactionStates>(
             listener: (context, state) {
-              if (state is TransactionErrorState) {
+              if (state is TransactionLoadingState) {
+                if (!_isInitialLoad && !_isLoadingDialogShowing) {
+                  _isLoadingDialogShowing = true;
+                  showLoadingDialog(context);
+                }
+              } else if (state is TransactionSuccessState) {
+                _isInitialLoad = false;
+                if (_isLoadingDialogShowing) {
+                  _isLoadingDialogShowing = false;
+                  pop(context);
+                }
+              } else if (state is TransactionErrorState) {
+                if (_isLoadingDialogShowing) {
+                  _isLoadingDialogShowing = false;
+                  pop(context);
+                }
                 CustomSnackBar.showError(context, state.errorMessage);
               }
             },
             builder: (context, state) {
               if (state is TransactionLoadingState) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24.0),
-                  child: LoadingDialog(),
-                );
+                if (_isInitialLoad) {
+                  return const TransactionsListShimmer();
+                }
               }
 
               if (state is TransactionErrorState) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Text(
-                      state.errorMessage,
-                      style: TextStyles.bodyMedium,
+                if (_isInitialLoad) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Text(
+                        state.errorMessage,
+                        style: TextStyles.bodyMedium,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               }
 
               final cubit = context.watch<TransactionCubit>();
               final transactions = cubit.transactionsList;
 
               if (transactions.isEmpty) {
+                final hasFilter =
+                    widget.isIncomeSelected || widget.isExpenseSelected;
+                if (hasFilter) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 32.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'No matching transactions found',
+                            style: TextStyles.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.lettersAndIcons.withValues(
+                                alpha: 0.7,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0),
@@ -249,64 +359,44 @@ class TransactionsListSection extends StatelessWidget {
                 );
               }
 
-              // Apply selection filters
-              final filteredTransactions = transactions.where((tx) {
-                final isExpense = tx.type.toLowerCase() == 'expense';
-                final isIncome = tx.type.toLowerCase() == 'income';
+              return Column(
+                children: [
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: transactions.length,
+                    separatorBuilder: (context, index) => const Gap(19),
+                    itemBuilder: (context, index) {
+                      final tx = transactions[index];
+                      final isExpense = tx.type.toLowerCase() == 'expense';
 
-                if (isIncomeSelected && !isExpenseSelected) {
-                  return isIncome;
-                } else if (isExpenseSelected && !isIncomeSelected) {
-                  return isExpense;
-                }
-                return true; // If both or neither selected, show all
-              }).toList();
-
-              if (filteredTransactions.isEmpty) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'No matching transactions found',
-                          style: TextStyles.bodyMedium.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.lettersAndIcons.withValues(
-                              alpha: 0.7,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      return InfoRecord(
+                        transaction: tx,
+                        bgColor: isExpense
+                            ? AppColors.lightBlueButton
+                            : AppColors.mainGreen.withValues(alpha: 0.6),
+                        title: tx.title,
+                        date: tx.formattedDate,
+                        cat: tx.categoryName.isNotEmpty
+                            ? tx.categoryName
+                            : 'General',
+                        amount: tx.getFormattedAmount(showPlusForIncome: true),
+                        amountColor: tx.getAmountColor(useGreenForIncome: true),
+                      );
+                    },
                   ),
-                );
-              }
-
-              return ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: filteredTransactions.length,
-                separatorBuilder: (context, index) => const Gap(19),
-                itemBuilder: (context, index) {
-                  final tx = filteredTransactions[index];
-                  final isExpense = tx.type.toLowerCase() == 'expense';
-
-                  return InfoRecord(
-                    transaction: tx,
-                    bgColor: isExpense
-                        ? AppColors.lightBlueButton
-                        : AppColors.mainGreen.withValues(alpha: 0.6),
-                    title: tx.title,
-                    date: tx.formattedDate,
-                    cat: tx.categoryName.isNotEmpty
-                        ? tx.categoryName
-                        : 'General',
-                    amount: tx.getFormattedAmount(showPlusForIncome: true),
-                    amountColor: tx.getAmountColor(useGreenForIncome: true),
-                  );
-                },
+                  if (cubit.hasMore) ...[
+                    const Gap(20),
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: CircularProgressIndicator(
+                          color: AppColors.mainGreen,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               );
             },
           ),

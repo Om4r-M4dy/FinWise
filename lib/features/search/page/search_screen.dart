@@ -6,7 +6,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/custom_text_form_field.dart';
 import 'package:finwise/core/widgets/info_record.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/row_app_bar.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
@@ -73,9 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   fillColor: AppColors.lightGreen,
                   suffixIcon: Container(
                     margin: const EdgeInsets.all(8),
-                    child: const CustomSvgPicture(
-                      path: AppAssets.arrowDown,
-                    ),
+                    child: const CustomSvgPicture(path: AppAssets.arrowDown),
                   ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -130,7 +128,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: [
                     if (_selectedDate != null)
                       IconButton(
-                        icon: const Icon(Icons.clear, size: 20, color: AppColors.lettersAndIcons),
+                        icon: const Icon(
+                          Icons.clear,
+                          size: 20,
+                          color: AppColors.lettersAndIcons,
+                        ),
                         onPressed: () {
                           setState(() {
                             _selectedDate = null;
@@ -172,7 +174,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (pickedDate != null) {
                     setState(() {
                       _selectedDate = pickedDate;
-                      _dateController.text = DateFormat('dd / MMM / yyyy').format(pickedDate).toUpperCase();
+                      _dateController.text = DateFormat(
+                        'dd / MMM / yyyy',
+                      ).format(pickedDate).toUpperCase();
                       _showSearchResults = false;
                     });
                   }
@@ -248,8 +252,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildSearchResults() {
-    final allTransactions = context.watch<TransactionCubit>().transactionsList;
-    
+    final allTransactions = context
+        .watch<TransactionCubit>()
+        .statsTransactionsList;
+
     final filtered = allTransactions.where((tx) {
       // 1. Filter by Title
       final titleQuery = _titleController.text.trim().toLowerCase();
@@ -277,10 +283,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
       // 4. Filter by Transaction Type (Income / Expense)
       final txType = tx.type.toLowerCase();
-      if (_selectedTransactionType == TransactionType.income && txType != 'income') {
+      if (_selectedTransactionType == TransactionType.income &&
+          txType != 'income') {
         return false;
       }
-      if (_selectedTransactionType == TransactionType.expense && txType != 'expense') {
+      if (_selectedTransactionType == TransactionType.expense &&
+          txType != 'expense') {
         return false;
       }
 

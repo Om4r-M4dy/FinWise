@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finwise/core/constants/firebase_constants.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
-import 'package:finwise/features/auth/models/user_model.dart';
-import 'package:finwise/features/analysis/data/model/goal_model.dart';
+import 'package:finwise/features/profile/data/models/user_model.dart';
+import 'package:finwise/features/saving_goals/data/model/goal_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreProvider {
@@ -59,32 +59,78 @@ class FirestoreProvider {
     }
   }
 
-  static Future<TransactionModel> getTransaction(String transactionId) async {
+  static Future<List<TransactionModel>> getTransactionsForRange(
+    String userId,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     try {
-      final docSnapshot = await transactionsCollection.doc(transactionId).get();
-      return TransactionModel.fromMap(
-        docSnapshot.data() as Map<String, dynamic>,
+      final querySnapshot = await transactionsCollection
+          .where('userId', isEqualTo: userId)
+          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+          .where('date', isLessThanOrEqualTo: Timestamp.fromDate(endDate))
+          .orderBy('date', descending: true)
+          .get(const GetOptions(source: Source.server));
+      List<TransactionModel> list = [];
+      for (var doc in querySnapshot.docs) {
+        list.add(TransactionModel.fromMap(doc.data() as Map<String, dynamic>));
+      }
+      return list;
+    } on FirebaseException catch (e) {
+      log(
+        'FirebaseException in getTransactionsForRange: ${e.code} - ${e.message}',
       );
+      print(
+        '========================================================================',
+      );
+      print('FIRESTORE INDEX ERROR: ${e.message}');
+      if (e.message != null && e.message!.contains('https://')) {
+        print('Create index link: ${e.message}');
+      }
+      print(
+        '========================================================================',
+      );
+      rethrow;
     } catch (e) {
       log(e.toString());
       rethrow;
     }
   }
 
-  static Future<List<TransactionModel>> getTransactions(String userId) async {
+  static Future<QuerySnapshot> getTransactionsPage(
+    String userId, {
+    required int limit,
+    DocumentSnapshot? startAfterDoc,
+    String? filterType,
+  }) async {
     try {
-      final querySnapshot = await transactionsCollection
-          .where('userId', isEqualTo: userId)
-          .orderBy('date', descending: true)
-          .get();
-      List<TransactionModel> transactionsList = [];
-      for (var doc in querySnapshot.docs) {
-        transactionsList.add(
-          TransactionModel.fromMap(doc.data() as Map<String, dynamic>),
-        );
+      Query query = transactionsCollection.where('userId', isEqualTo: userId);
+      if (filterType != null) {
+        String dbFilterType = filterType;
+        if (filterType.toLowerCase() == 'income') dbFilterType = 'Income';
+        if (filterType.toLowerCase() == 'expense') dbFilterType = 'Expense';
+        query = query.where('type', isEqualTo: dbFilterType);
       }
-      log('transactions length: ${transactionsList.length}');
-      return transactionsList;
+      query = query.orderBy('date', descending: true);
+      if (startAfterDoc != null) {
+        query = query.startAfterDocument(startAfterDoc);
+      }
+      return await query
+          .limit(limit)
+          .get(const GetOptions(source: Source.server));
+    } on FirebaseException catch (e) {
+      log('FirebaseException in getTransactionsPage: ${e.code} - ${e.message}');
+      print(
+        '========================================================================',
+      );
+      print('FIRESTORE INDEX ERROR: ${e.message}');
+      if (e.message != null && e.message!.contains('https://')) {
+        print('Create index link: ${e.message}');
+      }
+      print(
+        '========================================================================',
+      );
+      rethrow;
     } catch (e) {
       log(e.toString());
       rethrow;
