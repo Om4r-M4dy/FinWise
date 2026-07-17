@@ -26,16 +26,20 @@ class _VerifyScreenState extends State<VerifyScreen> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null && !user.emailVerified) {
         await user.sendEmailVerification();
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Verification email sent')),
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Error: $e')));
     } finally {
-      setState(() => _isResending = false);
+      if (mounted) {
+        setState(() => _isResending = false);
+      }
     }
   }
 
@@ -48,11 +52,15 @@ class _VerifyScreenState extends State<VerifyScreen> {
         replaceWith(context, Routes.bottomNavBar);
       }
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Email not verified yet')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Email not verified yet')));
+      }
     }
-    setState(() => _checking = false);
+    if (mounted) {
+      setState(() => _checking = false);
+    }
   }
 
   @override

@@ -1,22 +1,22 @@
 import 'package:finwise/features/Calendar/page/calendar_screen.dart';
 import 'package:finwise/features/Home/pages/home_screen.dart';
 import 'package:finwise/features/Home/pages/nav_bar.dart';
-import 'package:finwise/features/Security/pages/changePin_screen.dart';
-import 'package:finwise/features/Security/pages/fingerPrint_screen.dart';
+import 'package:finwise/features/Security/pages/change_pin_screen.dart';
+import 'package:finwise/features/Security/pages/fingerprint_screen.dart';
 import 'package:finwise/features/Security/pages/fingerprint_details_screen.dart';
 import 'package:finwise/features/Security/pages/add_fingerprint_screen.dart';
-import 'package:finwise/features/Security/pages/loadingChangeFinger_screen.dart';
+import 'package:finwise/features/Security/pages/loading_change_finger_screen.dart';
 import 'package:finwise/features/Security/pages/loading_deleted_fingerprint_screen.dart';
-import 'package:finwise/features/Security/pages/loadingChangePin_screen.dart';
+import 'package:finwise/features/Security/pages/loading_change_pin_screen.dart';
 import 'package:finwise/features/Security/pages/security_screen.dart';
 import 'package:finwise/features/Security/pages/terms_and_conditions.dart';
 import 'package:finwise/features/Transaction/presentation/pages/transaction_screen.dart';
 import 'package:finwise/features/analysis/pages/analysis_screen.dart';
-import 'package:finwise/features/auth/persentation/page/confNewPassword_screen.dart';
+import 'package:finwise/features/auth/persentation/page/conf_new_password_screen.dart';
 import 'package:finwise/features/auth/persentation/page/forgot_password.dart';
 import 'package:finwise/features/auth/persentation/page/login_screen.dart';
-import 'package:finwise/features/auth/persentation/page/newPassword_screen.dart';
-import 'package:finwise/features/auth/persentation/page/securityPin_screen.dart';
+import 'package:finwise/features/auth/persentation/page/new_password_screen.dart';
+import 'package:finwise/features/auth/persentation/page/security_pin_screen.dart';
 import 'package:finwise/features/auth/persentation/page/security_fingerprint_screen.dart';
 import 'package:finwise/features/auth/persentation/page/signup_screen.dart';
 import 'package:finwise/features/auth/persentation/page/verify_screen.dart';
@@ -27,6 +27,7 @@ import 'package:finwise/features/profile/pages/edit_profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/pages/add_transaction.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
@@ -74,11 +75,18 @@ class AppRouter {
         builder: (context, state) => const OnBoardingScreen(),
       ),
 
-      // Shell route for all authenticated/authenticated-related screens requiring TransactionCubit
+      // Shell route for all authenticated/authenticated-related screens requiring TransactionCubit and GoalCubit
       ShellRoute(
         builder: (context, state, child) {
-          return BlocProvider<TransactionCubit>(
-            create: (context) => TransactionCubit(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<TransactionCubit>(
+                create: (context) => TransactionCubit(),
+              ),
+              BlocProvider<GoalCubit>(
+                create: (context) => GoalCubit(),
+              ),
+            ],
             child: child,
           );
         },
@@ -104,7 +112,11 @@ class AppRouter {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>;
               final categoryName = extra['categoryName'] as String;
-              return TransactionsByCategoryScreen(categoryName: categoryName);
+              final goalId = extra['goalId'] as String?;
+              return TransactionsByCategoryScreen(
+                categoryName: categoryName,
+                goalId: goalId,
+              );
             },
           ),
           GoRoute(

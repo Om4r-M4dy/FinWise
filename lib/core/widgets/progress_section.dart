@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/core/functions/format_amount.dart';
 import 'package:gap/gap.dart';
 
 class ProgressSection extends StatelessWidget {
@@ -17,17 +18,23 @@ class ProgressSection extends StatelessWidget {
     required this.totalExpense,
     required this.totalBalance,
     this.extraInfo,
+    this.rightTitle,
+    this.isRightExpense = true,
+    this.customMessage,
   });
   final double percentage;
   final double totalAmount;
   final double totalExpense;
   final double totalBalance;
   final Widget? extraInfo;
+  final String? rightTitle;
+  final bool isRightExpense;
+  final String? customMessage;
 
   @override
   Widget build(BuildContext context) {
     final txList = context.watch<TransactionCubit>().transactionsList;
-    final message = _getEncouragingMessage(txList, percentage);
+    final message = customMessage ?? _getEncouragingMessage(txList, percentage);
 
     return Column(
       children: [
@@ -35,7 +42,7 @@ class ProgressSection extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              TotalMoney(total: totalBalance),
+              Expanded(child: TotalMoney(total: totalBalance)),
               VerticalDivider(
                 color: AppColors.background,
                 thickness: 1,
@@ -43,7 +50,13 @@ class ProgressSection extends StatelessWidget {
                 indent: 8,
                 endIndent: 8,
               ),
-              TotalMoney(total: totalExpense, isExpense: true),
+              Expanded(
+                child: TotalMoney(
+                  total: totalExpense,
+                  isExpense: isRightExpense,
+                  title: rightTitle,
+                ),
+              ),
             ],
           ),
         ),
@@ -66,7 +79,6 @@ class ProgressSection extends StatelessWidget {
       ],
     );
   }
-  // TODO: Add it to a new transaction helper file to handle filtering monthly and yearly transactions and categories
 
   String _getEncouragingMessage(
     List<TransactionModel> txList,
@@ -74,10 +86,13 @@ class ProgressSection extends StatelessWidget {
   ) {
     final now = DateTime.now();
     final expenses = txList
-        .where((tx) =>
-            tx.type.toLowerCase() == 'expense' &&
-            tx.date.year == now.year &&
-            tx.date.month == now.month)
+        .where(
+          (tx) =>
+              tx.type.toLowerCase() == 'expense' &&
+              tx.categoryId != '2' &&
+              tx.date.year == now.year &&
+              tx.date.month == now.month,
+        )
         .toList();
     if (expenses.isEmpty) {
       return "Great job! You haven't recorded any expenses this month.";
@@ -145,15 +160,23 @@ class ProgressSection extends StatelessWidget {
 }
 
 class TotalMoney extends StatelessWidget {
-  const TotalMoney({super.key, required this.total, this.isExpense = false});
+  const TotalMoney({
+    super.key,
+    required this.total,
+    this.isExpense = false,
+    this.title,
+  });
   final bool isExpense;
   final double total;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomSvgPicture(
               path: isExpense ? AppAssets.expense : AppAssets.income,
@@ -161,17 +184,20 @@ class TotalMoney extends StatelessWidget {
             ),
             const Gap(7),
             Text(
-              isExpense ? "Total Expanse" : "Total Balance",
+              title ?? (isExpense ? "Total Expanse" : "Total Balance"),
               style: TextStyles.bodySmall,
             ),
           ],
         ),
-        Text(
-          isExpense
-              ? "- \$${total.toStringAsFixed(2)}"
-              : "\$${total.toStringAsFixed(2)}",
-          style: TextStyles.headlineLarge.copyWith(
-            color: isExpense ? AppColors.oceanBlueButton : AppColors.background,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            formatAmount(total, isExpense: isExpense),
+            style: TextStyles.headlineLarge.copyWith(
+              color: isExpense
+                  ? AppColors.oceanBlueButton
+                  : AppColors.background,
+            ),
           ),
         ),
       ],

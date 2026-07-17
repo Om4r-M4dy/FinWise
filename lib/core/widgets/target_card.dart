@@ -12,12 +12,14 @@ class TargetCard extends StatelessWidget {
     this.center,
     required this.radius,
     this.titelStyle,
+    this.backgroundColor,
   });
   final String title;
   final double percent;
   final double radius;
   final Widget? center;
   final TextStyle? titelStyle;
+  final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +32,7 @@ class TargetCard extends StatelessWidget {
             blurRadius: 4,
           ),
         ],
-        color: center != null ? null : AppColors.lightBlueButton,
+        color: backgroundColor ?? (center != null ? null : AppColors.lightBlueButton),
         borderRadius: BorderRadius.circular(40),
       ),
       child: Column(

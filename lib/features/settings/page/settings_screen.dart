@@ -129,7 +129,7 @@ class SettingSwitch extends StatelessWidget {
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: AppColors.mainGreen,
+        activeThumbColor: AppColors.mainGreen,
       ),
     );
   }

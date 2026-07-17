@@ -1,7 +1,7 @@
 final List<Map<String, String>> categories = [
   {'key': '0', 'label': 'Food'},
   {'key': '1', 'label': 'Medicine'},
-  {'key': '2', 'label': 'Travel'},
+  {'key': '2', 'label': 'Saving & Investments'},
   {'key': '3', 'label': 'Transport'},
   {'key': '4', 'label': 'Gifts'},
   {'key': '5', 'label': 'Rent'},

@@ -33,27 +33,27 @@ class PlotsSections extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 230,
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(24),
         color: AppColors.lightGreen,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 29, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Column(
           children: [
             _PlotHeader(plotTitle: plotTitle),
-            Gap(10),
+            const Gap(6),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   width:
-                      chartData.length * 48.0 <
-                          MediaQuery.of(context).size.width
-                      ? MediaQuery.of(context).size.width - 60
-                      : chartData.length * 48.0,
+                      chartData.length * 38.0 <
+                          MediaQuery.of(context).size.width - 114
+                      ? MediaQuery.of(context).size.width - 114
+                      : chartData.length * 38.0,
                   child: BarChart(
                     BarChartData(
                       maxY: maxY,
@@ -69,14 +69,14 @@ class PlotsSections extends StatelessWidget {
                         leftTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
-                            reservedSize: 35,
+                            reservedSize: 38,
                             getTitlesWidget: (value, meta) {
-                              final text = maxY >= 1000
+                              final isUnder1000 = maxY < 1000;
+                              final text = !isUnder1000
                                   ? '${(value / 1000).toInt()}k'
                                   : '\$${value.toInt()}';
                               return SideTitleWidget(
                                 meta: meta,
-
                                 fitInside: SideTitleFitInsideData.fromTitleMeta(
                                   meta,
                                 ),
@@ -84,6 +84,7 @@ class PlotsSections extends StatelessWidget {
                                   text,
                                   style: TextStyles.bodySmall.copyWith(
                                     color: AppColors.lightBlueButton,
+                                    fontSize: isUnder1000 ? 9.5 : 12,
                                   ),
                                 ),
                               );

@@ -4,6 +4,7 @@ import 'package:finwise/core/widgets/icon_with_text_button.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -196,6 +197,7 @@ class TransactionDetailsSheet extends StatelessWidget {
   Widget _buildRow(String label, String value, {Color? valueColor}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
@@ -204,11 +206,15 @@ class TransactionDetailsSheet extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        Text(
-          value,
-          style: TextStyles.bodyMedium.copyWith(
-            fontWeight: FontWeight.bold,
-            color: valueColor ?? AppColors.lettersAndIcons,
+        const Gap(16),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: TextStyles.bodyMedium.copyWith(
+              fontWeight: FontWeight.bold,
+              color: valueColor ?? AppColors.lettersAndIcons,
+            ),
           ),
         ),
       ],
@@ -254,10 +260,12 @@ class TransactionDetailsSheet extends StatelessWidget {
 
                 final transactionCubit = context.read<TransactionCubit>();
                 final userCubit = context.read<UserCubit>();
+                final goalCubit = context.read<GoalCubit>();
 
                 await transactionCubit.deleteTransactionWithFinancials(
                   transaction: transaction,
                   userCubit: userCubit,
+                  goalCubit: goalCubit,
                 );
               },
               style: ElevatedButton.styleFrom(

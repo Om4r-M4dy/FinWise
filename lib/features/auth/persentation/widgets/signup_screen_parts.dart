@@ -57,7 +57,9 @@ class SocialButtonsRow extends StatelessWidget {
     if (user != null && context.mounted) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_name', user.user?.displayName ?? '');
-      replaceWith(context, Routes.bottomNavBar);
+      if (context.mounted) {
+        replaceWith(context, Routes.bottomNavBar);
+      }
     }
   }
 

@@ -136,7 +136,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.lettersAndIcons.withOpacity(0.3),
+                    color: AppColors.lettersAndIcons.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -151,7 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withOpacity(0.1),
+                      color: AppColors.mainGreen.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -166,7 +166,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   subtitle: Text(
                     'Take a new photo',
                     style: TextStyle(
-                      color: AppColors.lettersAndIcons.withOpacity(0.6),
+                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -180,7 +180,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withOpacity(0.1),
+                      color: AppColors.mainGreen.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -195,7 +195,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   subtitle: Text(
                     'Choose from gallery',
                     style: TextStyle(
-                      color: AppColors.lettersAndIcons.withOpacity(0.6),
+                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -428,7 +428,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           border: Border.all(color: Colors.white, width: 2),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
+                              color: Colors.black.withValues(alpha: 0.15),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),

@@ -34,7 +34,7 @@ class LoadingOverlay extends StatelessWidget {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
         child: Container(
-          color: Colors.black.withOpacity(0.45),
+          color: Colors.black.withValues(alpha: 0.45),
           child: Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 28),
@@ -43,7 +43,7 @@ class LoadingOverlay extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.mainGreen.withOpacity(0.25),
+                    color: AppColors.mainGreen.withValues(alpha: 0.25),
                     blurRadius: 24,
                     spreadRadius: 2,
                   ),
@@ -61,7 +61,9 @@ class LoadingOverlay extends StatelessWidget {
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         AppColors.mainGreen,
                       ),
-                      backgroundColor: AppColors.mainGreen.withOpacity(0.15),
+                      backgroundColor: AppColors.mainGreen.withValues(
+                        alpha: 0.15,
+                      ),
                     ),
                   ),
                   if (message != null) ...[

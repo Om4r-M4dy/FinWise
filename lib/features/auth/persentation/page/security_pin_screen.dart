@@ -82,7 +82,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                             ),
                             onSubmit: (code) {
                               otpCode = code;
-                              print(code);
+                              debugPrint(code);
                             },
                           ),
                         ),
