@@ -15,7 +15,10 @@ abstract class AppThemes {
     ),
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.mainGreen,
+      surface: AppColors.background,
       onSurface: AppColors.lettersAndIcons,
+      primaryContainer: AppColors.lightGreen,
+      onPrimaryContainer: AppColors.lettersAndIcons,
     ),
     inputDecorationTheme: InputDecorationTheme(
       fillColor: AppColors.lightGreen,
@@ -46,7 +49,10 @@ abstract class AppThemes {
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.mainGreen,
       brightness: Brightness.dark,
+      surface: AppColors.dark05,
       onSurface: Colors.white,
+      primaryContainer: AppColors.darkGreen,
+      onPrimaryContainer: Colors.white,
     ),
     inputDecorationTheme: InputDecorationTheme(
       fillColor: AppColors.darkGreen,

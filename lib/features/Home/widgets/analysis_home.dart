@@ -12,18 +12,27 @@ class AnalysisHome extends StatelessWidget {
     required this.money,
     this.iconW,
     this.moneyColor,
+    this.textColor,
+    this.iconColor,
   });
   final String icon;
   final String title;
   final String money;
   final double? iconW;
   final Color? moneyColor;
+  final Color? textColor;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
+    final defaultColor = textColor ?? AppColors.lettersAndIcons;
     return Row(
       children: [
-        CustomSvgPicture(path: icon, width: iconW, color: AppColors.dark05),
+        CustomSvgPicture(
+          path: icon,
+          width: iconW,
+          color: iconColor ?? AppColors.dark05,
+        ),
         const Gap(12),
         Expanded(
           child: Column(
@@ -32,7 +41,7 @@ class AnalysisHome extends StatelessWidget {
               Text(
                 title,
                 style: TextStyles.bodySmall.copyWith(
-                  color: AppColors.lettersAndIcons,
+                  color: defaultColor,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -44,7 +53,7 @@ class AnalysisHome extends StatelessWidget {
                   style: TextStyles.bodyMedium.copyWith(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: moneyColor ?? AppColors.lettersAndIcons,
+                    color: moneyColor ?? defaultColor,
                   ),
                 ),
               ),

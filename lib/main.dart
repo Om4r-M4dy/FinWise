@@ -6,6 +6,7 @@ import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:finwise/core/styles/themes.dart';
 import 'package:finwise/core/styles/theme_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:finwise/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -41,21 +42,29 @@ class MainApp extends StatelessWidget {
         BlocProvider<NotificationCubit>(create: (_) => NotificationCubit()),
         BlocProvider<ThemeCubit>(create: (_) => ThemeCubit()),
       ],
-      child: BlocBuilder<ThemeCubit, bool>(
-        builder: (context, isDark) {
-          return MaterialApp.router(
-            routerConfig: AppRouter.routes,
-            debugShowCheckedModeBanner: false,
-            theme: isDark ? AppThemes.darkTheme : AppThemes.lightTheme,
-            builder: (context, child) {
-              return SafeArea(
-                top: false,
-                bottom: Platform.isAndroid,
-                child: child ?? const SizedBox.shrink(),
-              );
-            },
-          );
+      child: BlocListener<UserCubit, UserState>(
+        listener: (context, state) {
+          if (state is UserLoaded) {
+            final isDark = state.user.settings?['darkTheme'] ?? false;
+            context.read<ThemeCubit>().updateTheme(isDark);
+          }
         },
+        child: BlocBuilder<ThemeCubit, bool>(
+          builder: (context, isDark) {
+            return MaterialApp.router(
+              routerConfig: AppRouter.routes,
+              debugShowCheckedModeBanner: false,
+              theme: isDark ? AppThemes.darkTheme : AppThemes.lightTheme,
+              builder: (context, child) {
+                return SafeArea(
+                  top: false,
+                  bottom: Platform.isAndroid,
+                  child: child ?? const SizedBox.shrink(),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

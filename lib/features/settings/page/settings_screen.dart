@@ -1,5 +1,6 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/styles/theme_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
@@ -36,6 +37,10 @@ class SettingsScreen extends StatelessWidget {
                     value: isDark,
                     onChanged: (value) {
                       context.read<ThemeCubit>().toggleTheme();
+                      final userCubit = context.read<UserCubit>();
+                      if (userCubit.user != null) {
+                        userCubit.updateSettings(darkTheme: value);
+                      }
                     },
                   );
                 },

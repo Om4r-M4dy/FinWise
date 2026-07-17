@@ -1,4 +1,3 @@
-import 'package:finwise/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -8,7 +7,7 @@ class MyBodyView extends StatelessWidget {
     this.topSection,
     required this.bottomSection,
     this.noPadding = false,
-    this.clipBehavior = Clip.none,
+    this.clipBehavior = Clip.antiAlias,
   });
 
   final Widget? topSection;
@@ -30,9 +29,9 @@ class MyBodyView extends StatelessWidget {
           child: Container(
             width: double.infinity,
             clipBehavior: clipBehavior,
-            decoration: const BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(70.0)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(70.0)),
             ),
             child: noPadding
                 ? bottomSection

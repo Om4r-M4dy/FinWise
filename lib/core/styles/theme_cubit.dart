@@ -9,4 +9,11 @@ class ThemeCubit extends Cubit<bool> {
     UserPrefs.setIsDarkMode(newValue);
     emit(newValue);
   }
+
+  void updateTheme(bool isDark) {
+    if (state != isDark) {
+      UserPrefs.setIsDarkMode(isDark);
+      emit(isDark);
+    }
+  }
 }

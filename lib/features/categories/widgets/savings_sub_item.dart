@@ -41,7 +41,7 @@ class SavingsSubItem extends StatelessWidget {
           Text(
             label,
             style: TextStyles.bodyMedium.copyWith(
-              color: AppColors.lettersAndIcons,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ],

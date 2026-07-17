@@ -41,15 +41,16 @@ class TransactionDetailsSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final amountColor =
         transaction.getAmountColor(useGreenForIncome: true) ??
-        AppColors.lettersAndIcons;
+        theme.colorScheme.onSurface;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(32),
           topRight: Radius.circular(32),
         ),
@@ -73,7 +74,7 @@ class TransactionDetailsSheet extends StatelessWidget {
             'Transaction Details',
             style: TextStyles.bodyLarge.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.lettersAndIcons,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           const Gap(20),
@@ -81,7 +82,7 @@ class TransactionDetailsSheet extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
-              color: AppColors.background,
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: AppColors.mainGreen.withValues(alpha: 0.15),
@@ -89,7 +90,7 @@ class TransactionDetailsSheet extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.lettersAndIcons.withValues(alpha: 0.04),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -98,50 +99,52 @@ class TransactionDetailsSheet extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildRow('Title', transaction.title),
-                const Divider(
-                  color: AppColors.background,
+                _buildRow(context, 'Title', transaction.title),
+                Divider(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.12),
                   height: 24,
                   thickness: 1,
                 ),
                 _buildRow(
+                  context,
                   'Category',
                   transaction.categoryName.isNotEmpty
                       ? transaction.categoryName
                       : 'General',
                 ),
-                const Divider(
-                  color: AppColors.background,
+                Divider(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.12),
                   height: 24,
                   thickness: 1,
                 ),
                 _buildRow(
+                  context,
                   'Amount',
                   transaction.getFormattedAmount(showPlusForIncome: true),
                   valueColor: amountColor,
                 ),
-                const Divider(
-                  color: AppColors.background,
+                Divider(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.12),
                   height: 24,
                   thickness: 1,
                 ),
-                _buildRow('Type', transaction.type.toUpperCase()),
-                const Divider(
-                  color: AppColors.background,
+                _buildRow(context, 'Type', transaction.type.toUpperCase()),
+                Divider(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.12),
                   height: 24,
                   thickness: 1,
                 ),
-                _buildRow('Date & Time', transaction.formattedDate),
+                _buildRow(context, 'Date & Time', transaction.formattedDate),
                 if (transaction.note.trim().isNotEmpty) ...[
-                  const Divider(
-                    color: AppColors.background,
+                  Divider(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.12),
                     height: 24,
                     thickness: 1,
                   ),
                   Text(
                     'Note',
                     style: TextStyles.bodyMedium.copyWith(
-                      color: AppColors.lettersAndIcons.withValues(alpha: 0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -149,7 +152,7 @@ class TransactionDetailsSheet extends StatelessWidget {
                   Text(
                     transaction.note,
                     style: TextStyles.bodyMedium.copyWith(
-                      color: AppColors.lettersAndIcons,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -194,7 +197,8 @@ class TransactionDetailsSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(String label, String value, {Color? valueColor}) {
+  Widget _buildRow(BuildContext context, String label, String value, {Color? valueColor}) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,7 +206,7 @@ class TransactionDetailsSheet extends StatelessWidget {
         Text(
           label,
           style: TextStyles.bodyMedium.copyWith(
-            color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -213,7 +217,7 @@ class TransactionDetailsSheet extends StatelessWidget {
             textAlign: TextAlign.end,
             style: TextStyles.bodyMedium.copyWith(
               fontWeight: FontWeight.bold,
-              color: valueColor ?? AppColors.lettersAndIcons,
+              color: valueColor ?? theme.colorScheme.onSurface,
             ),
           ),
         ),
@@ -222,11 +226,12 @@ class TransactionDetailsSheet extends StatelessWidget {
   }
 
   void _confirmDelete(BuildContext context) {
+    final theme = Theme.of(context);
     showDialog(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          backgroundColor: AppColors.background,
+          backgroundColor: theme.colorScheme.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -234,13 +239,13 @@ class TransactionDetailsSheet extends StatelessWidget {
             'Delete Transaction',
             style: TextStyles.bodyLarge.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.lettersAndIcons,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           content: Text(
             'Are you sure you want to delete this transaction? This action cannot be undone.',
             style: TextStyles.bodyMedium.copyWith(
-              color: AppColors.lettersAndIcons.withValues(alpha: 0.8),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
             ),
           ),
           actions: [
@@ -249,7 +254,7 @@ class TransactionDetailsSheet extends StatelessWidget {
               child: Text(
                 'Cancel',
                 style: TextStyles.bodyMedium.copyWith(
-                  color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ),

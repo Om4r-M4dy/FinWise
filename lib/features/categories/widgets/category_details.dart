@@ -37,7 +37,9 @@ class CategoryDetails extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(
         title,
-        style: TextStyles.bodyMedium.copyWith(color: AppColors.lettersAndIcons),
+        style: TextStyles.bodyMedium.copyWith(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
       ),
       subtitle: Text(
         subtitle,

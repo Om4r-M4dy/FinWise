@@ -115,7 +115,7 @@ class Savings extends StatelessWidget {
                                         .toList();
                                     pushTo(
                                       context,
-                                      Routes.foodScreen,
+                                      Routes.addTransactionByCategory,
                                       extra: {
                                         'categoryName': goal.title,
                                         'transactions': filtered,

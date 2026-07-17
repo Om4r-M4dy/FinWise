@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:go_router/go_router.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/extentions/context_extensions.dart';
@@ -13,6 +14,7 @@ import 'package:finwise/features/profile/widget/profile_option.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:finwise/core/styles/theme_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:gap/gap.dart';
@@ -53,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return FileImage(File(imagePath));
       } else if (imagePath.startsWith('http') ||
           imagePath.startsWith('https')) {
-        return NetworkImage(imagePath);
+        return CachedNetworkImageProvider(imagePath);
       }
     }
     return const AssetImage(AppAssets.defaultProfile);
@@ -148,23 +150,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ? user.profilePicture
         : _profileImagePath;
     final displayEmail = user?.email ?? '';
+    final theme = Theme.of(context);
 
     return MyBodyView(
+      clipBehavior: Clip.none,
       topSection: SafeArea(
         bottom: false,
         child: SizedBox(
           width: double.infinity,
           height: context.screenHeight * 0.13,
           child: AppBar(
-            backgroundColor: AppColors.mainGreen,
-            leading: SizedBox.shrink(),
-            title: Text("Profile", style: TextStyles.bodyLarge),
+            backgroundColor: theme.appBarTheme.backgroundColor,
+            leading: const SizedBox.shrink(),
+            title: Text(
+              "Profile",
+              style: TextStyles.bodyLarge.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
             actions: [
+              IconButton(
+                onPressed: () {
+                  final themeCubit = context.read<ThemeCubit>();
+                  final userCubit = context.read<UserCubit>();
+                  themeCubit.toggleTheme();
+                  if (userCubit.user != null) {
+                    userCubit.updateSettings(darkTheme: themeCubit.state);
+                  }
+                },
+                icon: Container(
+                  width: 30,
+                  height: 30,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    context.watch<ThemeCubit>().state
+                        ? Icons.light_mode_rounded
+                        : Icons.dark_mode_rounded,
+                    size: 18,
+                    color: theme.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ),
               IconButton(
                 onPressed: () {
                   pushTo(context, Routes.notificationScreen);
                 },
-                icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+                icon: Container(
+                  width: 30,
+                  height: 30,
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer,
+                    shape: BoxShape.circle,
+                  ),
+                  child: CustomSvgPicture(
+                    path: AppAssets.notification,
+                    color: theme.colorScheme.onPrimaryContainer,
+                  ),
+                ),
               ),
             ],
           ),
@@ -176,20 +223,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         alignment: Alignment.topCenter,
         children: [
           Positioned.fill(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                left: 37.0,
-                right: 37.0,
-                top: profileImageRadius + 20.0,
-                bottom: 20.0,
-              ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(70.0)),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(
+                  left: 37.0,
+                  right: 37.0,
+                  top: profileImageRadius + 12.0,
+                  bottom: 110.0,
+                ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
                   Text(displayName, style: TextStyles.bodyLarge),
                   Text(displayEmail, style: TextStyles.bodySmall),
-                  Gap(60),
+                  Gap(25),
                   ProfileOption(
                     path: AppAssets.profile,
                     title: 'Edit Profile',
@@ -258,6 +307,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
+        ),
           Positioned(
             top: -profileImageRadius - 15,
             child: CircleAvatar(

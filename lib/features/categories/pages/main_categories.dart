@@ -28,7 +28,9 @@ class MainCategories extends StatelessWidget {
         final budget = user?.monthlyBudgetLimit ?? 0.0;
         final expense = user?.totalExpense ?? 0.0;
         final balance = user?.totalBalance ?? 0.0;
-        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final monthlyExpense = context
+            .watch<TransactionCubit>()
+            .monthlyExpenses;
         final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return MyBodyView(
@@ -41,7 +43,12 @@ class MainCategories extends StatelessWidget {
             totalBalance: balance,
           ),
           bottomSection: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 20),
+            padding: const EdgeInsets.only(
+              left: 37.0,
+              right: 37.0,
+              top: 20.0,
+              bottom: 110.0,
+            ),
             child: Column(
               children: [
                 Gap(13),
@@ -56,7 +63,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Food',
                             'transactions': filtered,
@@ -75,7 +82,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Transport',
                             'transactions': filtered,
@@ -94,7 +101,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Medicine',
                             'transactions': filtered,
@@ -117,7 +124,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Groceries',
                             'transactions': filtered,
@@ -137,7 +144,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Rent',
                             'transactions': filtered,
@@ -156,7 +163,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Gifts',
                             'transactions': filtered,
@@ -189,7 +196,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Leisure',
                             'transactions': filtered,
@@ -208,7 +215,7 @@ class MainCategories extends StatelessWidget {
                             .toList();
                         pushTo(
                           context,
-                          Routes.foodScreen,
+                          Routes.addTransactionByCategory,
                           extra: {
                             'categoryName': 'Other',
                             'transactions': filtered,

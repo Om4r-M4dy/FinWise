@@ -12,15 +12,23 @@ class PercentageBar extends StatelessWidget {
   final double percentage;
   final double totalAmount;
   final Color? bgColor;
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final resolvedBgColor = bgColor ?? (isDark ? AppColors.darkGreen : AppColors.background);
+    final progressColor = isDark ? AppColors.mainGreen : AppColors.dark05;
+    final textNonFilledColor = isDark ? Colors.white : AppColors.dark05;
+    final textFilledColor = isDark ? AppColors.lettersAndIcons : AppColors.background;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
         return Container(
           height: 28,
           decoration: BoxDecoration(
-            color: bgColor ?? AppColors.background,
+            color: resolvedBgColor,
             borderRadius: BorderRadius.circular(13.5),
           ),
           child: TweenAnimationBuilder(
@@ -60,11 +68,11 @@ class PercentageBar extends StatelessWidget {
               return Stack(
                 alignment: Alignment.centerLeft,
                 children: [
-                  buildLabels(AppColors.dark05),
+                  buildLabels(textNonFilledColor),
                   Container(
                     width: currentProgressWidth,
                     decoration: BoxDecoration(
-                      color: AppColors.dark05,
+                      color: progressColor,
                       borderRadius: BorderRadius.circular(13.5),
                     ),
                   ),
@@ -74,7 +82,7 @@ class PercentageBar extends StatelessWidget {
                       widthFactor: value,
                       child: SizedBox(
                         width: maxWidth,
-                        child: buildLabels(AppColors.background),
+                        child: buildLabels(textFilledColor),
                       ),
                     ),
                   ),

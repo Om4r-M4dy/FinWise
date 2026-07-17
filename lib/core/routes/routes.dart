@@ -9,7 +9,7 @@ class Routes {
   static const String helpCenter = '/help_center';
   static const String customerService = '/customer_service';
   static const String chatScreen = '/chat_screen';
-  static const String foodScreen = '/foodScreen';
+  static const String addTransactionByCategory = '/addTransactionByCategory';
   static const String addTransaction = '/add_transaction';
   static const String transportScreen = '/transport_screen';
   static const String groceriesScreen = '/groceries_screen';

@@ -44,7 +44,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
         final income = userState.income;
         final expense = userState.expense;
         final budget = userState.budget;
-        final monthlyExpense = context.watch<TransactionCubit>().monthlyExpenses;
+        final monthlyExpense = context
+            .watch<TransactionCubit>()
+            .monthlyExpenses;
         final percentage = calculateBudgetPercentage(monthlyExpense, budget);
 
         return Scaffold(
@@ -53,81 +55,83 @@ class _TransactionScreenState extends State<TransactionScreen> {
             clipBehavior: Clip.hardEdge,
             noPadding: true,
             topSection: Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  flipController.toggleCard();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.lightGreen,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  height: 75,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('Total Balance', style: TextStyles.bodyMedium),
-                      Text(
-                        '\$${balance.toStringAsFixed(2)}',
-                        style: TextStyles.headlineLarge.copyWith(
-                          fontWeight: FontWeight.w700,
+              children: [
+                InkWell(
+                  onTap: () {
+                    flipController.toggleCard();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.darkGreen.withValues(alpha: 0.7)
+                          : AppColors.lightGreen,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    height: 75,
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Total Balance', style: TextStyles.bodyMedium),
+                        Text(
+                          '\$${balance.toStringAsFixed(2)}',
+                          style: TextStyles.headlineLarge.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+                Gap(17),
+                FlipCard(
+                  controller: flipController,
+                  flipOnTouch: false,
+                  front: Row(
+                    children: [
+                      TransactionBox(
+                        titel: 'Incom',
+                        balance: income.toStringAsFixed(2),
+                        pathIcon: AppAssets.income,
+                        iconColor: AppColors.mainGreen,
+                        isSelected: isIncomeSelected,
+                        onTap: () {
+                          setState(() {
+                            isIncomeSelected = !isIncomeSelected;
+                          });
+                        },
+                      ),
+                      Gap(15),
+                      TransactionBox(
+                        titel: 'Expense',
+                        balance: expense.toStringAsFixed(2),
+                        pathIcon: AppAssets.expense,
+                        iconColor: AppColors.oceanBlueButton,
+                        balanceColor: AppColors.oceanBlueButton,
+                        isSelected: isExpenseSelected,
+                        onTap: () {
+                          setState(() {
+                            isExpenseSelected = !isExpenseSelected;
+                          });
+                        },
                       ),
                     ],
                   ),
+                  back: ProgressSection(
+                    percentage: percentage,
+                    totalAmount: budget,
+                    totalExpense: expense,
+                    totalBalance: balance,
+                  ),
                 ),
-              ),
-              Gap(17),
-              FlipCard(
-                controller: flipController,
-                flipOnTouch: false,
-                front: Row(
-                  children: [
-                    TransactionBox(
-                      titel: 'Incom',
-                      balance: income.toStringAsFixed(2),
-                      pathIcon: AppAssets.income,
-                      iconColor: AppColors.mainGreen,
-                      isSelected: isIncomeSelected,
-                      onTap: () {
-                        setState(() {
-                          isIncomeSelected = !isIncomeSelected;
-                        });
-                      },
-                    ),
-                    Gap(15),
-                    TransactionBox(
-                      titel: 'Expense',
-                      balance: expense.toStringAsFixed(2),
-                      pathIcon: AppAssets.expense,
-                      iconColor: AppColors.oceanBlueButton,
-                      balanceColor: AppColors.oceanBlueButton,
-                      isSelected: isExpenseSelected,
-                      onTap: () {
-                        setState(() {
-                          isExpenseSelected = !isExpenseSelected;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                back: ProgressSection(
-                  percentage: percentage,
-                  totalAmount: budget,
-                  totalExpense: expense,
-                  totalBalance: balance,
-                ),
-              ),
-            ],
+              ],
+            ),
+            bottomSection: TransactionsListSection(
+              isIncomeSelected: isIncomeSelected,
+              isExpenseSelected: isExpenseSelected,
+            ),
           ),
-          bottomSection: TransactionsListSection(
-            isIncomeSelected: isIncomeSelected,
-            isExpenseSelected: isExpenseSelected,
-          ),
-        )
         );
       },
     );

@@ -102,14 +102,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Scaffold(
           backgroundColor: Colors.transparent,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: AppColors.mainGreen,
-            shape: const CircleBorder(),
-            onPressed: () => AIScannerHelper.showAIScannerSheet(context),
-            child: const Icon(
-              Icons.auto_awesome_rounded,
-              color: Colors.white,
-              size: 28,
+          floatingActionButtonLocation: const _OffsetFabLocation(),
+          floatingActionButton: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF8E2DE2), // Deep Violet
+                  Color(0xFF4A00E0), // Vibrant Blue
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF8E2DE2).withValues(alpha: 0.4),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: FloatingActionButton(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              focusElevation: 0,
+              hoverElevation: 0,
+              highlightElevation: 0,
+              shape: const CircleBorder(),
+              onPressed: () => AIScannerHelper.showAIScannerSheet(context),
+              child: const Icon(
+                Icons.auto_awesome_rounded,
+                color: Colors.white,
+                size: 28,
+              ),
             ),
           ),
           body: Column(
@@ -124,10 +149,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Hi, $userName ', style: TextStyles.bodyLarge),
+                      Text(
+                        'Hi, $userName ',
+                        style: TextStyles.bodyLarge.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
                       Text(
                         'What do you want to track ?',
-                        style: TextStyles.bodySmall,
+                        style: TextStyles.bodySmall.copyWith(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.8),
+                        ),
                       ),
                     ],
                   ),
@@ -135,7 +169,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 actions: [
                   IconButton(
                     onPressed: () => pushTo(context, Routes.notificationScreen),
-                    icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+                    icon: Container(
+                      width: 30,
+                      height: 30,
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        shape: BoxShape.circle,
+                      ),
+                      child: CustomSvgPicture(
+                        path: AppAssets.notification,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -151,9 +197,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     totalBalance: balance,
                   ),
                   bottomSection: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 37.0,
-                      vertical: 20,
+                    padding: const EdgeInsets.only(
+                      left: 37.0,
+                      right: 37.0,
+                      top: 20.0,
+                      bottom: 110.0,
                     ),
                     child: Column(
                       children: [
@@ -164,7 +212,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: LastWeekAnalysis(
                             revenue: lastWeekData['revenue'] ?? 0.0,
                             expenses: lastWeekData['expenses'] ?? 0.0,
-                            savingsPercent: lastWeekData['savingsPercent'] ?? 0.0,
+                            savingsPercent:
+                                lastWeekData['savingsPercent'] ?? 0.0,
                           ),
                         ),
                         const Gap(26),
@@ -248,7 +297,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       'No transactions found for this period.',
                       style: TextStyles.bodySmall.copyWith(
-                        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                     const Gap(8),
@@ -298,6 +349,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+}
 
+class _OffsetFabLocation extends FloatingActionButtonLocation {
+  const _OffsetFabLocation();
 
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry geometry) {
+    final Offset standardOffset = FloatingActionButtonLocation.endFloat
+        .getOffset(geometry);
+    return Offset(standardOffset.dx, standardOffset.dy - 75.0);
+  }
 }

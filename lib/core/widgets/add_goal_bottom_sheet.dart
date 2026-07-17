@@ -19,10 +19,12 @@ void showAddGoalBottomSheet(
   );
   final formKey = GlobalKey<FormState>();
 
+  final theme = Theme.of(context);
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: AppColors.background,
+    backgroundColor: theme.colorScheme.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(30),
@@ -30,6 +32,8 @@ void showAddGoalBottomSheet(
       ),
     ),
     builder: (sheetContext) {
+      final sheetTheme = Theme.of(sheetContext);
+      final sheetIsDark = sheetTheme.brightness == Brightness.dark;
       final progress = goal != null && goal.targetAmount > 0
           ? (goal.currentAmount / goal.targetAmount).clamp(0.0, 1.0)
           : 0.0;
@@ -52,7 +56,7 @@ void showAddGoalBottomSheet(
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
+                    color: sheetTheme.colorScheme.onSurface.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -65,7 +69,7 @@ void showAddGoalBottomSheet(
                     goal != null ? "Savings Target Details" : "Add Savings Target",
                     style: TextStyles.bodyLarge.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.lettersAndIcons,
+                      color: sheetTheme.colorScheme.onSurface,
                     ),
                   ),
                   if (goal != null)
@@ -87,7 +91,7 @@ void showAddGoalBottomSheet(
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.lightGreen,
+                    color: sheetIsDark ? AppColors.darkGreen : AppColors.lightGreen,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Column(
@@ -99,7 +103,7 @@ void showAddGoalBottomSheet(
                           Text(
                             "Current Progress",
                             style: TextStyles.bodyMedium.copyWith(
-                              color: AppColors.lettersAndIcons.withValues(alpha: 0.7),
+                              color: sheetTheme.colorScheme.onSurface.withValues(alpha: 0.7),
                             ),
                           ),
                           Text(
@@ -114,7 +118,7 @@ void showAddGoalBottomSheet(
                       const Gap(8),
                       LinearProgressIndicator(
                         value: progress,
-                        backgroundColor: AppColors.background,
+                        backgroundColor: sheetIsDark ? AppColors.dark05 : AppColors.background,
                         color: AppColors.mainGreen,
                         minHeight: 8,
                         borderRadius: BorderRadius.circular(4),
@@ -123,7 +127,7 @@ void showAddGoalBottomSheet(
                       Text(
                         "${goal.currentAmount.toStringAsFixed(2)} / ${goal.targetAmount.toStringAsFixed(2)}",
                         style: TextStyles.bodySmall.copyWith(
-                          color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                          color: sheetTheme.colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -134,15 +138,15 @@ void showAddGoalBottomSheet(
               TextFormField(
                 controller: titleController,
                 style: TextStyles.bodyMedium.copyWith(
-                  color: AppColors.lettersAndIcons,
+                  color: sheetTheme.colorScheme.onSurface,
                 ),
                 decoration: InputDecoration(
                   labelText: goal != null ? "Target Name" : "Target Name (e.g. Travel, Car, New House)",
                   labelStyle: TextStyles.bodyMedium.copyWith(
-                    color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                    color: sheetTheme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                   filled: true,
-                  fillColor: AppColors.lightGreen,
+                  fillColor: sheetIsDark ? AppColors.darkGreen : AppColors.lightGreen,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
@@ -159,16 +163,16 @@ void showAddGoalBottomSheet(
               TextFormField(
                 controller: amountController,
                 style: TextStyles.bodyMedium.copyWith(
-                  color: AppColors.lettersAndIcons,
+                  color: sheetTheme.colorScheme.onSurface,
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   labelText: "Target Amount",
                   labelStyle: TextStyles.bodyMedium.copyWith(
-                    color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                    color: sheetTheme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                   filled: true,
-                  fillColor: AppColors.lightGreen,
+                  fillColor: sheetIsDark ? AppColors.darkGreen : AppColors.lightGreen,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
@@ -249,19 +253,20 @@ void _showDeleteConfirmationDialog(
   showDialog(
     context: context,
     builder: (dialogContext) {
+      final dialogTheme = Theme.of(dialogContext);
       return AlertDialog(
-        backgroundColor: AppColors.background,
+        backgroundColor: dialogTheme.colorScheme.surface,
         title: Text(
           "Delete Goal",
           style: TextStyles.bodyLarge.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.lettersAndIcons,
+            color: dialogTheme.colorScheme.onSurface,
           ),
         ),
         content: Text(
           "Are you sure you want to delete this savings goal? This action cannot be undone.",
           style: TextStyles.bodyMedium.copyWith(
-            color: AppColors.lettersAndIcons.withValues(alpha: 0.8),
+            color: dialogTheme.colorScheme.onSurface.withValues(alpha: 0.8),
           ),
         ),
         actions: [
@@ -270,7 +275,7 @@ void _showDeleteConfirmationDialog(
             child: Text(
               "Cancel",
               style: TextStyles.bodyMedium.copyWith(
-                color: AppColors.lettersAndIcons,
+                color: dialogTheme.colorScheme.onSurface,
               ),
             ),
           ),

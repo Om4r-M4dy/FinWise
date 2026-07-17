@@ -1,5 +1,4 @@
 import 'package:finwise/core/constants/app_assets.dart';
-import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
@@ -26,15 +25,26 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppBar(
-      backgroundColor: AppColors.mainGreen,
+      backgroundColor: theme.appBarTheme.backgroundColor,
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: CustomSvgPicture(path: AppAssets.back),
+        icon: CustomSvgPicture(
+          path: AppAssets.back,
+          color: theme.colorScheme.onSurface,
+        ),
       ),
-      title: Center(child: Text(title, style: TextStyles.bodyLarge)),
+      title: Center(
+        child: Text(
+          title,
+          style: TextStyles.bodyLarge.copyWith(
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
+      ),
       actions: actions ??
           (noNotify
               ? null
@@ -51,8 +61,18 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                             onPressed: () {
                               pushTo(context, Routes.notificationScreen);
                             },
-                            icon: CustomSvgPicture(
-                              path: AppAssets.appBarNotification,
+                            icon: Container(
+                              width: 30,
+                              height: 30,
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primaryContainer,
+                                shape: BoxShape.circle,
+                              ),
+                              child: CustomSvgPicture(
+                                path: AppAssets.notification,
+                                color: theme.colorScheme.onPrimaryContainer,
+                              ),
                             ),
                           ),
                           if (unreadCount > 0)
