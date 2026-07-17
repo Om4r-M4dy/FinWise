@@ -3,7 +3,6 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/calculate_last_week_analysis.dart';
 import 'package:finwise/core/functions/plot_helper.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/info_record.dart';
@@ -16,9 +15,7 @@ import 'package:finwise/features/profile/cubit/user_state.dart';
 import 'package:finwise/features/Home/widgets/last_week_analysis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/intl.dart';
 
 class QuickAnalysisScreen extends StatelessWidget {
@@ -103,44 +100,6 @@ class QuickAnalysisScreen extends StatelessWidget {
         bottomSection: SingleChildScrollView(
           child: Column(
             children: [
-              PlotsSections(
-                plotTitle: "$currentMonthName Expenses",
-                chartData: dynamicChart.chartData,
-                maxY: dynamicChart.maxY,
-                bottomLabels: dynamicChart.labels,
-              ),
-              Gap(26),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: transactionsList.length > 5
-                    ? 5
-                    : transactionsList.length,
-                itemBuilder: (context, index) {
-                  final tx = transactionsList[index];
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom:
-                          index ==
-                              (transactionsList.length > 5
-                                  ? 4
-                                  : transactionsList.length - 1)
-                          ? 8.0
-                          : 19.0,
-                    ),
-                    child: InfoRecord(
-                      transaction: tx,
-                      title: tx.title,
-                      date: tx.formattedDate,
-                      cat: tx.categoryName.isNotEmpty
-                          ? tx.categoryName
-                          : 'General',
-                      amount: tx.getFormattedAmount(showPlusForIncome: true),
-                      amountColor: tx.getAmountColor(useGreenForIncome: true),
-                    ),
-                  );
-                },
-              ),
               PlotsSections(
                 plotTitle: "$currentMonthName Expenses",
                 chartData: dynamicChart.chartData,

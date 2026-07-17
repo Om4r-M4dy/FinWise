@@ -17,8 +17,7 @@ class CompleteProfileBottomSheet extends StatefulWidget {
       _CompleteProfileBottomSheetState();
 }
 
-class _CompleteProfileBottomSheetState
-    extends State<CompleteProfileBottomSheet>
+class _CompleteProfileBottomSheetState extends State<CompleteProfileBottomSheet>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _incomeController = TextEditingController();
@@ -41,13 +40,13 @@ class _CompleteProfileBottomSheetState
       parent: _animationController,
       curve: Curves.easeOut,
     );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.15),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
     _animationController.forward();
   }
 
@@ -60,7 +59,7 @@ class _CompleteProfileBottomSheetState
     super.dispose();
   }
 
-Future<void> _saveIncome() async {
+  Future<void> _saveIncome() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
@@ -68,7 +67,9 @@ Future<void> _saveIncome() async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid == null) {
-        showMyDialog(context, 'User session expired. Please log in again.');
+        if (mounted) {
+          showMyDialog(context, 'User session expired. Please log in again.');
+        }
         return;
       }
 
@@ -77,16 +78,18 @@ Future<void> _saveIncome() async {
       final balance = double.parse(_balanceController.text.trim());
 
       await context.read<UserCubit>().updateFinancials(
-            monthlyBudgetLimit: budgetLimit,
-            totalIncome: monthlyTotalIncom,
-            totalBalance: balance, 
-          );
+        monthlyBudgetLimit: budgetLimit,
+        totalIncome: monthlyTotalIncom,
+        totalBalance: balance,
+      );
 
       if (mounted) {
-        Navigator.of(context).pop(); 
+        Navigator.of(context).pop();
       }
     } catch (e) {
-      showMyDialog(context, 'Failed to save. Please try again.');
+      if (mounted) {
+        showMyDialog(context, 'Failed to save. Please try again.');
+      }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -117,96 +120,96 @@ Future<void> _saveIncome() async {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                children: [
-                  // ── Handle ──────────────────────────────────────────
-                  Container(
-                    width: 44,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(100),
+                  children: [
+                    // ── Handle ──────────────────────────────────────────
+                    Container(
+                      width: 44,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.mainGreen.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
                     ),
-                  ),
-                  const Gap(24),
+                    const Gap(24),
 
-                  // ── Illustration ─────────────────────────────────────
-                  Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGreen,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.mainGreen.withOpacity(0.25),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.account_balance_wallet_rounded,
-                      size: 44,
-                      color: AppColors.darkGreen,
-                    ),
-                  ),
-                  const Gap(20),
-
-                  // ── Title ────────────────────────────────────────────
-                  Text(
-                    'Complete Your Profile',
-                    style: TextStyles.headlineLarge.copyWith(
-                      color: AppColors.darkGreen,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const Gap(8),
-
-                  // ── Subtitle ─────────────────────────────────────────
-                  Text(
-                    'Tell us your monthly income so we can\npersonalize your financial experience.',
-                    textAlign: TextAlign.center,
-                    style: TextStyles.bodySmall.copyWith(
-                      color: AppColors.lettersAndIcons.withOpacity(0.6),
-                      height: 1.5,
-                    ),
-                  ),
-                  const Gap(32),
-
-                  _buildTextField(
-                    label: 'Total Balance',
-                    controller: _balanceController,
-                    hint: '0.00',
-                  ),
-                  const Gap(16),
-                  _buildTextField(
-                    label: 'Monthly Income',
-                    controller: _incomeController,
-                    hint: '0.00',
-                  ),
-                  const Gap(16),
-                  _buildTextField(
-                    label: 'Monthly Budget Limit',
-                    controller: _budgetLimitController,
-                    hint: '0.00',
-                  ),
-                  const Gap(32),
-
-                  // ── Save Button ───────────────────────────────────────
-                  _isLoading
-                      ? const CircularProgressIndicator(
-                          color: AppColors.mainGreen,
-                        )
-                      : MainButton(
-                          size: ButtonSize.large,
-                          text: 'Save & Continue',
-                          onPress: _saveIncome,
-                          textStyle: TextStyles.bodyMedium.copyWith(
-                            fontWeight: FontWeight.w700,
+                    // ── Illustration ─────────────────────────────────────
+                    Container(
+                      width: 90,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        color: AppColors.lightGreen,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.mainGreen.withValues(alpha: 0.25),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
                           ),
-                        ),
-                ],
-              ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.account_balance_wallet_rounded,
+                        size: 44,
+                        color: AppColors.darkGreen,
+                      ),
+                    ),
+                    const Gap(20),
+
+                    // ── Title ────────────────────────────────────────────
+                    Text(
+                      'Complete Your Profile',
+                      style: TextStyles.headlineLarge.copyWith(
+                        color: AppColors.darkGreen,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const Gap(8),
+
+                    // ── Subtitle ─────────────────────────────────────────
+                    Text(
+                      'Tell us your monthly income so we can\npersonalize your financial experience.',
+                      textAlign: TextAlign.center,
+                      style: TextStyles.bodySmall.copyWith(
+                        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                        height: 1.5,
+                      ),
+                    ),
+                    const Gap(32),
+
+                    _buildTextField(
+                      label: 'Total Balance',
+                      controller: _balanceController,
+                      hint: '0.00',
+                    ),
+                    const Gap(16),
+                    _buildTextField(
+                      label: 'Monthly Income',
+                      controller: _incomeController,
+                      hint: '0.00',
+                    ),
+                    const Gap(16),
+                    _buildTextField(
+                      label: 'Monthly Budget Limit',
+                      controller: _budgetLimitController,
+                      hint: '0.00',
+                    ),
+                    const Gap(32),
+
+                    // ── Save Button ───────────────────────────────────────
+                    _isLoading
+                        ? const CircularProgressIndicator(
+                            color: AppColors.mainGreen,
+                          )
+                        : MainButton(
+                            size: ButtonSize.large,
+                            text: 'Save & Continue',
+                            onPress: _saveIncome,
+                            textStyle: TextStyles.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -256,7 +259,7 @@ Future<void> _saveIncome() async {
             fillColor: AppColors.lightGreen,
             hintText: hint,
             hintStyle: TextStyles.bodyMedium.copyWith(
-              color: AppColors.lettersAndIcons.withOpacity(0.4),
+              color: AppColors.lettersAndIcons.withValues(alpha: 0.4),
             ),
             prefixIcon: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -281,10 +284,7 @@ Future<void> _saveIncome() async {
               borderRadius: BorderRadius.circular(18),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.redAccent,
-                width: 1.5,
-              ),
+              borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
               borderRadius: BorderRadius.circular(18),
             ),
             contentPadding: const EdgeInsets.symmetric(
@@ -297,10 +297,3 @@ Future<void> _saveIncome() async {
     );
   }
 }
-
-
-
-
-
-
-

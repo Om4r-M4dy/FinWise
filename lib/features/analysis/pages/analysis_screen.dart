@@ -1,9 +1,6 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
-import 'package:finwise/core/constants/app_colors.dart';
-import 'package:finwise/core/constants/app_assets.dart';
-import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/functions/plot_helper.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/income_expense_row.dart';
@@ -156,7 +153,6 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                       DateHeader(
                         selectedIndex: index,
                         labels: const ["Daily", "Weekly", "Monthly"],
-                        labels: const ["Daily", "Weekly", "Monthly"],
                         onUpdate: (value) {
                           setState(() {
                             index = value;
@@ -165,9 +161,6 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                       ),
                       Gap(30),
                       PlotsSections(
-                        chartData: dynamicChart.chartData,
-                        maxY: dynamicChart.maxY,
-                        bottomLabels: dynamicChart.labels,
                         chartData: dynamicChart.chartData,
                         maxY: dynamicChart.maxY,
                         bottomLabels: dynamicChart.labels,

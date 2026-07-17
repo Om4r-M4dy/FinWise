@@ -1,8 +1,7 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// class TransactionRemoteDataSource {
+//   final FirebaseFirestore _firestore;
 
-class TransactionRemoteDataSource {
-  final FirebaseFirestore _firestore;
-
-  TransactionRemoteDataSource(this._firestore);
-}
+//   TransactionRemoteDataSource(this._firestore);
+// }

@@ -134,124 +134,125 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            const Gap(27),
-            Text(
-              "Reset Password?",
-              style: TextStyles.headline_24.copyWith(
-                fontSize: 20,
-                color: AppColors.lettersAndIcons,
-                fontFamily: AppFonts.poppins,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const Gap(10),
-            Text(
-              "Enter your registered email address below and we'll send you a link to reset your password.",
-              style: TextStyles.caption1_14.copyWith(
-                color: AppColors.lettersAndIcons,
-                fontFamily: AppFonts.poppins,
-                fontWeight: FontWeight.w400,
-                height: 1.5,
-              ),
-            ),
-            const Gap(40),
-            Text(
-              "Enter Email Address",
-              style: TextStyles.caption1_14.copyWith(
-                color: AppColors.lettersAndIcons,
-                fontFamily: AppFonts.poppins,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const Gap(8),
-            AuthTextField(
-              hintText: "example@example.com",
-              controller: _emailController,
-            ),
-            const Gap(40),
-
-            /// Send Reset Email Button
-            CustomAuthButton(
-              text: "Send Reset Link",
-              onPressed: _resetPassword,
-              isLoading: _isLoading,
-            ),
-
-            const Gap(20),
-
-            /// Sign Up Button
-            CustomAuthButton(
-              text: "Sign Up",
-              onPressed: () {
-                replaceWith(context, Routes.signupScreen);
-              },
-              backgroundColor: AppColors.lightGreen,
-            ),
-
-            const Gap(28),
-            const Center(
-              child: Text("or sign up with", style: TextStyle(fontSize: 12)),
-            ),
-            const Gap(19),
-
-            // google && facebook
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SocialButton(
-                  icon: AppAssets.facebook,
-                  onTap: () async {
-                    final user = await FacebookAuthService.signInWithFacebook(
-                      context,
-                    );
-                    if (user != null && context.mounted) {
-                      replaceWith(context, Routes.bottomNavBar);
-                    }
-                  },
+                const Gap(27),
+                Text(
+                  "Reset Password?",
+                  style: TextStyles.headline_24.copyWith(
+                    fontSize: 20,
+                    color: AppColors.lettersAndIcons,
+                    fontFamily: AppFonts.poppins,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                const Gap(16),
-                SocialButton(
-                  icon: AppAssets.google,
-                  onTap: () async {
-                    final user = await GoogleAuth.signInWithGoogle(context);
-                    if (user != null && context.mounted) {
-                      replaceWith(context, Routes.bottomNavBar);
-                    }
+                const Gap(10),
+                Text(
+                  "Enter your registered email address below and we'll send you a link to reset your password.",
+                  style: TextStyles.caption1_14.copyWith(
+                    color: AppColors.lettersAndIcons,
+                    fontFamily: AppFonts.poppins,
+                    fontWeight: FontWeight.w400,
+                    height: 1.5,
+                  ),
+                ),
+                const Gap(40),
+                Text(
+                  "Enter Email Address",
+                  style: TextStyles.caption1_14.copyWith(
+                    color: AppColors.lettersAndIcons,
+                    fontFamily: AppFonts.poppins,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Gap(8),
+                AuthTextField(
+                  hintText: "example@example.com",
+                  controller: _emailController,
+                ),
+                const Gap(40),
+
+                /// Send Reset Email Button
+                CustomAuthButton(
+                  text: "Send Reset Link",
+                  onPressed: _resetPassword,
+                  isLoading: _isLoading,
+                ),
+
+                const Gap(20),
+
+                /// Sign Up Button
+                CustomAuthButton(
+                  text: "Sign Up",
+                  onPressed: () {
+                    replaceWith(context, Routes.signupScreen);
                   },
+                  backgroundColor: AppColors.lightGreen,
+                ),
+
+                const Gap(28),
+                const Center(
+                  child: Text(
+                    "or sign up with",
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+                const Gap(19),
+
+                // google && facebook
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SocialButton(
+                      icon: AppAssets.facebook,
+                      onTap: () async {
+                        final user =
+                            await FacebookAuthService.signInWithFacebook(
+                              context,
+                            );
+                        if (user != null && context.mounted) {
+                          replaceWith(context, Routes.bottomNavBar);
+                        }
+                      },
+                    ),
+                    const Gap(16),
+                    SocialButton(
+                      icon: AppAssets.google,
+                      onTap: () async {
+                        final user = await GoogleAuth.signInWithGoogle(context);
+                        if (user != null && context.mounted) {
+                          replaceWith(context, Routes.bottomNavBar);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                const Gap(19),
+
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      replaceWith(context, Routes.signupScreen);
+                    },
+                    child: const Text.rich(
+                      TextSpan(
+                        text: "Don't have an account? ",
+                        style: TextStyle(color: AppColors.gray39, fontSize: 12),
+                        children: [
+                          TextSpan(
+                            text: "Sign Up",
+                            style: TextStyle(color: AppColors.lightBlueButton),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-            const Gap(19),
-
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  replaceWith(context, Routes.signupScreen);
-                },
-                child: const Text.rich(
-                  TextSpan(
-                    text: "Don't have an account? ",
-                    style: TextStyle(color: AppColors.gray39, fontSize: 12),
-                    children: [
-                      TextSpan(
-                        text: "Sign Up",
-                        style: TextStyle(color: AppColors.lightBlueButton),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
-    ),
 
         /// Full-screen loading overlay
-        LoadingOverlay(
-          isLoading: _isLoading,
-          message: "Sending reset link...",
-        ),
+        LoadingOverlay(isLoading: _isLoading, message: "Sending reset link..."),
       ],
     );
   }
@@ -313,7 +314,7 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
                 width: 90,
                 height: 90,
                 decoration: BoxDecoration(
-                  color: AppColors.mainGreen.withOpacity(0.15),
+                  color: AppColors.mainGreen.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -339,7 +340,7 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
-                color: AppColors.lettersAndIcons.withOpacity(0.7),
+                color: AppColors.lettersAndIcons.withValues(alpha: 0.7),
                 fontFamily: AppFonts.poppins,
               ),
             ),
@@ -360,7 +361,7 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
-                color: AppColors.lettersAndIcons.withOpacity(0.6),
+                color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
                 fontFamily: AppFonts.poppins,
                 height: 1.6,
               ),

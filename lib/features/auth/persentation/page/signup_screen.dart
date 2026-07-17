@@ -301,7 +301,7 @@ class _SignupScreenState extends State<SignupScreen> {
       decoration: InputDecoration(
         hintText: '10 123 4567',
         hintStyle: TextStyle(
-          color: AppColors.lettersAndIcons.withOpacity(0.4),
+          color: AppColors.lettersAndIcons.withValues(alpha: 0.4),
           fontFamily: AppFonts.poppins,
           fontSize: 14,
         ),
@@ -314,13 +314,13 @@ class _SignupScreenState extends State<SignupScreen> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.lettersAndIcons.withOpacity(0.2),
+            color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.lettersAndIcons.withOpacity(0.2),
+            color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -346,7 +346,7 @@ class _SignupScreenState extends State<SignupScreen> {
       showDropdownIcon: true,
       dropdownIcon: Icon(
         Icons.arrow_drop_down,
-        color: AppColors.lettersAndIcons.withOpacity(0.6),
+        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
       ),
     );
   }
@@ -366,7 +366,7 @@ class _SignupScreenState extends State<SignupScreen> {
           decoration: InputDecoration(
             hintText: 'DD / MM / YYYY',
             hintStyle: TextStyle(
-              color: AppColors.lettersAndIcons.withOpacity(0.4),
+              color: AppColors.lettersAndIcons.withValues(alpha: 0.4),
               fontFamily: AppFonts.poppins,
               fontSize: 14,
             ),
@@ -379,13 +379,13 @@ class _SignupScreenState extends State<SignupScreen> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
-                color: AppColors.lettersAndIcons.withOpacity(0.2),
+                color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
-                color: AppColors.lettersAndIcons.withOpacity(0.2),
+                color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
               ),
             ),
             focusedBorder: OutlineInputBorder(

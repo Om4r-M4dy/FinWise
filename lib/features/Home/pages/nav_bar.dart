@@ -1,7 +1,7 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
-import 'package:finwise/features/Home/model/navBar_screens.dart';
+import 'package:finwise/features/Home/model/navbar_screens.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
