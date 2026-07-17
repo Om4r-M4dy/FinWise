@@ -129,9 +129,7 @@ class FirestoreProvider {
           .get();
       List<GoalModel> goalsList = [];
       for (var doc in querySnapshot.docs) {
-        goalsList.add(
-          GoalModel.fromMap(doc.data() as Map<String, dynamic>),
-        );
+        goalsList.add(GoalModel.fromMap(doc.data() as Map<String, dynamic>));
       }
       goalsList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       return goalsList;
@@ -156,6 +154,51 @@ class FirestoreProvider {
     } catch (e) {
       log(e.toString());
       rethrow;
+    }
+  }
+
+  // Notifications Methods
+  static CollectionReference _userNotifications(String userId) {
+    return user.doc(userId).collection('notifications');
+  }
+
+  static Future<void> addNotification(
+    String userId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      await _userNotifications(userId).add(data);
+    } catch (e) {
+      log('Error adding notification: $e');
+    }
+  }
+
+  static Stream<List<Map<String, dynamic>>> getNotificationsStream(
+    String userId,
+  ) {
+    return _userNotifications(
+      userId,
+    ).orderBy('date', descending: true).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    });
+  }
+
+  static Future<void> markAllAsRead(String userId) async {
+    try {
+      final snapshot = await _userNotifications(
+        userId,
+      ).where('isRead', isEqualTo: false).get();
+      final batch = firestore.batch();
+      for (var doc in snapshot.docs) {
+        batch.update(doc.reference, {'isRead': true});
+      }
+      await batch.commit();
+    } catch (e) {
+      log('Error marking notifications as read: $e');
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:finwise/core/services/firebase/firestore_provider.dart';
+import 'package:finwise/core/services/notification/notification_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:finwise/core/functions/google_auth.dart';
@@ -63,6 +64,20 @@ class AuthCubit extends Cubit<AuthState> {
         await UserPrefs.setName(userModel.username ?? '');
         await UserPrefs.setIsLoggedIn(true);
 
+        // Send welcome notification
+        final notifyData = {
+          'title': 'Welcome Back!',
+          'subTitle': 'You have logged in successfully.',
+          'iconPath': 'assets/icons/notification.svg',
+          'date': DateTime.now(),
+          'isRead': false,
+        };
+        await FirestoreProvider.addNotification(user.uid, notifyData);
+        await NotificationService.showInstantNotification(
+          title: 'Welcome Back!',
+          body: 'You have logged in successfully.',
+        );
+
         emit(AuthSuccess(userModel: userModel));
       } else {
         emit(AuthFailure('Login failed: User is null'));
@@ -92,6 +107,19 @@ class AuthCubit extends Cubit<AuthState> {
         await UserPrefs.setName(userModel.username ?? '');
         await UserPrefs.setIsLoggedIn(true);
 
+        final notifyData = {
+          'title': 'Welcome!',
+          'subTitle': 'Logged in with Google successfully.',
+          'iconPath': 'assets/icons/Google.svg',
+          'date': DateTime.now(),
+          'isRead': false,
+        };
+        await FirestoreProvider.addNotification(userCredential.user!.uid, notifyData);
+        await NotificationService.showInstantNotification(
+          title: 'Welcome!',
+          body: 'Logged in with Google successfully.',
+        );
+
         emit(AuthSuccess(userModel: userModel));
       } else {
         emit(AuthFailure('Google sign-in was cancelled or failed.'));
@@ -112,6 +140,19 @@ class AuthCubit extends Cubit<AuthState> {
 
         await UserPrefs.setName(userModel.username ?? '');
         await UserPrefs.setIsLoggedIn(true);
+
+        final notifyData = {
+          'title': 'Welcome!',
+          'subTitle': 'Logged in with Facebook successfully.',
+          'iconPath': 'assets/icons/Facebook.svg',
+          'date': DateTime.now(),
+          'isRead': false,
+        };
+        await FirestoreProvider.addNotification(userCredential.user!.uid, notifyData);
+        await NotificationService.showInstantNotification(
+          title: 'Welcome!',
+          body: 'Logged in with Facebook successfully.',
+        );
 
         emit(AuthSuccess(userModel: userModel));
       } else {
