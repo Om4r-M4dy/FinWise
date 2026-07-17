@@ -11,8 +11,8 @@ import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/core/widgets/ai_scanner_helper.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/Transaction/presentation/widgets/ai_scanner_bar.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/profile/cubit/user_cubit.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
@@ -34,6 +34,7 @@ class AddTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
@@ -46,73 +47,16 @@ class AddTransaction extends StatelessWidget {
           : null,
 
       body: MyBodyView(
-        topSection: InkWell(
-          onTap: () => AIScannerHelper.showAIScannerSheet(
-            context,
-            isAlreadyOnAddScreen: true,
-          ),
-
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.25),
-                width: 1.5,
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.auto_awesome_rounded,
-                    color: Colors.white,
-                    size: 32,
-                  ),
-                ),
-                const Gap(12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Scan with AI",
-                        style: TextStyles.bodyLarge.copyWith(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        "Fast fill transaction from image or receipt",
-                        style: TextStyles.bodySmall.copyWith(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.white,
-                  size: 16,
-                ),
-              ],
-            ),
-          ),
-        ),
+        clipBehavior: Clip.antiAlias,
+        topSection: const AIScannerBar(),
         noPadding: true,
         bottomSection: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 15.0),
+          padding: const EdgeInsets.only(
+            left: 37.0,
+            right: 37.0,
+            top: 40.0,
+            bottom: 110.0,
+          ),
           child: BlocConsumer<TransactionCubit, TransactionStates>(
             listener: (context, state) {
               if (state is TransactionLoadingState) {
@@ -148,7 +92,7 @@ class AddTransaction extends StatelessWidget {
                       child: Text(
                         "Transaction Type",
                         style: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -177,7 +121,7 @@ class AddTransaction extends StatelessWidget {
                       child: Text(
                         "Date",
                         style: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -189,10 +133,10 @@ class AddTransaction extends StatelessWidget {
                         mode: DateTimeFieldPickerMode.date,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColors.lightGreen,
+                          fillColor: theme.colorScheme.primaryContainer,
                           hintText: "Select Date",
                           hintStyle: TextStyles.bodyMedium.copyWith(
-                            color: AppColors.lettersAndIcons.withValues(
+                            color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.5,
                             ),
                           ),
@@ -223,7 +167,7 @@ class AddTransaction extends StatelessWidget {
                       child: Text(
                         "Category",
                         style: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -234,7 +178,7 @@ class AddTransaction extends StatelessWidget {
                         initialValue: cubit.selectedCategory,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColors.lightGreen,
+                          fillColor: theme.colorScheme.primaryContainer,
                           suffixIcon: Container(
                             margin: const EdgeInsets.all(8),
                             child: CustomSvgPicture(path: AppAssets.arrowDown),
@@ -254,7 +198,7 @@ class AddTransaction extends StatelessWidget {
                             child: Text(
                               category['label']!,
                               style: TextStyles.bodyMedium.copyWith(
-                                color: AppColors.lettersAndIcons,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                           );
@@ -274,7 +218,7 @@ class AddTransaction extends StatelessWidget {
                         child: Text(
                           "Link to Saving Goal",
                           style: TextStyles.bodyMedium.copyWith(
-                            color: AppColors.lettersAndIcons,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -300,7 +244,7 @@ class AddTransaction extends StatelessWidget {
                                   child: Text(
                                     goal.title,
                                     style: TextStyles.bodyMedium.copyWith(
-                                      color: AppColors.lettersAndIcons,
+                                      color: theme.colorScheme.onSurface,
                                     ),
                                   ),
                                 );
@@ -312,10 +256,10 @@ class AddTransaction extends StatelessWidget {
                               initialValue: dropdownValue,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: AppColors.lightGreen,
+                                fillColor: theme.colorScheme.primaryContainer,
                                 hintText: "Select a Savings Goal (Optional)",
                                 hintStyle: TextStyles.bodyMedium.copyWith(
-                                  color: AppColors.lettersAndIcons.withValues(
+                                  color: theme.colorScheme.onSurface.withValues(
                                     alpha: 0.5,
                                   ),
                                 ),
@@ -340,7 +284,7 @@ class AddTransaction extends StatelessWidget {
                                   child: Text(
                                     "None / General Savings",
                                     style: TextStyles.bodyMedium.copyWith(
-                                      color: AppColors.lettersAndIcons
+                                      color: theme.colorScheme.onSurface
                                           .withValues(alpha: 0.5),
                                     ),
                                   ),
@@ -363,7 +307,7 @@ class AddTransaction extends StatelessWidget {
                               ? "* This transaction will add money to the selected goal."
                               : "* This transaction will withdraw money from the selected goal.",
                           style: TextStyles.bodySmall.copyWith(
-                            color: AppColors.lettersAndIcons.withValues(
+                            color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.6,
                             ),
                             fontStyle: FontStyle.italic,
@@ -378,7 +322,7 @@ class AddTransaction extends StatelessWidget {
                       child: Text(
                         "Title",
                         style: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -389,10 +333,10 @@ class AddTransaction extends StatelessWidget {
                         controller: cubit.titleController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColors.lightGreen,
+                          fillColor: theme.colorScheme.primaryContainer,
                           hintText: "e.g. Dinner, Salary",
                           hintStyle: TextStyles.bodyMedium.copyWith(
-                            color: AppColors.lettersAndIcons.withValues(
+                            color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.5,
                             ),
                           ),
@@ -420,7 +364,7 @@ class AddTransaction extends StatelessWidget {
                       child: Text(
                         "Amount",
                         style: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -434,10 +378,10 @@ class AddTransaction extends StatelessWidget {
                         ),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColors.lightGreen,
+                          fillColor: theme.colorScheme.primaryContainer,
                           hintText: "\$0.00",
                           hintStyle: TextStyles.bodyMedium.copyWith(
-                            color: AppColors.lettersAndIcons.withValues(
+                            color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.5,
                             ),
                           ),
@@ -467,7 +411,7 @@ class AddTransaction extends StatelessWidget {
                       child: Text(
                         "Note",
                         style: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -477,10 +421,10 @@ class AddTransaction extends StatelessWidget {
                       maxLines: 4,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppColors.lightGreen,
+                        fillColor: theme.colorScheme.primaryContainer,
                         hintText: "Enter message / description",
                         hintStyle: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons.withValues(
+                          color: theme.colorScheme.onSurface.withValues(
                             alpha: 0.5,
                           ),
                         ),
@@ -514,7 +458,7 @@ class AddTransaction extends StatelessWidget {
                           }
                         },
                         textStyle: TextStyles.bodyMedium.copyWith(
-                          color: AppColors.lettersAndIcons,
+                          color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -542,6 +486,7 @@ class TransactionTypeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () => cubit.setType(type),
       child: Container(
@@ -549,7 +494,7 @@ class TransactionTypeButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: cubit.selectedType == type
               ? AppColors.mainGreen.withValues(alpha: 0.15)
-              : AppColors.lightGreen,
+              : theme.colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
             color: cubit.selectedType == type
@@ -564,7 +509,7 @@ class TransactionTypeButton extends StatelessWidget {
           style: TextStyles.bodySmall.copyWith(
             color: cubit.selectedType == type
                 ? AppColors.mainGreen
-                : AppColors.lettersAndIcons,
+                : theme.colorScheme.onPrimaryContainer,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -41,7 +41,12 @@ class MainCategories extends StatelessWidget {
             totalBalance: balance,
           ),
           bottomSection: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 20),
+            padding: const EdgeInsets.only(
+              left: 37.0,
+              right: 37.0,
+              top: 20.0,
+              bottom: 110.0,
+            ),
             child: Column(
               children: [
                 Gap(13),

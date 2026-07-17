@@ -1,5 +1,4 @@
 import 'package:finwise/core/constants/app_assets.dart';
-import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
@@ -18,57 +17,111 @@ final List<NavItemModel> navScreens = [
 
   NavItemModel(
     icon: AppAssets.analysis,
-    appBar: (context) => AppBar(
-      backgroundColor: AppColors.mainGreen,
-      leading: SizedBox.shrink(),
-      title: Text("Analysis", style: TextStyles.bodyLarge),
-      actions: [
-        IconButton(
-          onPressed: () {
-            pushTo(context, Routes.notificationScreen);
-          },
-          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+    appBar: (context) {
+      final theme = Theme.of(context);
+      return AppBar(
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        leading: const SizedBox.shrink(),
+        title: Text(
+          "Analysis",
+          style: TextStyles.bodyLarge.copyWith(color: theme.colorScheme.onSurface),
         ),
-      ],
-    ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              pushTo(context, Routes.notificationScreen);
+            },
+            icon: Container(
+              width: 30,
+              height: 30,
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primaryContainer,
+                shape: BoxShape.circle,
+              ),
+              child: CustomSvgPicture(
+                path: AppAssets.notification,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
     page: AnalysisScreen(),
   ),
 
   NavItemModel(
     icon: AppAssets.transactions,
-    appBar: (context) => AppBar(
-      backgroundColor: AppColors.mainGreen,
-      leading: SizedBox.shrink(),
-      title: Text("Add Transaction", style: TextStyles.bodyLarge),
-      actions: [
-        IconButton(
-          onPressed: () {
-            pushTo(context, Routes.notificationScreen);
-          },
-          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+    appBar: (context) {
+      final theme = Theme.of(context);
+      return AppBar(
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        leading: const SizedBox.shrink(),
+        title: Text(
+          "Add Transaction",
+          style: TextStyles.bodyLarge.copyWith(color: theme.colorScheme.onSurface),
         ),
-      ],
-    ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              pushTo(context, Routes.notificationScreen);
+            },
+            icon: Container(
+              width: 30,
+              height: 30,
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primaryContainer,
+                shape: BoxShape.circle,
+              ),
+              child: CustomSvgPicture(
+                path: AppAssets.notification,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
     page: BlocProvider(
       create: (context) => TransactionCubit(),
       child: const AddTransaction(showAppBar: false),
-  ),
+    ),
   ),
   NavItemModel(
     icon: AppAssets.category,
-    appBar: (context) => AppBar(
-      backgroundColor: AppColors.mainGreen,
-      leading: SizedBox.shrink(),
-      title: Text("Categories", style: TextStyles.bodyLarge),
-      actions: [
-        IconButton(
-          onPressed: () {
-            pushTo(context, Routes.notificationScreen);
-          },
-          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+    appBar: (context) {
+      final theme = Theme.of(context);
+      return AppBar(
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        leading: const SizedBox.shrink(),
+        title: Text(
+          "Categories",
+          style: TextStyles.bodyLarge.copyWith(color: theme.colorScheme.onSurface),
         ),
-      ],
-    ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              pushTo(context, Routes.notificationScreen);
+            },
+            icon: Container(
+              width: 30,
+              height: 30,
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primaryContainer,
+                shape: BoxShape.circle,
+              ),
+              child: CustomSvgPicture(
+                path: AppAssets.notification,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
     page: MainCategories(),
   ),
   NavItemModel(icon: AppAssets.profile, appBar: null, page: ProfileScreen()),

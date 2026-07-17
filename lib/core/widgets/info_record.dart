@@ -54,7 +54,7 @@ class InfoRecord extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyles.bodyMedium.copyWith(
-                  color: AppColors.lettersAndIcons,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               Text(
@@ -85,7 +85,7 @@ class InfoRecord extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyles.bodySmall.copyWith(
               fontWeight: FontWeight.w300,
-              color: AppColors.lettersAndIcons,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ),
@@ -102,7 +102,7 @@ class InfoRecord extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyles.bodyMedium.copyWith(
-              color: amountColor ?? AppColors.lettersAndIcons,
+              color: amountColor ?? Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ),

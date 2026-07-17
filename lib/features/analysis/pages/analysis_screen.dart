@@ -138,7 +138,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
             totalBalance: balance,
           ),
           bottomSection: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.only(bottom: 110.0),
             child: Column(
               children: [
                 Padding(

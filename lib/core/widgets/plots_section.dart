@@ -37,7 +37,7 @@ class PlotsSections extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        color: AppColors.lightGreen,
+        color: Theme.of(context).colorScheme.primaryContainer,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -111,7 +111,7 @@ class PlotsSections extends StatelessWidget {
                                   child: Text(
                                     labels[index],
                                     style: TextStyles.bodySmall.copyWith(
-                                      color: AppColors.darkGreen,
+                                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                                     ),
                                   ),
                                 );
@@ -133,9 +133,9 @@ class PlotsSections extends StatelessWidget {
                       ),
                       borderData: FlBorderData(
                         show: true,
-                        border: const Border(
+                        border: Border(
                           bottom: BorderSide(
-                            color: AppColors.darkGreen,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
                             width: 1,
                           ),
                           left: BorderSide(color: Colors.transparent),
@@ -162,24 +162,34 @@ class _PlotHeader extends StatelessWidget {
   final String? plotTitle;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(plotTitle ?? "Income & Expenses", style: TextStyles.bodySmall),
+        Text(
+          plotTitle ?? "Income & Expenses",
+          style: TextStyles.bodySmall.copyWith(
+            color: theme.colorScheme.onPrimaryContainer,
+          ),
+        ),
         Row(
           children: [
             IconButton(
               onPressed: () {
                 pushTo(context, Routes.searchScreen);
               },
-              icon: const CustomSvgPicture(path: AppAssets.searchButton),
+              icon: const CustomSvgPicture(
+                path: AppAssets.searchButton,
+              ),
             ),
 
             IconButton(
               onPressed: () {
                 pushTo(context, Routes.calendarScreen);
               },
-              icon: const CustomSvgPicture(path: AppAssets.calender),
+              icon: const CustomSvgPicture(
+                path: AppAssets.calender,
+              ),
             ),
           ],
         ),

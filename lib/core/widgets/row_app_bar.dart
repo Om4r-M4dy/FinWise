@@ -10,6 +10,7 @@ class RowAppBar extends StatelessWidget {
   final String title;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -17,16 +18,36 @@ class RowAppBar extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: CustomSvgPicture(path: AppAssets.back),
+          icon: CustomSvgPicture(
+            path: AppAssets.back,
+            color: theme.colorScheme.onSurface,
+          ),
         ),
         Spacer(),
-        Text(title, style: TextStyles.bodyLarge),
+        Text(
+          title,
+          style: TextStyles.bodyLarge.copyWith(
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
         Spacer(),
         IconButton(
           onPressed: () {
             pushTo(context, Routes.notificationScreen);
           },
-          icon: CustomSvgPicture(path: AppAssets.appBarNotification),
+          icon: Container(
+            width: 30,
+            height: 30,
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primaryContainer,
+              shape: BoxShape.circle,
+            ),
+            child: CustomSvgPicture(
+              path: AppAssets.notification,
+              color: theme.colorScheme.onPrimaryContainer,
+            ),
+          ),
         ),
       ],
     );

@@ -61,6 +61,44 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  /// Update settings both locally and on Firestore
+  Future<void> updateSettings({
+    bool? pushNotifications,
+    bool? darkTheme,
+  }) async {
+    if (user == null) return;
+
+    final updatedSettings = Map<String, bool>.from(user!.settings ?? {});
+    if (pushNotifications != null) {
+      updatedSettings['pushNotifications'] = pushNotifications;
+    }
+    if (darkTheme != null) {
+      updatedSettings['darkTheme'] = darkTheme;
+    }
+
+    final updated = UserModel(
+      uid: user!.uid,
+      username: user!.username,
+      email: user!.email,
+      phone: user!.phone,
+      profilePicture: user!.profilePicture,
+      dob: user!.dob,
+      settings: updatedSettings,
+      totalBalance: user!.totalBalance,
+      totalExpense: user!.totalExpense,
+      totalIncome: user!.totalIncome,
+      monthlyBudgetLimit: user!.monthlyBudgetLimit,
+    );
+
+    emit(UserLoaded(updated)); // optimistic UI update
+
+    try {
+      await FirestoreProvider.editUser(updated);
+    } catch (_) {
+      emit(UserLoaded(user!)); // rollback on failure
+    }
+  }
+
   /// Helper to apply a transaction to the user's totals
   Future<void> applyTransaction({
     required double amount,

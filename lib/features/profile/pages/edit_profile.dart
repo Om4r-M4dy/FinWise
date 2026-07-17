@@ -119,9 +119,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   // ── Show Image Picker Options Bottom Sheet ─────────────────────────────
   void _showImagePickerSheet() {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.background,
+      backgroundColor: theme.colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -136,7 +137,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.lettersAndIcons.withValues(alpha: 0.3),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -166,7 +167,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   subtitle: Text(
                     'Take a new photo',
                     style: TextStyle(
-                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -195,7 +196,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   subtitle: Text(
                     'Choose from gallery',
                     style: TextStyle(
-                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),

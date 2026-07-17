@@ -43,6 +43,7 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       // backgroundColor: AppColors.background,
       appBar: navScreens[currentIndex].appBar?.call(context),
       body: navScreens[currentIndex].page,
@@ -50,13 +51,13 @@ class _NavBarState extends State<NavBar> {
       bottomNavigationBar: SizedBox(
         width: double.infinity,
         child: Container(
-          color: AppColors.background,
+          color: Colors.transparent,
           child: Container(
             height: 80,
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            decoration: const BoxDecoration(
-              color: AppColors.lightGreen,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(70),
                 topRight: Radius.circular(70),
               ),
@@ -87,7 +88,7 @@ class _NavBarState extends State<NavBar> {
                       path: icons[index],
                       width: 25,
                       height: 25,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   ),
                 );
