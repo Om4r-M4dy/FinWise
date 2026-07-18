@@ -24,6 +24,9 @@ import 'package:gap/gap.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
 import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
+import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/core/widgets/export_filter_bottom_sheet.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -66,7 +69,20 @@ class _TransactionScreenState extends State<TransactionScreen> {
         final isDark = Theme.of(context).brightness == Brightness.dark;
 
         return Scaffold(
-          appBar: const DefaultAppBar(title: 'Transactions'),
+          appBar: DefaultAppBar(
+            title: 'Transactions',
+            actions: [
+              IconButton(
+                tooltip: 'Export to CSV',
+                onPressed: () {
+                  final transactions =
+                      context.read<TransactionCubit>().transactionsList;
+                  showExportFilterBottomSheet(context, transactions);
+                },
+                icon: const Icon(Icons.ios_share_rounded),
+              ),
+            ],
+          ),
           body: MyBodyView(
             clipBehavior: Clip.hardEdge,
             noPadding: true,
