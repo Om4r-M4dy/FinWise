@@ -11,13 +11,19 @@ class BuildAuthUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           'Personalized financial insights\nat your fingertips.',
           textAlign: TextAlign.center,
-          style: TextStyles.bodySmall.copyWith(color: AppColors.darkModeIcon),
+          style: TextStyles.bodySmall.copyWith(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.8)
+                : AppColors.darkModeIcon,
+          ),
         ),
         const Gap(42),
         MainButton(
@@ -32,7 +38,8 @@ class BuildAuthUI extends StatelessWidget {
           onPress: () {
             replaceWith(context, Routes.signupScreen);
           },
-          backgroundColor: AppColors.lightGreen,
+          backgroundColor: isDark ? AppColors.darkGreen : AppColors.lightGreen,
+          textColor: isDark ? Colors.white : AppColors.lettersAndIcons,
         ),
       ],
     );

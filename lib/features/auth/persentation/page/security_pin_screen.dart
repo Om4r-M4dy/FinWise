@@ -23,6 +23,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: SafeArea(
@@ -34,7 +35,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
               "Security pin",
               style: TextStyles.headlineLarge.copyWith(
                 fontSize: 30,
-                color: AppColors.lettersAndIcons,
+                color: isDark ? Colors.white : AppColors.lettersAndIcons,
                 fontFamily: AppFonts.poppins,
                 fontWeight: FontWeight.w600,
               ),
@@ -46,9 +47,9 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
-                decoration: const BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.dark05 : AppColors.background,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40),
                   ),
@@ -62,7 +63,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                         "Enter security pin",
                         style: TextStyles.headlineLarge.copyWith(
                           fontSize: 20,
-                          color: AppColors.lettersAndIcons,
+                          color: isDark ? Colors.white : AppColors.lettersAndIcons,
                           fontFamily: AppFonts.poppins,
                           fontWeight: FontWeight.w600,
                         ),
@@ -76,7 +77,11 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                             fieldSize: width < 360 ? 38 : 45,
                             codeDigit: CodeDigit.six,
                             filled: true,
-                            fillColor: Colors.grey.shade200,
+                            fillColor: isDark ? AppColors.darkGreen : Colors.grey.shade200,
+                            textStyle: TextStyle(
+                              color: isDark ? Colors.white : AppColors.lettersAndIcons,
+                              fontFamily: AppFonts.poppins,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(100),
                               borderSide: BorderSide.none,
@@ -125,7 +130,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                             "Accept",
                             style: TextStyles.headline_24.copyWith(
                               fontSize: 20,
-                              color: AppColors.lettersAndIcons,
+                              color: isDark ? AppColors.voidColor : AppColors.lettersAndIcons,
                               fontFamily: AppFonts.poppins,
                               fontWeight: FontWeight.w600,
                             ),
@@ -142,7 +147,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                             // Handle send again action
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.lightGreen,
+                            backgroundColor: isDark ? AppColors.darkGreen : AppColors.lightGreen,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
@@ -153,7 +158,7 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                             "Send again",
                             style: TextStyles.headline_24.copyWith(
                               fontSize: 20,
-                              color: AppColors.lettersAndIcons,
+                              color: isDark ? Colors.white : AppColors.lettersAndIcons,
                               fontFamily: AppFonts.poppins,
                               fontWeight: FontWeight.w600,
                             ),
@@ -163,9 +168,12 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
 
                       const Gap(154),
 
-                      const Text(
+                      Text(
                         "or sign up with",
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isDark ? Colors.white70 : AppColors.lettersAndIcons,
+                        ),
                       ),
 
                       const Gap(16),
@@ -187,14 +195,14 @@ class _SecuritypinScreenState extends State<SecuritypinScreen> {
                         onTap: () {
                           replaceWith(context, Routes.signupScreen);
                         },
-                        child: const Text.rich(
+                        child: Text.rich(
                           TextSpan(
                             text: "Don't have an account? ",
                             style: TextStyle(
-                              color: AppColors.gray39,
+                              color: isDark ? Colors.white70 : AppColors.gray39,
                               fontSize: 12,
                             ),
-                            children: [
+                            children: const [
                               TextSpan(
                                 text: "Sign Up",
                                 style: TextStyle(

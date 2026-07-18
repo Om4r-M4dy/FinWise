@@ -26,13 +26,14 @@ class LabeledField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: TextStyles.caption1_14.copyWith(
-            color: AppColors.lettersAndIcons,
+            color: isDark ? Colors.white : AppColors.lettersAndIcons,
             fontFamily: AppFonts.poppins,
             fontWeight: FontWeight.w500,
           ),
@@ -92,16 +93,23 @@ class TermsNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white70 : AppColors.lettersAndIcons;
     return Column(
-      children: const [
-        Center(child: Text("By continuing, you agree to ")),
+      children: [
+        Center(
+          child: Text(
+            "By continuing, you agree to ",
+            style: TextStyle(color: textColor),
+          ),
+        ),
         Center(
           child: Text(
             "Terms of Use and Privacy Policy.",
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, color: textColor),
           ),
         ),
-        Gap(13),
+        const Gap(13),
       ],
     );
   }
@@ -113,10 +121,28 @@ class AlreadyAccountLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: GestureDetector(
         onTap: () => replaceWith(context, Routes.loginScreen),
-        child: const Text("Already have an account? Log In"),
+        child: Text.rich(
+          TextSpan(
+            text: "Already have an account? ",
+            style: TextStyle(
+              color: isDark ? Colors.white70 : AppColors.gray39,
+              fontSize: 14,
+            ),
+            children: const [
+              TextSpan(
+                text: "Log In",
+                style: TextStyle(
+                  color: AppColors.lightBlueButton,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
