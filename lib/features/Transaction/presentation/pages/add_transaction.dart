@@ -1,6 +1,5 @@
 import 'package:date_field/date_field.dart';
 import 'package:finwise/core/constants/app_assets.dart';
-import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/categories.dart';
 import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
@@ -18,10 +17,12 @@ import 'package:finwise/features/Transaction/presentation/cubit/transaction_stat
 import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/saving_goals/persentation/cubit/goal_cubit.dart';
-import 'package:finwise/features/saving_goals/persentation/cubit/goal_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+
+import 'package:finwise/features/Transaction/presentation/widgets/transaction_type_button.dart';
+import 'package:finwise/features/Transaction/presentation/widgets/transaction_goal_selector.dart';
 
 class AddTransaction extends StatefulWidget {
   final TransactionModel? transactionToEdit;
@@ -228,110 +229,7 @@ class _AddTransactionState extends State<AddTransaction> {
                     ),
                     const Gap(24),
 
-                    if (cubit.selectedCategory == '2') ...[
-                      Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        child: Text(
-                          "Link to Saving Goal",
-                          style: TextStyles.bodyMedium.copyWith(
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                      ),
-                      const Gap(4),
-                      SizedBox(
-                        height: 48,
-                        child: BlocBuilder<GoalCubit, GoalState>(
-                          builder: (context, goalState) {
-                            final hasSelectedGoal =
-                                goalState is GoalLoadedState &&
-                                goalState.goals.any(
-                                  (g) => g.goalId == cubit.selectedGoalId,
-                                );
-                            final dropdownValue = hasSelectedGoal
-                                ? cubit.selectedGoalId
-                                : null;
-
-                            List<DropdownMenuItem<String>> items = [];
-                            if (goalState is GoalLoadedState) {
-                              items = goalState.goals.map((goal) {
-                                return DropdownMenuItem<String>(
-                                  value: goal.goalId,
-                                  child: Text(
-                                    goal.title,
-                                    style: TextStyles.bodyMedium.copyWith(
-                                      color: theme.colorScheme.onSurface,
-                                    ),
-                                  ),
-                                );
-                              }).toList();
-                            }
-
-                            return DropdownButtonFormField<String?>(
-                              isExpanded: true,
-                              initialValue: dropdownValue,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: theme.colorScheme.primaryContainer,
-                                hintText: "Select a Savings Goal (Optional)",
-                                hintStyle: TextStyles.bodyMedium.copyWith(
-                                  color: theme.colorScheme.onSurface.withValues(
-                                    alpha: 0.5,
-                                  ),
-                                ),
-                                suffixIcon: Container(
-                                  margin: const EdgeInsets.all(8),
-                                  child: CustomSvgPicture(
-                                    path: AppAssets.arrowDown,
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 10,
-                                  horizontal: 16,
-                                ),
-                              ),
-                              items: [
-                                DropdownMenuItem<String?>(
-                                  value: null,
-                                  child: Text(
-                                    "None / General Savings",
-                                    style: TextStyles.bodyMedium.copyWith(
-                                      color: theme.colorScheme.onSurface
-                                          .withValues(alpha: 0.5),
-                                    ),
-                                  ),
-                                ),
-                                ...items,
-                              ],
-                              onChanged: (value) {
-                                cubit.setGoalId(value);
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      const Gap(6),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(
-                          cubit.selectedType ==
-                                  TransactionTypeEnum.expense.value
-                              ? "* This transaction will add money to the selected goal."
-                              : "* This transaction will withdraw money from the selected goal.",
-                          style: TextStyles.bodySmall.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(
-                              alpha: 0.6,
-                            ),
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                      const Gap(24),
-                    ],
+                    TransactionGoalSelector(cubit: cubit),
 
                     Container(
                       margin: const EdgeInsets.only(left: 10),
@@ -485,50 +383,6 @@ class _AddTransactionState extends State<AddTransaction> {
                 ),
               );
             },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class TransactionTypeButton extends StatelessWidget {
-  const TransactionTypeButton({
-    super.key,
-    required this.cubit,
-    required this.type,
-  });
-
-  final TransactionCubit cubit;
-  final String type;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: () => cubit.setType(type),
-      child: Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: cubit.selectedType == type
-              ? AppColors.mainGreen.withValues(alpha: 0.15)
-              : theme.colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: cubit.selectedType == type
-                ? AppColors.mainGreen
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          type,
-          style: TextStyles.bodySmall.copyWith(
-            color: cubit.selectedType == type
-                ? AppColors.mainGreen
-                : theme.colorScheme.onPrimaryContainer,
-            fontWeight: FontWeight.bold,
           ),
         ),
       ),

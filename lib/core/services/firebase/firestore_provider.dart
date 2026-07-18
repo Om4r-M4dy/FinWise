@@ -80,14 +80,14 @@ class FirestoreProvider {
       log(
         'FirebaseException in getTransactionsForRange: ${e.code} - ${e.message}',
       );
-      print(
+      log(
         '========================================================================',
       );
-      print('FIRESTORE INDEX ERROR: ${e.message}');
+      log('FIRESTORE INDEX ERROR: ${e.message}');
       if (e.message != null && e.message!.contains('https://')) {
-        print('Create index link: ${e.message}');
+        log('Create index link: ${e.message}');
       }
-      print(
+      log(
         '========================================================================',
       );
       rethrow;
@@ -120,14 +120,14 @@ class FirestoreProvider {
           .get(const GetOptions(source: Source.server));
     } on FirebaseException catch (e) {
       log('FirebaseException in getTransactionsPage: ${e.code} - ${e.message}');
-      print(
+      log(
         '========================================================================',
       );
-      print('FIRESTORE INDEX ERROR: ${e.message}');
+      log('FIRESTORE INDEX ERROR: ${e.message}');
       if (e.message != null && e.message!.contains('https://')) {
-        print('Create index link: ${e.message}');
+        log('Create index link: ${e.message}');
       }
-      print(
+      log(
         '========================================================================',
       );
       rethrow;

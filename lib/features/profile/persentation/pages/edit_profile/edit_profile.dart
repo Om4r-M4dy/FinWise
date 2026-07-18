@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/extentions/context_extensions.dart';
 import 'package:finwise/core/styles/text_styles.dart';
@@ -16,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:finwise/core/services/firebase/firestore_provider.dart';
 import 'package:finwise/features/profile/data/models/user_model.dart';
+import 'package:finwise/features/profile/persentation/pages/edit_profile/widgets/profile_avatar_picker.dart';
 import 'package:finwise/core/extentions/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,22 +79,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.dispose();
   }
 
-  // ── Profile Image Widget Helper ─────────────────────────────────────────
-  // Resolves the profile image: either from a local file, web URL, or default asset.
-  ImageProvider _getProfileImage() {
-    if (_profileImagePath != null && _profileImagePath!.isNotEmpty) {
-      if (File(_profileImagePath!).existsSync()) {
-        return FileImage(File(_profileImagePath!));
-      } else if (_profileImagePath!.startsWith('http') ||
-          _profileImagePath!.startsWith('https')) {
-        return NetworkImage(_profileImagePath!);
-      }
-    }
-    return const AssetImage(AppAssets.defaultProfile);
-
-    // return const AssetImage(AppAssets.profileImage);
-  }
-
   // ── Pick Image from Gallery/Camera ─────────────────────────────────────
   Future<void> _pickImage(ImageSource source) async {
     try {
@@ -115,102 +99,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (!mounted) return;
       CustomSnackBar.showError(context, 'Could not pick image: $e');
     }
-  }
-
-  // ── Show Image Picker Options Bottom Sheet ─────────────────────────────
-  void _showImagePickerSheet() {
-    final theme = Theme.of(context);
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: theme.colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const Gap(16),
-                Text(
-                  'Change Profile Photo',
-                  style: TextStyles.bodyLarge.copyWith(fontSize: 18),
-                ),
-                const Gap(20),
-                ListTile(
-                  leading: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.camera_alt_rounded,
-                      color: AppColors.mainGreen,
-                    ),
-                  ),
-                  title: const Text(
-                    'Camera',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Take a new photo',
-                    style: TextStyle(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(ImageSource.camera);
-                  },
-                ),
-                ListTile(
-                  leading: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.photo_library_rounded,
-                      color: AppColors.mainGreen,
-                    ),
-                  ),
-                  title: const Text(
-                    'Gallery',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Choose from gallery',
-                    style: TextStyle(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(ImageSource.gallery);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   // ── Update Profile Logic ───────────────────────────────────────────────
@@ -409,45 +297,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-
             Positioned(
               top: -EditProfileScreen.profileImageRadius - 15,
-              child: GestureDetector(
-                onTap: _showImagePickerSheet,
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    CircleAvatar(
-                      radius: EditProfileScreen.profileImageRadius,
-                      backgroundImage: _getProfileImage(),
-                    ),
-                    Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: AppColors.mainGreen,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              child: ProfileAvatarPicker(
+                profileImagePath: _profileImagePath,
+                radius: EditProfileScreen.profileImageRadius,
+                onTap: () {
+                  ProfileAvatarPicker.showImagePickerSheet(
+                    context: context,
+                    onPick: _pickImage,
+                  );
+                },
               ),
             ),
           ],
