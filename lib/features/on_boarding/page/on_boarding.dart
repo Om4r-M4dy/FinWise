@@ -5,9 +5,9 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/features/on_boarding/Widget/background_card.dart';
 import 'package:finwise/features/on_boarding/Widget/build_page_content.dart';
 import 'package:finwise/features/on_boarding/data/on_boarding_data.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// A stateful widget that displays the onboarding flow of the application.
 /// It introduces the user to the app's core features before navigating to the main/login screen.
@@ -73,8 +73,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           );
                         } else {
                           // Mark onboarding as seen (won't show again)
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.setBool('seen_onboarding', true);
+                          await UserPrefs.setSeenOnboarding(true);
                           if (context.mounted) {
                             replaceWith(context, Routes.authScreen);
                           }
