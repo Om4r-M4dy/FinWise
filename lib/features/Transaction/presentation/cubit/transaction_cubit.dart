@@ -462,9 +462,10 @@ class TransactionCubit extends Cubit<TransactionStates> {
 
           // 2. If this transaction was linked to a goal, reverse the goal amount
           if (transaction.goalId != null && goalCubit != null) {
+            final oldImpact = isExpense ? transaction.amount : -transaction.amount;
             await goalCubit.adjustGoalAmount(
               goalId: transaction.goalId!,
-              amountDiff: -transaction.amount,
+              amountDiff: -oldImpact,
               userId: transaction.userId,
             );
           }
@@ -559,22 +560,26 @@ class TransactionCubit extends Cubit<TransactionStates> {
             if (oldTransaction.goalId != updatedTransaction.goalId) {
               // Goal changed — reverse old goal, apply to new goal
               if (oldTransaction.goalId != null) {
+                final oldImpact = isOldExpense ? oldTransaction.amount : -oldTransaction.amount;
                 await goalCubit.adjustGoalAmount(
                   goalId: oldTransaction.goalId!,
-                  amountDiff: -oldTransaction.amount,
+                  amountDiff: -oldImpact,
                   userId: userId,
                 );
               }
               if (updatedTransaction.goalId != null) {
+                final newImpact = isNewExpense ? amount : -amount;
                 await goalCubit.adjustGoalAmount(
                   goalId: updatedTransaction.goalId!,
-                  amountDiff: amount,
+                  amountDiff: newImpact,
                   userId: userId,
                 );
               }
             } else if (updatedTransaction.goalId != null) {
               // Same goal, apply the difference
-              final difference = amount - oldTransaction.amount;
+              final oldImpact = isOldExpense ? oldTransaction.amount : -oldTransaction.amount;
+              final newImpact = isNewExpense ? amount : -amount;
+              final difference = newImpact - oldImpact;
               if (difference != 0) {
                 await goalCubit.adjustGoalAmount(
                   goalId: updatedTransaction.goalId!,

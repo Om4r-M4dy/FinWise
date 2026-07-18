@@ -1,5 +1,4 @@
 import 'package:finwise/core/constants/app_assets.dart';
-import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/functions/goal_aggregation.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';

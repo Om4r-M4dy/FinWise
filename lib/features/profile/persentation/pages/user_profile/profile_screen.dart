@@ -301,6 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
+          ),  // closes Positioned.fill
           Positioned(
             top: -profileImageRadius - 15,
             child: CircleAvatar(

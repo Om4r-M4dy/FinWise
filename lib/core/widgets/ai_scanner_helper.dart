@@ -8,7 +8,7 @@ import 'package:finwise/core/services/AI/gemini_service.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/dialogs/custom_snackbar.dart';
 import 'package:finwise/core/widgets/dialogs/loading_dialog.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
