@@ -11,6 +11,7 @@ import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/sections/progress_section.dart';
 import 'package:finwise/core/widgets/shimmer/shimmer_loading.dart';
 import 'package:finwise/features/Home/persentation/widgets/last_week_analysis.dart';
+import 'package:finwise/features/Home/persentation/widgets/ai_advisor_banner.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
 import 'package:finwise/features/analysis/widgets/date_header.dart';
@@ -202,68 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const Gap(16),
-                        GestureDetector(
-                          onTap: () => pushTo(context, Routes.aiAdvisorScreen),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: Theme.of(context).brightness == Brightness.dark
-                                    ? [AppColors.darkGreen, AppColors.dark05]
-                                    : [AppColors.darkGreen, AppColors.lettersAndIcons],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.mainGreen.withValues(alpha: 0.2),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.psychology_rounded,
-                                    color: AppColors.mainGreen,
-                                    size: 24,
-                                  ),
-                                ),
-                                const Gap(14),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'AI Financial Advisor',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const Gap(2),
-                                      Text(
-                                        'Get smart tips based on your spending',
-                                        style: TextStyle(
-                                          color: Colors.white.withValues(alpha: 0.7),
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: AppColors.mainGreen,
-                                  size: 16,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        const AiAdvisorBanner(),
                         const Gap(26),
                         _transactionsWithDateFilters(),
                       ],

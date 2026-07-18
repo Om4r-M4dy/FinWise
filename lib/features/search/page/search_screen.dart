@@ -1,17 +1,14 @@
 import 'package:finwise/core/constants/app_assets.dart';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/categories.dart';
-import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/custom_text_form_field.dart';
-import 'package:finwise/core/widgets/info_record.dart';
 import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/core/widgets/row_app_bar.dart';
-import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
+import 'package:finwise/features/search/widgets/search_results_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
@@ -242,93 +239,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               if (_showSearchResults && !_isLoading) ...[
                 Text('Results', style: TextStyles.bodyMedium),
-                _buildSearchResults(),
+                SearchResultsList(
+                  titleQuery: _titleController.text,
+                  selectedCategoryKey: _selectedCategoryKey,
+                  selectedDate: _selectedDate,
+                  selectedTransactionType: _selectedTransactionType,
+                ),
               ],
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildSearchResults() {
-    final allTransactions = context
-        .watch<TransactionCubit>()
-        .statsTransactionsList;
-
-    final filtered = allTransactions.where((tx) {
-      // 1. Filter by Title
-      final titleQuery = _titleController.text.trim().toLowerCase();
-      if (titleQuery.isNotEmpty) {
-        if (!tx.title.toLowerCase().contains(titleQuery)) {
-          return false;
-        }
-      }
-
-      // 2. Filter by Category
-      if (_selectedCategoryKey != 'all') {
-        if (tx.categoryId != _selectedCategoryKey) {
-          return false;
-        }
-      }
-
-      // 3. Filter by Date
-      if (_selectedDate != null) {
-        if (tx.date.year != _selectedDate!.year ||
-            tx.date.month != _selectedDate!.month ||
-            tx.date.day != _selectedDate!.day) {
-          return false;
-        }
-      }
-
-      // 4. Filter by Transaction Type (Income / Expense)
-      final txType = tx.type.toLowerCase();
-      if (_selectedTransactionType == TransactionType.income &&
-          txType != 'income') {
-        return false;
-      }
-      if (_selectedTransactionType == TransactionType.expense &&
-          txType != 'expense') {
-        return false;
-      }
-
-      return true;
-    }).toList();
-
-    if (filtered.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24.0),
-          child: Text(
-            'No matching transactions found.',
-            style: TextStyles.bodyMedium.copyWith(
-              color: AppColors.oceanBlueButton,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: filtered.length,
-      separatorBuilder: (context, index) => const Gap(19),
-      itemBuilder: (context, index) {
-        final tx = filtered[index];
-        final isExpense = tx.type.toLowerCase() == 'expense';
-
-        return InfoRecord(
-          bgColor: isExpense
-              ? AppColors.lightBlueButton
-              : AppColors.mainGreen.withValues(alpha: 0.6),
-          title: tx.title,
-          date: tx.formattedDate,
-          cat: tx.categoryName.isNotEmpty ? tx.categoryName : 'General',
-          amount: tx.getFormattedAmount(showPlusForIncome: true),
-          amountColor: tx.getAmountColor(useGreenForIncome: true),
-        );
-      },
     );
   }
 

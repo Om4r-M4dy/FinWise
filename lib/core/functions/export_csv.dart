@@ -44,9 +44,11 @@ Future<bool> exportTransactionsToCsv(
     await file.writeAsString(csvBuffer.toString());
 
     final xFile = XFile(file.path, mimeType: 'text/csv');
-    await Share.shareXFiles(
-      [xFile],
-      subject: 'FinWise Transactions Export',
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [xFile],
+        subject: 'FinWise Transactions Export',
+      ),
     );
 
     return true;
