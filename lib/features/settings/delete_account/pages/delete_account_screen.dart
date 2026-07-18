@@ -4,10 +4,10 @@ import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/features/auth/persentation/widgets/auth_text_field.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
 import 'package:finwise/features/settings/delete_account/cubit/delete_account_cubit.dart';
 import 'package:finwise/features/settings/delete_account/cubit/delete_account_state.dart';
 import 'package:finwise/features/settings/delete_account/widgets/delete_dialog.dart';
@@ -68,7 +68,11 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   ),
                   const Gap(24),
                   Container(
-                    padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+                    padding: const EdgeInsets.only(
+                      left: 25,
+                      right: 25,
+                      top: 25,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
                       color: Theme.of(context).colorScheme.primaryContainer,
@@ -102,7 +106,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       final cubit = context.read<DeleteAccountCubit>();
                       final isConfirmed = cubit.isPasswordConfirmed;
                       final isVerifying = state is PasswordVerificationLoading;
-                      
+
                       String? errorText;
                       if (state is PasswordVerificationFailure) {
                         errorText = state.errorMessage;
@@ -122,21 +126,30 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.check_circle, color: AppColors.mainGreen),
+                                const Icon(
+                                  Icons.check_circle,
+                                  color: AppColors.mainGreen,
+                                ),
                                 const Gap(8),
                                 Text(
                                   "Password verified successfully",
-                                  style: TextStyles.bodyMedium.copyWith(color: AppColors.mainGreen),
+                                  style: TextStyles.bodyMedium.copyWith(
+                                    color: AppColors.mainGreen,
+                                  ),
                                 ),
                               ],
                             )
                           else
                             MainButton(
-                              text: isVerifying ? "Verifying..." : "Confirm Password",
+                              text: isVerifying
+                                  ? "Verifying..."
+                                  : "Confirm Password",
                               onPress: isVerifying
                                   ? null
                                   : () {
-                                      cubit.verifyPassword(_passwordController.text);
+                                      cubit.verifyPassword(
+                                        _passwordController.text,
+                                      );
                                     },
                             ),
                         ],
@@ -159,14 +172,18 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                                 ? () {
                                     showDialog(
                                       context: context,
-                                      builder: (dialogContext) => BlocProvider.value(
-                                        value: context.read<DeleteAccountCubit>(),
-                                        child: const DeleteDialog(),
-                                      ),
+                                      builder: (dialogContext) =>
+                                          BlocProvider.value(
+                                            value: context
+                                                .read<DeleteAccountCubit>(),
+                                            child: const DeleteDialog(),
+                                          ),
                                     );
                                   }
                                 : null,
-                            backgroundColor: isConfirmed ? Colors.red : Colors.grey.shade400,
+                            backgroundColor: isConfirmed
+                                ? Colors.red
+                                : Colors.grey.shade400,
                             textColor: Colors.white,
                           ),
                           const Gap(11),

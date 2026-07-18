@@ -6,21 +6,21 @@ import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
-import 'package:finwise/core/widgets/icon_with_text_button.dart';
+import 'package:finwise/core/widgets/buttons/icon_with_text_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/core/widgets/progress_section.dart';
+import 'package:finwise/core/widgets/sections/progress_section.dart';
 import 'package:finwise/features/categories/widgets/category_details.dart';
 import 'package:finwise/features/Transaction/presentation/widgets/transaction_details_sheet.dart';
-import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
-import 'package:finwise/features/analysis/cubit/goal_state.dart';
-import 'package:finwise/features/analysis/data/model/goal_model.dart';
+import 'package:finwise/features/saving_goals/persentation/cubit/goal_cubit.dart';
+import 'package:finwise/features/saving_goals/persentation/cubit/goal_state.dart';
+import 'package:finwise/features/saving_goals/data/model/goal_model.dart';
 import 'package:finwise/core/widgets/add_goal_bottom_sheet.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/core/extentions/transaction_extension.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/core/functions/is_category_match.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -39,7 +39,9 @@ class TransactionsByCategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Watch transaction list dynamically from TransactionCubit
-    final allTransactions = context.watch<TransactionCubit>().transactionsList;
+    final allTransactions = context
+        .watch<TransactionCubit>()
+        .statsTransactionsList;
     final transactions = goalId != null
         ? allTransactions.where((tx) => tx.goalId == goalId).toList()
         : allTransactions

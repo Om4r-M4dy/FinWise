@@ -47,7 +47,7 @@ class TargetCard extends StatelessWidget {
             backgroundColor: circleBackgroundColor ?? (isDark ? AppColors.darkGreen : AppColors.background),
             radius: radius,
             lineWidth: 5.0,
-            percent: percent / 100,
+            percent: (percent.clamp(0.0, 100.0)) / 100,
             center:
                 center ??
                 Text("${(percent).toInt()}%", style: TextStyles.bodyLarge.copyWith(

@@ -5,11 +5,11 @@ import 'package:finwise/core/functions/is_category_match.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
-import 'package:finwise/core/widgets/progress_section.dart';
+import 'package:finwise/core/widgets/sections/progress_section.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/categories/widgets/category_item.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -23,7 +23,7 @@ class MainCategories extends StatelessWidget {
       builder: (context, userState) {
         final transactionList = context
             .watch<TransactionCubit>()
-            .transactionsList;
+            .statsTransactionsList;
         final user = userState is UserLoaded ? userState.user : null;
         final budget = user?.monthlyBudgetLimit ?? 0.0;
         final expense = user?.totalExpense ?? 0.0;

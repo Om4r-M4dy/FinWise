@@ -1,45 +1,21 @@
 import 'package:finwise/core/services/firebase/firestore_provider.dart';
 import 'package:finwise/core/services/notification/notification_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:finwise/core/functions/google_auth.dart';
-import 'package:finwise/core/functions/facebook_auth.dart';
-import 'package:finwise/features/auth/models/user_model.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
+import 'package:finwise/features/auth/data/repo/auth_repo.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
+  final _repository = AuthRepo();
+
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordVerfiyController = TextEditingController();
   final nameController = TextEditingController();
-  // Helper method to fetch user data from Firestore or create it if not exists
-  Future<UserModel> _getOrCreateUserModel(User user) async {
-    final doc = await FirestoreProvider.user.doc(user.uid).get();
-    if (doc.exists && doc.data() != null) {
-      return UserModel.fromJson(doc.data() as Map<String, dynamic>);
-    } else {
-      final userModel = UserModel(
-        uid: user.uid,
-        username: user.displayName ?? '',
-        email: user.email ?? '',
-        phone: user.phoneNumber ?? '',
-        profilePicture: user.photoURL ?? '',
-        totalBalance: 0.0,
-        totalExpense: 0.0,
-        totalIncome: 0.0,
-        dob: 0.0,
-        monthlyBudgetLimit: 0.0,
-        settings: {'pushNotifications': true, 'darkTheme': false},
-      );
-      await FirestoreProvider.addUser(userModel);
-      return userModel;
-    }
-  }
 
   Future<void> loginWithEmailAndPassword() async {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
@@ -49,17 +25,16 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(AuthLoading());
 
-    try {
-      final userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text,
-          );
+    final result = await _repository.loginWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
 
-      final user = userCredential.user;
-      if (user != null) {
-        final userModel = await _getOrCreateUserModel(user);
-
+    await result.fold(
+      (failure) async {
+        emit(AuthFailure(failure.message));
+      },
+      (userModel) async {
         // Save name and login state using UserPrefs
         await UserPrefs.setName(userModel.username ?? '');
         await UserPrefs.setIsLoggedIn(true);
@@ -72,38 +47,29 @@ class AuthCubit extends Cubit<AuthState> {
           'date': DateTime.now(),
           'isRead': false,
         };
-        await FirestoreProvider.addNotification(user.uid, notifyData);
-        await NotificationService.showInstantNotification(
-          title: 'Welcome Back!',
-          body: 'You have logged in successfully.',
-        );
+        await FirestoreProvider.addNotification(userModel.uid!, notifyData);
+        final showPush = userModel.settings?['pushNotifications'] ?? true;
+        if (showPush) {
+          await NotificationService.showInstantNotification(
+            title: 'Welcome Back!',
+            body: 'You have logged in successfully.',
+          );
+        }
 
         emit(AuthSuccess(userModel: userModel));
-      } else {
-        emit(AuthFailure('Login failed: User is null'));
-      }
-    } on FirebaseAuthException catch (e) {
-      String errorMessage = 'An error occurred. Please try again.';
-      if (e.code == 'user-not-found') {
-        errorMessage = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        errorMessage = 'Wrong password provided.';
-      } else if (e.code == 'invalid-email') {
-        errorMessage = 'The email address is badly formatted.';
-      }
-      emit(AuthFailure(errorMessage));
-    } catch (e) {
-      emit(AuthFailure('Error: $e'));
-    }
+      },
+    );
   }
 
   Future<void> loginWithGoogle(BuildContext context) async {
     emit(AuthLoading());
-    try {
-      final userCredential = await GoogleAuth.signInWithGoogle(context);
-      if (userCredential != null && userCredential.user != null) {
-        final userModel = await _getOrCreateUserModel(userCredential.user!);
+    final result = await _repository.loginWithGoogle(context);
 
+    await result.fold(
+      (failure) async {
+        emit(AuthFailure(failure.message));
+      },
+      (userModel) async {
         await UserPrefs.setName(userModel.username ?? '');
         await UserPrefs.setIsLoggedIn(true);
 
@@ -114,30 +80,29 @@ class AuthCubit extends Cubit<AuthState> {
           'date': DateTime.now(),
           'isRead': false,
         };
-        await FirestoreProvider.addNotification(userCredential.user!.uid, notifyData);
-        await NotificationService.showInstantNotification(
-          title: 'Welcome!',
-          body: 'Logged in with Google successfully.',
-        );
+        await FirestoreProvider.addNotification(userModel.uid!, notifyData);
+        final showPush = userModel.settings?['pushNotifications'] ?? true;
+        if (showPush) {
+          await NotificationService.showInstantNotification(
+            title: 'Welcome!',
+            body: 'Logged in with Google successfully.',
+          );
+        }
 
         emit(AuthSuccess(userModel: userModel));
-      } else {
-        emit(AuthFailure('Google sign-in was cancelled or failed.'));
-      }
-    } catch (e) {
-      emit(AuthFailure('Google sign-in error: $e'));
-    }
+      },
+    );
   }
 
   Future<void> loginWithFacebook(BuildContext context) async {
     emit(AuthLoading());
-    try {
-      final userCredential = await FacebookAuthService.signInWithFacebook(
-        context,
-      );
-      if (userCredential != null && userCredential.user != null) {
-        final userModel = await _getOrCreateUserModel(userCredential.user!);
+    final result = await _repository.loginWithFacebook(context);
 
+    await result.fold(
+      (failure) async {
+        emit(AuthFailure(failure.message));
+      },
+      (userModel) async {
         await UserPrefs.setName(userModel.username ?? '');
         await UserPrefs.setIsLoggedIn(true);
 
@@ -148,19 +113,18 @@ class AuthCubit extends Cubit<AuthState> {
           'date': DateTime.now(),
           'isRead': false,
         };
-        await FirestoreProvider.addNotification(userCredential.user!.uid, notifyData);
-        await NotificationService.showInstantNotification(
-          title: 'Welcome!',
-          body: 'Logged in with Facebook successfully.',
-        );
+        await FirestoreProvider.addNotification(userModel.uid!, notifyData);
+        final showPush = userModel.settings?['pushNotifications'] ?? true;
+        if (showPush) {
+          await NotificationService.showInstantNotification(
+            title: 'Welcome!',
+            body: 'Logged in with Facebook successfully.',
+          );
+        }
 
         emit(AuthSuccess(userModel: userModel));
-      } else {
-        emit(AuthFailure('Facebook sign-in was cancelled or failed.'));
-      }
-    } catch (e) {
-      emit(AuthFailure('Facebook sign-in error: $e'));
-    }
+      },
+    );
   }
 
   @override

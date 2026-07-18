@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_state.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_state.dart';
 
 import 'package:finwise/core/functions/format_amount.dart';
 
@@ -97,8 +97,8 @@ class Info extends StatelessWidget {
                 color: isExpense
                     ? color
                     : (Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : AppColors.dark05),
+                          ? Colors.white
+                          : AppColors.dark05),
               ),
             ),
           ],

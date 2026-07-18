@@ -4,11 +4,11 @@ import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
-import 'package:finwise/core/services/gemini_service.dart';
+import 'package:finwise/core/services/AI/gemini_service.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/dialogs/custom_snackbar.dart';
 import 'package:finwise/core/widgets/dialogs/loading_dialog.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +16,10 @@ import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AIScannerHelper {
-  static void showAIScannerSheet(BuildContext context, {bool isAlreadyOnAddScreen = false}) {
+  static void showAIScannerSheet(
+    BuildContext context, {
+    bool isAlreadyOnAddScreen = false,
+  }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Resize sheet when keyboard opens
@@ -40,8 +43,9 @@ class AIScannerHelper {
     required String userInstructions,
   }) async {
     // Capture cubit before async gap to avoid reading context after disposal
-    final TransactionCubit? cubit =
-        isAlreadyOnAddScreen ? context.read<TransactionCubit>() : null;
+    final TransactionCubit? cubit = isAlreadyOnAddScreen
+        ? context.read<TransactionCubit>()
+        : null;
 
     // Show loading dialog
     LoadingDialog.show(context);
@@ -280,7 +284,8 @@ class _AIScannerSheetContentState extends State<_AIScannerSheetContent> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: AppColors.lightGreen,
-                      hintText: "Add instruction or hint for the AI (optional)... e.g., 'Exclude sales tax', 'This was for coffee'",
+                      hintText:
+                          "Add instruction or hint for the AI (optional)... e.g., 'Exclude sales tax', 'This was for coffee'",
                       hintStyle: TextStyles.bodySmall.copyWith(
                         color: AppColors.lettersAndIcons.withValues(alpha: 0.5),
                       ),

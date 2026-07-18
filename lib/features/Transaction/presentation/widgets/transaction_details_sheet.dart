@@ -1,10 +1,10 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/styles/text_styles.dart';
-import 'package:finwise/core/widgets/icon_with_text_button.dart';
+import 'package:finwise/core/widgets/buttons/icon_with_text_button.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
-import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
+import 'package:finwise/features/saving_goals/persentation/cubit/goal_cubit.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +197,12 @@ class TransactionDetailsSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(BuildContext context, String label, String value, {Color? valueColor}) {
+  Widget _buildRow(
+    BuildContext context,
+    String label,
+    String value, {
+    Color? valueColor,
+  }) {
     final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

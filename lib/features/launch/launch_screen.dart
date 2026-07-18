@@ -5,7 +5,7 @@ import 'package:finwise/core/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';

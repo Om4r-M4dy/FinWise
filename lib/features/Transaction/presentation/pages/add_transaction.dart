@@ -4,26 +4,26 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/categories.dart';
 import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
-import 'package:finwise/core/widgets/dialogs/loading_dialog.dart';
+import 'package:finwise/core/widgets/dialogs/custom_snackbar.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
-import 'package:finwise/core/widgets/main_button.dart';
+import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/widgets/ai_scanner_bar.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_states.dart';
-import 'package:finwise/features/profile/cubit/user_cubit.dart';
+import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
-import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
-import 'package:finwise/features/analysis/cubit/goal_state.dart';
+import 'package:finwise/features/saving_goals/persentation/cubit/goal_cubit.dart';
+import 'package:finwise/features/saving_goals/persentation/cubit/goal_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class AddTransaction extends StatelessWidget {
+class AddTransaction extends StatefulWidget {
   final TransactionModel? transactionToEdit;
   final bool showAppBar;
 
@@ -34,14 +34,21 @@ class AddTransaction extends StatelessWidget {
   });
 
   @override
+  State<AddTransaction> createState() => _AddTransactionState();
+}
+
+class _AddTransactionState extends State<AddTransaction> {
+  bool _isLoadingDialogShowing = false;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cubit = context.read<TransactionCubit>();
 
     return Scaffold(
-      appBar: showAppBar
+      appBar: widget.showAppBar
           ? DefaultAppBar(
-              title: transactionToEdit == null
+              title: widget.transactionToEdit == null
                   ? "Add Transaction"
                   : "Edit Transaction",
             )
@@ -61,22 +68,33 @@ class AddTransaction extends StatelessWidget {
           child: BlocConsumer<TransactionCubit, TransactionStates>(
             listener: (context, state) {
               if (state is TransactionLoadingState) {
-                LoadingDialog.show(context);
+                if (!_isLoadingDialogShowing) {
+                  _isLoadingDialogShowing = true;
+                  showLoadingDialog(context);
+                }
               } else if (state is TransactionSuccessState) {
-                LoadingDialog.hide(context);
-                showMyDialog(
-                  context,
-                  transactionToEdit == null
-                      ? 'Transaction saved successfully!'
-                      : 'Transaction updated successfully!',
-                  type: DialogType.success,
-                );
-                showAppBar
-                    ? pop(context)
-                    : pushTo(context, Routes.bottomNavBar, extra: 0);
+                if (_isLoadingDialogShowing) {
+                  _isLoadingDialogShowing = false;
+                  // Dismiss the loading dialog first, then navigate
+                  pop(context);
+                  CustomSnackBar.showSuccess(
+                    context,
+                    widget.transactionToEdit == null
+                        ? 'Transaction saved successfully!'
+                        : 'Transaction updated successfully!',
+                  );
+                  if (widget.showAppBar) {
+                    pop(context);
+                  } else {
+                    pushTo(context, Routes.bottomNavBar, extra: 0);
+                  }
+                }
               } else if (state is TransactionErrorState) {
-                LoadingDialog.hide(context);
-                showMyDialog(context, state.errorMessage);
+                if (_isLoadingDialogShowing) {
+                  _isLoadingDialogShowing = false;
+                  pop(context);
+                }
+                CustomSnackBar.showError(context, state.errorMessage);
               }
             },
             builder: (context, state) {
@@ -440,9 +458,11 @@ class AddTransaction extends StatelessWidget {
                     Center(
                       child: MainButton(
                         size: ButtonSize.small,
-                        text: transactionToEdit == null ? "Save" : "Update",
+                        text: widget.transactionToEdit == null
+                            ? "Save"
+                            : "Update",
                         onPress: () {
-                          if (transactionToEdit == null) {
+                          if (widget.transactionToEdit == null) {
                             cubit.saveTransaction(
                               context.read<UserCubit>(),
                               goalCubit: context.read<GoalCubit>(),
@@ -450,7 +470,7 @@ class AddTransaction extends StatelessWidget {
                           } else {
                             cubit.editTransaction(
                               userCubit: context.read<UserCubit>(),
-                              oldTransaction: transactionToEdit!,
+                              oldTransaction: widget.transactionToEdit!,
                               goalCubit: context.read<GoalCubit>(),
                             );
                           }

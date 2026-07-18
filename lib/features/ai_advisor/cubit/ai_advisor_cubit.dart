@@ -1,5 +1,5 @@
 import 'package:finwise/core/functions/build_financial_summary.dart';
-import 'package:finwise/core/services/gemini_service.dart';
+import 'package:finwise/core/services/AI/gemini_service.dart';
 import 'package:finwise/features/Transaction/data/model/transaction_model.dart';
 import 'package:finwise/features/ai_advisor/cubit/ai_advisor_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
