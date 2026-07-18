@@ -7,13 +7,15 @@ class CategoryItem extends StatelessWidget {
   const CategoryItem({
     super.key,
     this.bgColor = AppColors.oceanBlueButton,
-    required this.icon,
+    this.icon,
+    this.iconWidget,
     required this.label,
     this.onTap,
   });
 
   final Color bgColor;
-  final String icon;
+  final String? icon;
+  final Widget? iconWidget;
   final String label;
   final Function()? onTap;
 
@@ -25,16 +27,18 @@ class CategoryItem extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
               height: 98,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: bgColor,
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: CustomSvgPicture(height: 54, width: 30, path: icon),
+              child: Center(
+                child: iconWidget ?? CustomSvgPicture(height: 54, width: 30, path: icon!),
+              ),
             ),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             Text(label, style: TextStyles.bodyMedium),
           ],
         ),

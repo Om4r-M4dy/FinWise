@@ -1,24 +1,20 @@
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class Toggle extends StatefulWidget {
-  const Toggle({super.key});
+class Toggle extends StatelessWidget {
+  const Toggle({
+    super.key,
+    required this.isOn,
+    required this.onChanged,
+  });
 
-  @override
-  State<Toggle> createState() => _ToggleState();
-}
-
-class _ToggleState extends State<Toggle> {
-  bool isOn = false;
+  final bool isOn;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          isOn = !isOn;
-        });
-      },
+      onTap: () => onChanged(!isOn),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: 31,

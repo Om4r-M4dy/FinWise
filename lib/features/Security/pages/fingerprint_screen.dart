@@ -6,30 +6,40 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/custom_svg_picture.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class FingerprintScreen extends StatelessWidget {
+class FingerprintScreen extends StatefulWidget {
   const FingerprintScreen({super.key});
 
   @override
+  State<FingerprintScreen> createState() => _FingerprintScreenState();
+}
+
+class _FingerprintScreenState extends State<FingerprintScreen> {
+  @override
   Widget build(BuildContext context) {
+    final fingerprintName = UserPrefs.getFingerprintName();
+
     return Scaffold(
-      appBar: DefaultAppBar(title: "Fingerprint"),
+      appBar: const DefaultAppBar(title: "Fingerprint"),
       body: MyBodyView(
         bottomSection: Column(
           children: [
             const Gap(10),
-            _FingerprintOption(
-              icon: AppAssets.fingerprint,
-              iconColor: Colors.white,
-              bgColor: const Color(0xff6DB6FE),
-              title: "John Fingerprint",
-              onPress: () {
-                pushTo(context, Routes.fingerprintDetailsScreen);
-              },
-            ),
-            const Gap(10),
+            if (fingerprintName != null && fingerprintName.isNotEmpty) ...[
+              _FingerprintOption(
+                icon: AppAssets.fingerprint,
+                iconColor: Colors.white,
+                bgColor: const Color(0xff6DB6FE),
+                title: fingerprintName,
+                onPress: () {
+                  pushTo(context, Routes.fingerprintDetailsScreen);
+                },
+              ),
+              const Gap(10),
+            ],
             _FingerprintOption(
               icon: null,
               iconWidget: const Icon(Icons.add, color: Colors.white, size: 22),
@@ -87,7 +97,9 @@ class _FingerprintOption extends StatelessWidget {
         icon: Icon(
           Icons.arrow_forward_ios,
           weight: 7,
-          color: AppColors.lettersAndIcons,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : AppColors.lettersAndIcons,
         ),
       ),
     );

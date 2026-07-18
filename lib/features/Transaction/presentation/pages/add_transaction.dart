@@ -4,6 +4,7 @@ import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/categories.dart';
 import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/extentions/dialogs.dart';
+import 'package:finwise/core/widgets/dialogs/loading_dialog.dart';
 import 'package:finwise/core/functions/navigations.dart';
 import 'package:finwise/core/routes/routes.dart';
 import 'package:finwise/core/styles/text_styles.dart';
@@ -60,9 +61,9 @@ class AddTransaction extends StatelessWidget {
           child: BlocConsumer<TransactionCubit, TransactionStates>(
             listener: (context, state) {
               if (state is TransactionLoadingState) {
-                showLoadingDialog(context);
+                LoadingDialog.show(context);
               } else if (state is TransactionSuccessState) {
-                pop(context);
+                LoadingDialog.hide(context);
                 showMyDialog(
                   context,
                   transactionToEdit == null
@@ -73,11 +74,8 @@ class AddTransaction extends StatelessWidget {
                 showAppBar
                     ? pop(context)
                     : pushTo(context, Routes.bottomNavBar, extra: 0);
-                showAppBar
-                    ? pop(context)
-                    : pushTo(context, Routes.bottomNavBar, extra: 0);
               } else if (state is TransactionErrorState) {
-                pop(context);
+                LoadingDialog.hide(context);
                 showMyDialog(context, state.errorMessage);
               }
             },

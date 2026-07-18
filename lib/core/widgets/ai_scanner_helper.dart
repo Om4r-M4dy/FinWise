@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:finwise/core/constants/app_colors.dart';
 import 'package:finwise/core/constants/transaction_type_enum.dart';
 import 'package:finwise/core/functions/get_category_id.dart';
@@ -7,6 +8,7 @@ import 'package:finwise/core/services/gemini_service.dart';
 import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/dialogs/custom_snackbar.dart';
 import 'package:finwise/core/widgets/dialogs/loading_dialog.dart';
+import 'package:finwise/core/widgets/main_button.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +35,7 @@ class AIScannerHelper {
 
   static Future<void> _scanImage(
     BuildContext context,
-    ImageSource source, {
+    String imagePath, {
     required bool isAlreadyOnAddScreen,
     required String userInstructions,
   }) async {
@@ -41,77 +43,61 @@ class AIScannerHelper {
     final TransactionCubit? cubit =
         isAlreadyOnAddScreen ? context.read<TransactionCubit>() : null;
 
-    final picker = ImagePicker();
+    // Show loading dialog
+    LoadingDialog.show(context);
+
     try {
-      final XFile? pickedFile = await picker.pickImage(
-        source: source,
-        maxWidth: 1024,
-        maxHeight: 1024,
-        imageQuality: 85,
+      final result = await GeminiService.scanImage(
+        imagePath,
+        userInstructions: userInstructions,
       );
 
-      if (pickedFile == null || !context.mounted) return;
+      if (!context.mounted) return;
+      LoadingDialog.hide(context);
 
-      // Show loading dialog
-      LoadingDialog.show(context);
+      CustomSnackBar.showSuccess(context, 'Scanned successfully!');
 
-      try {
-        final result = await GeminiService.scanImage(
-          pickedFile.path,
-          userInstructions: userInstructions,
+      final title = result['title'];
+      final categoryName = result['category'];
+      final amount = (result['amount'] as num?)?.toDouble();
+      final note = result['note'];
+      final type = result['type'];
+
+      if (isAlreadyOnAddScreen && cubit != null) {
+        if (title != null) cubit.titleController.text = title;
+        if (amount != null) {
+          cubit.amountController.text = amount.toStringAsFixed(2);
+        }
+        if (note != null) cubit.noteController.text = note;
+        if (type != null) {
+          if (type.toLowerCase() == 'income') {
+            cubit.setType(TransactionTypeEnum.income.value);
+          } else {
+            cubit.setType(TransactionTypeEnum.expense.value);
+          }
+        }
+        if (categoryName != null) {
+          final categoryId = getCategoryId(categoryName);
+          cubit.setCategory(categoryId);
+        }
+      } else {
+        // Prepopulate and push to AddTransaction screen
+        pushTo(
+          context,
+          Routes.addTransaction,
+          extra: {
+            'title': title,
+            'category': categoryName,
+            'amount': amount,
+            'note': note,
+            'type': type,
+          },
         );
-
-        if (!context.mounted) return;
-        LoadingDialog.hide(context);
-
-        CustomSnackBar.showSuccess(context, 'Scanned successfully!');
-
-        final title = result['title'];
-        final categoryName = result['category'];
-        final amount = (result['amount'] as num?)?.toDouble();
-        final note = result['note'];
-        final type = result['type'];
-
-        if (isAlreadyOnAddScreen && cubit != null) {
-          if (title != null) cubit.titleController.text = title;
-          if (amount != null) {
-            cubit.amountController.text = amount.toStringAsFixed(2);
-          }
-          if (note != null) cubit.noteController.text = note;
-          if (type != null) {
-            if (type.toLowerCase() == 'income') {
-              cubit.setType(TransactionTypeEnum.income.value);
-            } else {
-              cubit.setType(TransactionTypeEnum.expense.value);
-            }
-          }
-          if (categoryName != null) {
-            final categoryId = getCategoryId(categoryName);
-            cubit.setCategory(categoryId);
-          }
-        } else {
-          // Prepopulate and push to AddTransaction screen
-          pushTo(
-            context,
-            Routes.addTransaction,
-            extra: {
-              'title': title,
-              'category': categoryName,
-              'amount': amount,
-              'note': note,
-              'type': type,
-            },
-          );
-        }
-      } catch (e) {
-        if (context.mounted) {
-          LoadingDialog.hide(context);
-          CustomSnackBar.showError(context, 'Failed to scan: $e');
-        }
       }
     } catch (e) {
       if (context.mounted) {
-        CustomSnackBar.showError(context, 'Could not pick image: $e');
+        LoadingDialog.hide(context);
+        CustomSnackBar.showError(context, 'Failed to scan: $e');
       }
     }
   }
@@ -132,6 +118,7 @@ class _AIScannerSheetContent extends StatefulWidget {
 
 class _AIScannerSheetContentState extends State<_AIScannerSheetContent> {
   late final TextEditingController _aiNotesController;
+  XFile? _selectedImage;
 
   @override
   void initState() {
@@ -143,6 +130,28 @@ class _AIScannerSheetContentState extends State<_AIScannerSheetContent> {
   void dispose() {
     _aiNotesController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: source,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = pickedFile;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        CustomSnackBar.showError(context, 'Could not pick image: $e');
+      }
+    }
   }
 
   @override
@@ -168,104 +177,143 @@ class _AIScannerSheetContentState extends State<_AIScannerSheetContent> {
                 ),
                 const Gap(16),
                 Text(
-                  'AI Scanner',
+                  _selectedImage == null ? 'AI Scanner' : 'Confirm & Customize',
                   style: TextStyles.bodyLarge.copyWith(fontSize: 18),
                 ),
                 const Gap(16),
-                TextFormField(
-                  controller: _aiNotesController,
-                  maxLines: 2,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColors.lightGreen,
-                    hintText: "Add instruction or hint for the AI (optional)...",
-                    hintStyle: TextStyles.bodySmall.copyWith(
-                      color: AppColors.lettersAndIcons.withValues(alpha: 0.5),
+                if (_selectedImage == null) ...[
+                  // Step 1: Select Source
+                  ListTile(
+                    leading: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: AppColors.mainGreen.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt_rounded,
+                        color: AppColors.mainGreen,
+                      ),
                     ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(18),
+                    title: const Text(
+                      'Camera',
+                      style: TextStyle(fontWeight: FontWeight.w500),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 16,
+                    subtitle: Text(
+                      'Scan document / record using camera',
+                      style: TextStyle(
+                        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                        fontSize: 12,
+                      ),
+                    ),
+                    onTap: () => _pickImage(ImageSource.camera),
+                  ),
+                  ListTile(
+                    leading: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: AppColors.mainGreen.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.photo_library_rounded,
+                        color: AppColors.mainGreen,
+                      ),
+                    ),
+                    title: const Text(
+                      'Gallery',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: Text(
+                      'Upload image from gallery',
+                      style: TextStyle(
+                        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                        fontSize: 12,
+                      ),
+                    ),
+                    onTap: () => _pickImage(ImageSource.gallery),
+                  ),
+                ] else ...[
+                  // Step 2: Preview & Notes
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.file(
+                          File(_selectedImage!.path),
+                          width: double.infinity,
+                          height: 180,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedImage = null;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: Colors.black54,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Gap(16),
+                  TextFormField(
+                    controller: _aiNotesController,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.lightGreen,
+                      hintText: "Add instruction or hint for the AI (optional)... e.g., 'Exclude sales tax', 'This was for coffee'",
+                      hintStyle: TextStyles.bodySmall.copyWith(
+                        color: AppColors.lettersAndIcons.withValues(alpha: 0.5),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                    ),
+                    style: TextStyles.bodyMedium.copyWith(
+                      color: AppColors.lettersAndIcons,
                     ),
                   ),
-                  style: TextStyles.bodyMedium.copyWith(
-                    color: AppColors.lettersAndIcons,
+                  const Gap(16),
+                  MainButton(
+                    text: 'Scan with AI',
+                    size: ButtonSize.large,
+                    onPress: () {
+                      final imagePath = _selectedImage!.path;
+                      final userInstructions = _aiNotesController.text;
+                      Navigator.pop(context);
+                      AIScannerHelper._scanImage(
+                        widget.parentContext,
+                        imagePath,
+                        isAlreadyOnAddScreen: widget.isAlreadyOnAddScreen,
+                        userInstructions: userInstructions,
+                      );
+                    },
                   ),
-                ),
-                const Gap(16),
-                ListTile(
-                  leading: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.camera_alt_rounded,
-                      color: AppColors.mainGreen,
-                    ),
-                  ),
-                  title: const Text(
-                    'Camera',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Scan document / record using camera',
-                    style: TextStyle(
-                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                  onTap: () {
-                    final userInstructions = _aiNotesController.text;
-                    Navigator.pop(context);
-                    AIScannerHelper._scanImage(
-                      widget.parentContext,
-                      ImageSource.camera,
-                      isAlreadyOnAddScreen: widget.isAlreadyOnAddScreen,
-                      userInstructions: userInstructions,
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainGreen.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.photo_library_rounded,
-                      color: AppColors.mainGreen,
-                    ),
-                  ),
-                  title: const Text(
-                    'Gallery',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Upload image from gallery',
-                    style: TextStyle(
-                      color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                  onTap: () {
-                    final userInstructions = _aiNotesController.text;
-                    Navigator.pop(context);
-                    AIScannerHelper._scanImage(
-                      widget.parentContext,
-                      ImageSource.gallery,
-                      isAlreadyOnAddScreen: widget.isAlreadyOnAddScreen,
-                      userInstructions: userInstructions,
-                    );
-                  },
-                ),
+                ],
               ],
             ),
           ),

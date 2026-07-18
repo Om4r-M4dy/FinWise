@@ -20,19 +20,27 @@ class _HelpCenterState extends State<HelpCenter> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Help & FAQS'),
+      appBar: const DefaultAppBar(title: 'Help & FAQS'),
       body: MyBodyView(
         bottomSection: Center(
           child: Column(
             children: [
-              Text('How Can We Help You?'),
-              Gap(27),
+              Text(
+                'How Can We Help You?',
+                style: TextStyles.bodyLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : AppColors.lettersAndIcons,
+                ),
+              ),
+              const Gap(27),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
-                  color: AppColors.lightGreen,
+                  color: isDark ? AppColors.darkGreen : AppColors.lightGreen,
                 ),
                 child: CustomSlidingSegmentedControl<int>(
                   initialValue: selectedIndex,
@@ -42,18 +50,42 @@ class _HelpCenterState extends State<HelpCenter> {
                     1: SizedBox(
                       width: 169,
                       child: Center(
-                        child: Text('FAQ', style: TextStyles.bodyMedium),
+                        child: Text(
+                          'FAQ',
+                          style: TextStyles.bodyMedium.copyWith(
+                            color: selectedIndex == 1
+                                ? AppColors.lettersAndIcons
+                                : (isDark
+                                    ? Colors.white
+                                    : AppColors.lettersAndIcons.withValues(
+                                        alpha: 0.6,
+                                      )),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                     2: SizedBox(
                       width: 169,
                       child: Center(
-                        child: Text('Contact Us', style: TextStyles.bodyMedium),
+                        child: Text(
+                          'Contact Us',
+                          style: TextStyles.bodyMedium.copyWith(
+                            color: selectedIndex == 2
+                                ? AppColors.lettersAndIcons
+                                : (isDark
+                                    ? Colors.white
+                                    : AppColors.lettersAndIcons.withValues(
+                                        alpha: 0.6,
+                                      )),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   },
                   decoration: BoxDecoration(
-                    color: AppColors.lightGreen,
+                    color: isDark ? AppColors.darkGreen : AppColors.lightGreen,
                     borderRadius: BorderRadius.circular(18),
                   ),
                   thumbDecoration: BoxDecoration(
@@ -69,7 +101,7 @@ class _HelpCenterState extends State<HelpCenter> {
                   },
                 ),
               ),
-              Gap(9),
+              const Gap(9),
               Expanded(
                 child: ListView(
                   children: [

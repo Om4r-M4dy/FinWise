@@ -4,7 +4,10 @@ import 'package:finwise/core/constants/api_keys.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class GeminiService {
-  static Future<Map<String, dynamic>> scanImage(String imagePath, {String? userInstructions}) async {
+  static Future<Map<String, dynamic>> scanImage(
+    String imagePath, {
+    String? userInstructions,
+  }) async {
     // 1. Get the API key
     final apiKey = ApiKeys.geminiApiKey;
 
@@ -20,9 +23,7 @@ class GeminiService {
     final model = GenerativeModel(
       model: 'gemini-3.1-flash-lite',
       apiKey: apiKey,
-      generationConfig: GenerationConfig(
-        responseMimeType: 'application/json',
-      ),
+      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
 
     // 3. Read image file as bytes
@@ -42,7 +43,8 @@ class GeminiService {
     ];
 
     // 5. Build prompt
-    final prompt = '''
+    final prompt =
+        '''
 You are an AI financial scanner. Please analyze this image (which could be a receipt, invoice, bill, bank statement, or transaction record) and extract the following details:
 1. title: An informative title for the transaction, combining the merchant name/source with a very brief description of what it was for (e.g. 'Walmart - Groceries', 'Starbucks - Coffee', 'Shell Gas - Fuel Refill', 'Employer Name - Paycheck'). Keep it concise but highly descriptive.
 2. category: Choose the most appropriate category from this exact list: $categoriesList. You must choose one of these exact strings.
@@ -62,7 +64,8 @@ Your response must be a valid JSON object matching this schema:
 
     String finalPrompt = prompt;
     if (userInstructions != null && userInstructions.trim().isNotEmpty) {
-      finalPrompt += '\n\nAdditional User Instructions/Context:\n'
+      finalPrompt +=
+          '\n\nAdditional User Instructions/Context:\n'
           '${userInstructions.trim()}\n'
           'Please respect and follow the above user instructions when analyzing and extracting the details.';
     }
@@ -105,7 +108,9 @@ Your response must be a valid JSON object matching this schema:
         'type': parsed['type'] ?? 'expense',
       };
     } catch (e) {
-      throw Exception('Failed to parse Gemini response: $cleanedResponse\nError: $e');
+      throw Exception(
+        'Failed to parse Gemini response: $cleanedResponse\nError: $e',
+      );
     }
   }
 
