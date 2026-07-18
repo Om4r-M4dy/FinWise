@@ -23,6 +23,7 @@ class EditFinancialInfoScreen extends StatefulWidget {
 class _EditFinancialInfoScreenState extends State<EditFinancialInfoScreen> {
   late final TextEditingController _budgetController;
   late final TextEditingController _balanceController;
+  late final TextEditingController _incomeController;
 
   UserModel? _currentUser;
 
@@ -37,23 +38,29 @@ class _EditFinancialInfoScreenState extends State<EditFinancialInfoScreen> {
     _balanceController = TextEditingController(
       text: _currentUser?.totalBalance?.toString() ?? '0.0',
     );
+    _incomeController = TextEditingController(
+      text: _currentUser?.totalIncome?.toString() ?? '0.0',
+    );
   }
 
   @override
   void dispose() {
     _budgetController.dispose();
     _balanceController.dispose();
+    _incomeController.dispose();
     super.dispose();
   }
 
   Future<void> _updateFinancials() async {
     final budgetText = _budgetController.text.trim();
     final balanceText = _balanceController.text.trim();
+    final incomeText = _incomeController.text.trim();
 
     final budget = double.tryParse(budgetText);
     final balance = double.tryParse(balanceText);
+    final income = double.tryParse(incomeText);
 
-    if (budget == null || balance == null) {
+    if (budget == null || balance == null || income == null) {
       CustomSnackBar.showError(
         context,
         "Please enter valid numeric values for all fields",
@@ -66,6 +73,7 @@ class _EditFinancialInfoScreenState extends State<EditFinancialInfoScreen> {
       await context.read<UserCubit>().updateFinancials(
         monthlyBudgetLimit: budget,
         totalBalance: balance,
+        totalIncome: income,
       );
       if (!mounted) return;
       LoadingDialog.hide(context);
@@ -118,6 +126,17 @@ class _EditFinancialInfoScreenState extends State<EditFinancialInfoScreen> {
               CustomTextFormField(
                 controller: _balanceController,
                 hintText: 'Total Balance',
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+              ),
+              const Gap(17),
+
+              Text('Monthly Income', style: TextStyles.bodyMedium),
+              const Gap(13),
+              CustomTextFormField(
+                controller: _incomeController,
+                hintText: 'Monthly Income',
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),

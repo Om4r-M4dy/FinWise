@@ -5,6 +5,7 @@ import 'package:finwise/core/styles/text_styles.dart';
 import 'package:finwise/core/widgets/default_app_bar.dart';
 import 'package:finwise/core/widgets/buttons/main_button.dart';
 import 'package:finwise/core/widgets/my_body_view.dart';
+import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -35,7 +36,7 @@ class _ChangepinScreenState extends State<ChangepinScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Change Pin"),
+      appBar: const DefaultAppBar(title: "Change Pin"),
       body: MyBodyView(
         bottomSection: SingleChildScrollView(
           child: Column(
@@ -86,9 +87,45 @@ class _ChangepinScreenState extends State<ChangepinScreen> {
               Center(
                 child: MainButton(
                   text: "Change Pin",
-                  onPress: () {
-                    // Handle change pin logic
-                    replaceWith(context, Routes.loadingChangePinScreen);
+                  onPress: () async {
+                    final currentPin = _currentPinController.text;
+                    final newPin = _newPinController.text;
+                    final confirmPin = _confirmPinController.text;
+
+                    if (currentPin.isEmpty || newPin.isEmpty || confirmPin.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("All fields are required.")),
+                      );
+                      return;
+                    }
+
+                    if (currentPin != UserPrefs.getPin()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Current PIN is incorrect.")),
+                      );
+                      return;
+                    }
+
+                    if (newPin.length != 6 || int.tryParse(newPin) == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("New PIN must be a 6-digit number.")),
+                      );
+                      return;
+                    }
+
+                    if (newPin != confirmPin) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("New PIN and Confirm PIN do not match.")),
+                      );
+                      return;
+                    }
+
+                    // Save new PIN
+                    await UserPrefs.setPin(newPin);
+
+                    if (context.mounted) {
+                      replaceWith(context, Routes.loadingChangePinScreen);
+                    }
                   },
                 ),
               ),
@@ -104,13 +141,20 @@ class _ChangepinScreenState extends State<ChangepinScreen> {
     required bool obscure,
     required VoidCallback onToggle,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return TextField(
       controller: controller,
       obscureText: obscure,
       keyboardType: TextInputType.number,
+      maxLength: 6,
+      style: TextStyle(
+        color: isDark ? Colors.white : AppColors.lettersAndIcons,
+      ),
       decoration: InputDecoration(
+        counterText: "",
         filled: true,
-        fillColor: const Color(0xffDCEAE3),
+        fillColor: isDark ? AppColors.darkGreen : const Color(0xffDCEAE3),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
@@ -119,7 +163,9 @@ class _ChangepinScreenState extends State<ChangepinScreen> {
           onPressed: onToggle,
           icon: Icon(
             obscure ? Icons.visibility_off : Icons.visibility,
-            color: AppColors.lettersAndIcons,
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.7)
+                : AppColors.lettersAndIcons.withValues(alpha: 0.7),
           ),
         ),
       ),

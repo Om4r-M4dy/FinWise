@@ -28,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     var cubit = context.read<AuthCubit>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
@@ -42,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
           showMyDialog(context, state.errorMessage);
         }
       },
-      //  isLoading = state is AuthLoading;
       child: Form(
         key: cubit.formKey,
         child: AuthLayout(
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   "Username Or Email",
                   style: TextStyles.caption1_14.copyWith(
-                    color: AppColors.lettersAndIcons,
+                    color: isDark ? Colors.white : AppColors.lettersAndIcons,
                     fontFamily: AppFonts.poppins,
                     fontWeight: FontWeight.w500,
                   ),
@@ -84,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   "Password",
                   style: TextStyles.caption1_14.copyWith(
-                    color: AppColors.lettersAndIcons,
+                    color: isDark ? Colors.white : AppColors.lettersAndIcons,
                     fontFamily: AppFonts.poppins,
                     fontWeight: FontWeight.w500,
                   ),
@@ -113,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       cubit.loginWithEmailAndPassword();
                     }
                   },
-                  // isLoading: isLoading,
                 ),
 
                 const Gap(10),
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       "Forgot Password?",
                       style: TextStyles.caption1_14.copyWith(
-                        color: AppColors.lettersAndIcons,
+                        color: isDark ? Colors.white70 : AppColors.lettersAndIcons,
                         fontFamily: AppFonts.leagueSpartan,
                         fontWeight: FontWeight.w600,
                       ),
@@ -143,7 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     replaceWith(context, Routes.signupScreen);
                   },
-                  backgroundColor: AppColors.lightGreen,
+                  backgroundColor: isDark ? AppColors.darkGreen : AppColors.lightGreen,
+                  textColor: isDark ? Colors.white : AppColors.lettersAndIcons,
                 ),
 
                 const Gap(20),
@@ -154,10 +155,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       replaceWith(context, Routes.securityFingerprintScreen);
                     },
-                    child: const Text.rich(
+                    child: Text.rich(
                       TextSpan(
                         text: "Use ",
-                        children: [
+                        style: TextStyle(color: isDark ? Colors.white70 : AppColors.lettersAndIcons),
+                        children: const [
                           TextSpan(
                             text: "Fingerprint",
                             style: TextStyle(color: AppColors.blueButton),
@@ -169,7 +171,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const Gap(28),
-                const Center(child: Text("or sign up with")),
+                Center(
+                  child: Text(
+                    "or sign up with",
+                    style: TextStyle(
+                      color: isDark ? Colors.white70 : AppColors.lettersAndIcons,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
                 const Gap(19),
                 //google && facebook
                 Row(
@@ -198,11 +208,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       replaceWith(context, Routes.signupScreen);
                     },
-                    child: const Text.rich(
+                    child: Text.rich(
                       TextSpan(
                         text: "Don't have an account? ",
-                        style: TextStyle(color: AppColors.gray39),
-                        children: [
+                        style: TextStyle(
+                          color: isDark ? Colors.white70 : AppColors.gray39,
+                        ),
+                        children: const [
                           TextSpan(
                             text: "Sign Up",
                             style: TextStyle(color: AppColors.lightBlueButton),

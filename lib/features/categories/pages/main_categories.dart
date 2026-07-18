@@ -57,6 +57,7 @@ class MainCategories extends StatelessWidget {
                     CategoryItem(
                       icon: AppAssets.food,
                       label: "Food",
+                      bgColor: AppColors.lightBlueButton,
                       onTap: () {
                         final filtered = transactionList
                             .where((tx) => isCategoryMatch(tx, 'Food'))
@@ -206,7 +207,11 @@ class MainCategories extends StatelessWidget {
                     ),
                     Gap(21),
                     CategoryItem(
-                      icon: AppAssets.more,
+                      iconWidget: const Icon(
+                        Icons.more_horiz,
+                        color: Colors.white,
+                        size: 36,
+                      ),
                       label: "Other",
                       bgColor: AppColors.lightBlueButton,
                       onTap: () {

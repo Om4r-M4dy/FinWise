@@ -16,6 +16,8 @@ class AuthLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: Column(
         children: [
@@ -23,7 +25,7 @@ class AuthLayout extends StatelessWidget {
           Text(
             title,
             style: TextStyles.size_30.copyWith(
-              color: AppColors.lettersAndIcons,
+              color: isDark ? Colors.white : AppColors.lettersAndIcons,
               fontFamily: AppFonts.poppins,
               fontWeight: FontWeight.w600,
             ),
@@ -33,9 +35,11 @@ class AuthLayout extends StatelessWidget {
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(38),
-              decoration: const BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: isDark
+                    ? Theme.of(context).colorScheme.surface
+                    : AppColors.background,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),
                 ),

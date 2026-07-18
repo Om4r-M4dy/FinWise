@@ -85,8 +85,9 @@ class TransactionCubit extends Cubit<TransactionStates> {
         if (tx.type.toLowerCase() != 'expense') return false;
       } else if (category != 'All') {
         // filter by exact category name matching
-        if (tx.categoryName.toLowerCase() != category.toLowerCase())
+        if (tx.categoryName.toLowerCase() != category.toLowerCase()) {
           return false;
+        }
       }
 
       // 2. Filter by time range
@@ -449,6 +450,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
           emit(TransactionErrorState(failure.message));
         },
         (_) async {
+          // 1. Reverse the user's financial totals
           final isExpense =
               transaction.type.toLowerCase() ==
               TransactionTypeEnum.expense.value.toLowerCase();
@@ -458,6 +460,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
             reverse: true,
           );
 
+          // 2. If this transaction was linked to a goal, reverse the goal amount
           if (transaction.goalId != null && goalCubit != null) {
             await goalCubit.adjustGoalAmount(
               goalId: transaction.goalId!,
@@ -466,6 +469,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
             );
           }
 
+          // 3. Refresh the transaction list silently
           await getTransactions(transaction.userId, silent: true);
         },
       );
@@ -532,6 +536,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
           emit(TransactionErrorState(failure.message));
         },
         (_) async {
+          // 1. Reverse the OLD transaction's financial impact
           final isOldExpense =
               oldTransaction.type.toLowerCase() ==
               TransactionTypeEnum.expense.value.toLowerCase();
@@ -540,6 +545,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
             isExpense: isOldExpense,
             reverse: true,
           );
+
+          // 2. Apply the NEW transaction's financial impact
           final isNewExpense =
               selectedType == TransactionTypeEnum.expense.value;
           await userCubit.applyTransaction(
@@ -547,8 +554,10 @@ class TransactionCubit extends Cubit<TransactionStates> {
             isExpense: isNewExpense,
           );
 
+          // 3. Update goal amounts if the goal linkage changed or amount changed
           if (goalCubit != null) {
             if (oldTransaction.goalId != updatedTransaction.goalId) {
+              // Goal changed — reverse old goal, apply to new goal
               if (oldTransaction.goalId != null) {
                 await goalCubit.adjustGoalAmount(
                   goalId: oldTransaction.goalId!,
@@ -564,6 +573,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
                 );
               }
             } else if (updatedTransaction.goalId != null) {
+              // Same goal, apply the difference
               final difference = amount - oldTransaction.amount;
               if (difference != 0) {
                 await goalCubit.adjustGoalAmount(
@@ -575,6 +585,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
             }
           }
 
+          // 4. Refresh the transaction list silently
           await getTransactions(userId, silent: true);
         },
       );
@@ -604,7 +615,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
     emit(TransactionLoadingState());
 
     try {
-      final transactionId = DateTime.now().millisecondsSinceEpoch.toString();
+      final transactionId = FirestoreProvider.transactionsCollection.doc().id;
 
       final categoryLabel =
           categories.firstWhere(
@@ -640,12 +651,14 @@ class TransactionCubit extends Cubit<TransactionStates> {
           emit(TransactionErrorState(failure.message));
         },
         (_) async {
+          // 1. Update user's financial totals
           final isExpense = selectedType == TransactionTypeEnum.expense.value;
           await userCubit.applyTransaction(
             amount: amount,
             isExpense: isExpense,
           );
 
+          // 2. Update goal progress if this transaction is linked to a goal
           if (newTransaction.goalId != null && goalCubit != null) {
             await goalCubit.adjustGoalAmount(
               goalId: newTransaction.goalId!,
@@ -654,6 +667,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
             );
           }
 
+          // 3. Add in-app notification
           final notificationData = {
             'title': 'Transactions',
             'subTitle': 'A new transaction has been registered',
@@ -665,6 +679,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
           };
           await FirestoreProvider.addNotification(userId, notificationData);
 
+          // 4. Push notification (if enabled)
           final showPush =
               userCubit.user?.settings?['pushNotifications'] ?? true;
           if (showPush) {
@@ -676,11 +691,20 @@ class TransactionCubit extends Cubit<TransactionStates> {
             );
           }
 
+          // 5. Refresh the transaction list silently
           await getTransactions(userId, silent: true);
         },
       );
     } catch (e) {
       emit(TransactionErrorState(e.toString()));
     }
+  }
+
+  @override
+  Future<void> close() {
+    titleController.dispose();
+    amountController.dispose();
+    noteController.dispose();
+    return super.close();
   }
 }

@@ -46,13 +46,6 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
               SettingChoice(
-                icon: AppAssets.passSettings,
-                title: "Password Settings",
-                onPress: () {
-                  pushTo(context, Routes.securityScreen);
-                },
-              ),
-              SettingChoice(
                 icon: AppAssets.profile,
                 title: "Delete Account ",
                 onPress: () {

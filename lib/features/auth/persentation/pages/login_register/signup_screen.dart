@@ -64,16 +64,17 @@ class _SignupScreenState extends State<SignupScreen> {
       lastDate: DateTime(now.year - 10, now.month, now.day),
       helpText: 'Select Date of Birth',
       builder: (context, child) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.dark(
               primary: AppColors.mainGreen,
               onPrimary: Colors.white,
-              surface: AppColors.background,
-              onSurface: AppColors.lettersAndIcons,
+              surface: isDark ? AppColors.dark05 : AppColors.background,
+              onSurface: isDark ? Colors.white : AppColors.lettersAndIcons,
             ),
-            dialogTheme: const DialogThemeData(
-              backgroundColor: AppColors.background,
+            dialogTheme: DialogThemeData(
+              backgroundColor: isDark ? AppColors.dark05 : AppColors.background,
             ),
           ),
           child: child!,
@@ -215,6 +216,8 @@ class _SignupScreenState extends State<SignupScreen> {
   // ── Build ────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AuthLayout(
       title: "Create Account",
       child: SingleChildScrollView(
@@ -283,7 +286,15 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
 
             const Gap(28),
-            const Center(child: Text("or sign up with")),
+            Center(
+              child: Text(
+                "or sign up with",
+                style: TextStyle(
+                  color: isDark ? Colors.white70 : AppColors.lettersAndIcons,
+                  fontSize: 12,
+                ),
+              ),
+            ),
             const Gap(19),
             const SocialButtonsRow(),
             const Gap(19),
@@ -297,44 +308,44 @@ class _SignupScreenState extends State<SignupScreen> {
 
   /// Phone field with integrated country code picker
   Widget _buildPhoneField() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IntlPhoneField(
       decoration: InputDecoration(
         hintText: '10 123 4567',
         hintStyle: TextStyle(
-          color: AppColors.lettersAndIcons.withValues(alpha: 0.4),
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.4)
+              : AppColors.lettersAndIcons.withValues(alpha: 0.4),
           fontFamily: AppFonts.poppins,
           fontSize: 14,
         ),
         filled: true,
-        fillColor: AppColors.background,
+        fillColor: isDark ? AppColors.darkGreen : const Color(0xffDCEAE3),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
-          ),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
-          ),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(30),
           borderSide: const BorderSide(color: AppColors.mainGreen, width: 1.5),
         ),
       ),
       style: TextStyle(
-        color: AppColors.lettersAndIcons,
+        color: isDark ? Colors.white : AppColors.lettersAndIcons,
         fontFamily: AppFonts.poppins,
         fontSize: 14,
       ),
       dropdownTextStyle: TextStyle(
-        color: AppColors.lettersAndIcons,
+        color: isDark ? Colors.white : AppColors.lettersAndIcons,
         fontFamily: AppFonts.poppins,
         fontSize: 14,
       ),
@@ -346,56 +357,58 @@ class _SignupScreenState extends State<SignupScreen> {
       showDropdownIcon: true,
       dropdownIcon: Icon(
         Icons.arrow_drop_down,
-        color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.7)
+            : AppColors.lettersAndIcons.withValues(alpha: 0.6),
       ),
     );
   }
 
   /// Date of birth field — opens date picker on tap
   Widget _buildDobField() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: _pickDateOfBirth,
       child: AbsorbPointer(
         child: TextFormField(
           controller: _dobController,
           style: TextStyle(
-            color: AppColors.lettersAndIcons,
+            color: isDark ? Colors.white : AppColors.lettersAndIcons,
             fontFamily: AppFonts.poppins,
             fontSize: 14,
           ),
           decoration: InputDecoration(
             hintText: 'DD / MM / YYYY',
             hintStyle: TextStyle(
-              color: AppColors.lettersAndIcons.withValues(alpha: 0.4),
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.4)
+                  : AppColors.lettersAndIcons.withValues(alpha: 0.4),
               fontFamily: AppFonts.poppins,
               fontSize: 14,
             ),
             filled: true,
-            fillColor: AppColors.background,
+            fillColor: isDark ? AppColors.darkGreen : const Color(0xffDCEAE3),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 14,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
-              ),
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: AppColors.lettersAndIcons.withValues(alpha: 0.2),
-              ),
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(30),
               borderSide: const BorderSide(
                 color: AppColors.mainGreen,
                 width: 1.5,
               ),
             ),
-            suffixIcon: Icon(
+            suffixIcon: const Icon(
               Icons.calendar_today_rounded,
               color: AppColors.mainGreen,
               size: 20,

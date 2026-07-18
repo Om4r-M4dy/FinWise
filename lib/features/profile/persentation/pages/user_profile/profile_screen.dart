@@ -237,76 +237,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
 
-                  children: [
-                    Text(displayName, style: TextStyles.bodyLarge),
-                    Text(displayEmail, style: TextStyles.bodySmall),
-                    Gap(25),
-                    ProfileOption(
-                      path: AppAssets.profile,
-                      title: 'Edit Profile',
-                      onTap: () async {
-                        // Use GoRouter context.push directly to safely await the result
-                        await context.push(Routes.editProfileScreen);
-                        _loadUserData();
-                      },
-                    ),
-                    Gap(34),
-                    ProfileOption(
-                      path: AppAssets.dollar,
-                      title: 'Edit Financial Info',
-                      onTap: () async {
-                        await context.push(Routes.editFinancialInfoScreen);
-                        _loadUserData();
-                      },
-                    ),
-                    Gap(34),
-                    ProfileOption(
-                      path: AppAssets.transactions,
-                      title: 'Transactions',
-                      onTap: () {
-                        pushTo(context, Routes.transactionScreen);
-                      },
-                    ),
-                    Gap(34),
-                    ProfileOption(
-                      path: AppAssets.analysis,
-                      title: 'Quick Analysis',
-                      onTap: () {
-                        pushTo(context, Routes.quickAnalysisScreen);
-                      },
-                    ),
-                    Gap(34),
-                    ProfileOption(
-                      path: AppAssets.security,
-                      title: 'Security',
-                      onTap: () {
-                        pushTo(context, Routes.securityScreen);
-                      },
-                    ),
-                    Gap(34),
-                    ProfileOption(
-                      path: AppAssets.setting,
-                      title: 'Setting',
-                      onTap: () {
-                        pushTo(context, Routes.settingsScreen);
-                      },
-                    ),
-                    Gap(34),
-                    ProfileOption(
-                      path: AppAssets.help,
-                      title: 'Help',
-                      onTap: () {
-                        pushTo(context, Routes.helpCenter);
-                      },
-                    ),
-                    Gap(34),
-                    ProfileOption(
-                      path: AppAssets.legout,
-                      title: 'Logout',
-                      onTap: _showLogoutConfirmationDialog,
-                    ),
-                  ],
-                ),
+                children: [
+                  Text(displayName, style: TextStyles.bodyLarge),
+                  Text(displayEmail, style: TextStyles.bodySmall),
+                  Gap(25),
+                  ProfileOption(
+                    path: AppAssets.profile,
+                    title: 'Edit Profile',
+                    onTap: () async {
+                      // Use GoRouter context.push directly to safely await the result
+                      await context.push(Routes.editProfileScreen);
+                      _loadUserData();
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.dollar,
+                    title: 'Edit Financial Info',
+                    onTap: () async {
+                      await context.push(Routes.editFinancialInfoScreen);
+                      _loadUserData();
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.transactions,
+                    title: 'Transactions',
+                    onTap: () {
+                      pushTo(context, Routes.transactionScreen);
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.analysis,
+                    title: 'Quick Analysis',
+                    onTap: () {
+                      pushTo(context, Routes.quickAnalysisScreen);
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.setting,
+                    title: 'Setting',
+                    onTap: () {
+                      pushTo(context, Routes.settingsScreen);
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.help,
+                    title: 'Help',
+                    onTap: () {
+                      pushTo(context, Routes.helpCenter);
+                    },
+                  ),
+                  Gap(34),
+                  ProfileOption(
+                    path: AppAssets.legout,
+                    title: 'Logout',
+                    onTap: _showLogoutConfirmationDialog,
+                  ),
+                ],
               ),
             ),
           ),

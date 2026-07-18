@@ -1,3 +1,4 @@
+import 'package:finwise/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AuthTextField extends StatefulWidget {
@@ -37,6 +38,8 @@ class _AuthTextFieldState extends State<AuthTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,10 +49,18 @@ class _AuthTextFieldState extends State<AuthTextField> {
           controller: widget.controller,
           obscureText: _obscureText,
           keyboardType: widget.keyboardType,
+          style: TextStyle(
+            color: isDark ? Colors.white : AppColors.lettersAndIcons,
+          ),
           decoration: InputDecoration(
             hintText: widget.hintText,
+            hintStyle: TextStyle(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.4)
+                  : AppColors.lettersAndIcons.withValues(alpha: 0.4),
+            ),
             filled: true,
-            fillColor: const Color(0xffDCEAE3),
+            fillColor: isDark ? AppColors.darkGreen : const Color(0xffDCEAE3),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide.none,
@@ -70,7 +81,11 @@ class _AuthTextFieldState extends State<AuthTextField> {
                 ? IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: _hasError ? Colors.red : null,
+                      color: _hasError
+                          ? Colors.red
+                          : (isDark
+                              ? Colors.white.withValues(alpha: 0.7)
+                              : AppColors.lettersAndIcons.withValues(alpha: 0.7)),
                     ),
                     onPressed: () {
                       setState(() {

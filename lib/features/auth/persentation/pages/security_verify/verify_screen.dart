@@ -65,6 +65,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Stack(
       children: [
         AuthLayout(
@@ -76,7 +78,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
               Text(
                 'A verification link has been sent to your email.\nPlease check your inbox and verify your account.',
                 style: TextStyles.bodyLarge.copyWith(
-                  color: AppColors.lettersAndIcons,
+                  color: isDark ? Colors.white : AppColors.lettersAndIcons,
                 ),
               ),
               const Gap(40),
@@ -88,7 +90,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
               CustomAuthButton(
                 text: 'I have verified',
                 onPressed: _checking ? null : _checkVerification,
-                backgroundColor: AppColors.lightGreen,
+                backgroundColor: isDark ? AppColors.darkGreen : AppColors.lightGreen,
+                textColor: isDark ? Colors.white : AppColors.lettersAndIcons,
               ),
             ],
           ),

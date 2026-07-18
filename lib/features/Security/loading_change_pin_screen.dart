@@ -42,7 +42,9 @@ class _LoadingchangepinScreenState extends State<LoadingchangepinScreen>
     const double circleSize = 110;
 
     return Scaffold(
-      backgroundColor: AppColors.mainGreen,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.voidColor
+          : AppColors.mainGreen,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

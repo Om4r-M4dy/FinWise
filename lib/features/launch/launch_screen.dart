@@ -9,7 +9,6 @@ import 'package:finwise/features/profile/persentation/cubit/user_cubit.dart';
 import 'package:finwise/core/services/local/user_prefs.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({super.key});
@@ -51,8 +50,7 @@ class _LaunchScreenState extends State<LaunchScreen>
     }
 
     // Check if user has seen OnBoarding before
-    final prefs = await SharedPreferences.getInstance();
-    final bool seenOnBoarding = prefs.getBool('seen_onboarding') ?? false;
+    final bool seenOnBoarding = UserPrefs.getSeenOnboarding();
 
     if (!mounted) return;
 
