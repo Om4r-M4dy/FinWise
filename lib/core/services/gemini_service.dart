@@ -105,6 +105,50 @@ Your response must be a valid JSON object matching this schema:
     }
   }
 
+  static Future<String> getFinancialAdvice({
+    required String dataSummary,
+    required String userQuestion,
+  }) async {
+    final apiKey = ApiKeys.geminiApiKey;
+
+    if (apiKey.isEmpty) {
+      throw Exception(
+        'Gemini API key is not configured.\n'
+        'Please set your API key in lib/core/constants/api_keys.dart or '
+        'run the app with --dart-define=GEMINI_API_KEY=your_key.',
+      );
+    }
+
+    final model = GenerativeModel(
+      model: 'gemini-3.1-flash-lite',
+      apiKey: apiKey,
+      systemInstruction: Content.system(
+        'You are an expert financial advisor for the FinWise app. '
+        'Your responses MUST be short, highly scannable, and formatted using bullet points. '
+        'Follow these rules strictly:\n'
+        '1. Keep your entire response under 3 to 4 bullet points maximum (total < 100 words).\n'
+        '2. Do NOT include greetings, pleasantries, or concluding fluff (e.g. no "Hello!", "Hope this helps!"). Go straight to the point.\n'
+        '3. Use bolding for key figures or key action items (e.g., **Save \$50**, **Cut Food expense**).\n'
+        '4. Base all advice strictly on the provided financial summary.',
+      ),
+    );
+
+    final prompt = '''
+Financial Summary:
+$dataSummary
+
+User Question:
+$userQuestion
+''';
+
+    final response = await model.generateContent([Content.text(prompt)]);
+    final text = response.text;
+    if (text == null || text.trim().isEmpty) {
+      throw Exception('Failed to receive advice from Gemini API.');
+    }
+    return text.trim();
+  }
+
   static String _getMimeType(String filePath) {
     final extension = filePath.split('.').last.toLowerCase();
     return switch (extension) {

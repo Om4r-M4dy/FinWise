@@ -21,7 +21,7 @@ class MainButton extends StatelessWidget {
     this.backgroundColor = AppColors.mainGreen,
     this.size = ButtonSize.medium,
     this.textStyle = TextStyles.bodyLarge,
-    this.textColor = AppColors.background,
+    this.textColor,
   });
 
   final String text;
@@ -30,8 +30,15 @@ class MainButton extends StatelessWidget {
   final ButtonSize size;
   final TextStyle textStyle;
   final Color? textColor;
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color effectiveTextColor = textColor ??
+        (backgroundColor == AppColors.lightGreen
+            ? (isDark ? Colors.white : AppColors.lettersAndIcons)
+            : AppColors.background);
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         elevation: 0,
@@ -40,7 +47,7 @@ class MainButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       onPressed: onPress,
-      child: Text(text, style: textStyle.copyWith(color: textColor)),
+      child: Text(text, style: textStyle.copyWith(color: effectiveTextColor)),
     );
   }
 }

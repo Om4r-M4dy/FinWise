@@ -106,6 +106,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   void _showSuccessBottomSheet(String email) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -113,7 +114,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? AppColors.dark05 : AppColors.background,
       builder: (ctx) => _SuccessBottomSheet(
         email: email,
         onBackToLogin: () {
@@ -126,6 +127,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Stack(
       children: [
         AuthLayout(
@@ -139,7 +142,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   "Reset Password?",
                   style: TextStyles.headline_24.copyWith(
                     fontSize: 20,
-                    color: AppColors.lettersAndIcons,
+                    color: isDark ? Colors.white : AppColors.lettersAndIcons,
                     fontFamily: AppFonts.poppins,
                     fontWeight: FontWeight.w600,
                   ),
@@ -148,7 +151,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Text(
                   "Enter your registered email address below and we'll send you a link to reset your password.",
                   style: TextStyles.caption1_14.copyWith(
-                    color: AppColors.lettersAndIcons,
+                    color: isDark ? Colors.white70 : AppColors.lettersAndIcons,
                     fontFamily: AppFonts.poppins,
                     fontWeight: FontWeight.w400,
                     height: 1.5,
@@ -158,7 +161,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Text(
                   "Enter Email Address",
                   style: TextStyles.caption1_14.copyWith(
-                    color: AppColors.lettersAndIcons,
+                    color: isDark ? Colors.white : AppColors.lettersAndIcons,
                     fontFamily: AppFonts.poppins,
                     fontWeight: FontWeight.w500,
                   ),
@@ -185,14 +188,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onPressed: () {
                     replaceWith(context, Routes.signupScreen);
                   },
-                  backgroundColor: AppColors.lightGreen,
+                  backgroundColor: isDark ? AppColors.darkGreen : AppColors.lightGreen,
+                  textColor: isDark ? Colors.white : AppColors.lettersAndIcons,
                 ),
 
                 const Gap(28),
-                const Center(
+                Center(
                   child: Text(
                     "or sign up with",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark ? Colors.white70 : AppColors.lettersAndIcons,
+                    ),
                   ),
                 ),
                 const Gap(19),
@@ -232,11 +239,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     onTap: () {
                       replaceWith(context, Routes.signupScreen);
                     },
-                    child: const Text.rich(
+                    child: Text.rich(
                       TextSpan(
                         text: "Don't have an account? ",
-                        style: TextStyle(color: AppColors.gray39, fontSize: 12),
-                        children: [
+                        style: TextStyle(
+                          color: isDark ? Colors.white70 : AppColors.gray39,
+                          fontSize: 12,
+                        ),
+                        children: const [
                           TextSpan(
                             text: "Sign Up",
                             style: TextStyle(color: AppColors.lightBlueButton),
@@ -300,6 +310,8 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: FadeTransition(
@@ -331,7 +343,7 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 fontFamily: AppFonts.poppins,
-                color: AppColors.lettersAndIcons,
+                color: isDark ? Colors.white : AppColors.lettersAndIcons,
               ),
             ),
             const Gap(12),
@@ -340,7 +352,9 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
-                color: AppColors.lettersAndIcons.withValues(alpha: 0.7),
+                color: isDark
+                    ? Colors.white70
+                    : AppColors.lettersAndIcons.withValues(alpha: 0.7),
                 fontFamily: AppFonts.poppins,
               ),
             ),
@@ -361,7 +375,9 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
-                color: AppColors.lettersAndIcons.withValues(alpha: 0.6),
+                color: isDark
+                    ? Colors.white60
+                    : AppColors.lettersAndIcons.withValues(alpha: 0.6),
                 fontFamily: AppFonts.poppins,
                 height: 1.6,
               ),
@@ -383,7 +399,7 @@ class _SuccessBottomSheetState extends State<_SuccessBottomSheet>
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: isDark ? AppColors.voidColor : Colors.white,
                     fontFamily: AppFonts.poppins,
                   ),
                 ),

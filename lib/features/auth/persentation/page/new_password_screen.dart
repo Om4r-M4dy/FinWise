@@ -101,6 +101,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Stack(
       children: [
         Scaffold(
@@ -112,7 +114,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 child: Text(
                   "New password",
                   style: TextStyles.size_30.copyWith(
-                    color: AppColors.lettersAndIcons,
+                    color: isDark ? Colors.white : AppColors.lettersAndIcons,
                     fontFamily: AppFonts.poppins,
                     fontWeight: FontWeight.w600,
                   ),
@@ -123,9 +125,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(24),
-                  decoration: const BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.dark05 : AppColors.background,
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40),
                     ),
@@ -138,7 +140,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                         Text(
                           "New Password",
                           style: TextStyles.caption1_14.copyWith(
-                            color: AppColors.lettersAndIcons,
+                            color: isDark ? Colors.white : AppColors.lettersAndIcons,
                             fontFamily: AppFonts.poppins,
                             fontWeight: FontWeight.w500,
                           ),
@@ -153,7 +155,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                         Text(
                           "Confirm New Password",
                           style: TextStyles.caption1_14.copyWith(
-                            color: AppColors.lettersAndIcons,
+                            color: isDark ? Colors.white : AppColors.lettersAndIcons,
                             fontFamily: AppFonts.poppins,
                             fontWeight: FontWeight.w500,
                           ),
@@ -187,7 +189,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                               "Change Password",
                               style: TextStyles.headline_24.copyWith(
                                 fontSize: 20,
-                                color: AppColors.lettersAndIcons,
+                                color: isDark ? AppColors.voidColor : AppColors.lettersAndIcons,
                                 fontFamily: AppFonts.poppins,
                                 fontWeight: FontWeight.w600,
                               ),

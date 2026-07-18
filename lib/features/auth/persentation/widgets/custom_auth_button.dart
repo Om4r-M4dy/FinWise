@@ -8,6 +8,7 @@ class CustomAuthButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final Color backgroundColor;
+  final Color? textColor;
   final double width;
 
   const CustomAuthButton({
@@ -16,18 +17,32 @@ class CustomAuthButton extends StatelessWidget {
     this.onPressed,
     this.isLoading = false,
     this.backgroundColor = AppColors.mainGreen,
+    this.textColor,
     this.width = 207,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final Color effectiveBg = (isDark && backgroundColor == AppColors.lightGreen)
+        ? AppColors.darkGreen
+        : backgroundColor;
+
+    final Color effectiveText = textColor ??
+        (effectiveBg == AppColors.darkGreen
+            ? Colors.white
+            : (effectiveBg == AppColors.lightGreen
+                ? AppColors.lettersAndIcons
+                : AppColors.lettersAndIcons));
+
     return Center(
       child: SizedBox(
         width: width,
         child: ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: backgroundColor,
+            backgroundColor: effectiveBg,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
@@ -47,7 +62,7 @@ class CustomAuthButton extends StatelessWidget {
                   text,
                   style: TextStyles.headline_24.copyWith(
                     fontSize: 20,
-                    color: AppColors.lettersAndIcons,
+                    color: effectiveText,
                     fontFamily: AppFonts.poppins,
                     fontWeight: FontWeight.w600,
                   ),

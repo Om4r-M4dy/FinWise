@@ -28,6 +28,7 @@ class Routes {
   static const String notificationSettingsScreen = '/notification_settings';
   static const String deleteAccountScreen = '/delete_account';
   static const String notificationScreen = '/notification';
+  static const String aiAdvisorScreen = '/ai_advisor';
 
   static const String profileScreen = '/profile';
   static const String editProfileScreen = '/edit_profile';

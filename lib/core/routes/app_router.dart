@@ -28,6 +28,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:finwise/features/auth/persentation/cubit/auth_cubit.dart';
 import 'package:finwise/features/Transaction/presentation/cubit/transaction_cubit.dart';
 import 'package:finwise/features/analysis/cubit/goal_cubit.dart';
+import 'package:finwise/features/ai_advisor/cubit/ai_advisor_cubit.dart';
+import 'package:finwise/features/ai_advisor/pages/ai_advisor_screen.dart';
 import 'package:finwise/features/Transaction/presentation/pages/add_transaction.dart';
 import 'package:finwise/features/categories/pages/add_savings.dart';
 import 'package:finwise/features/categories/pages/car.dart';
@@ -207,6 +209,13 @@ class AppRouter {
           GoRoute(
             path: Routes.quickAnalysisScreen,
             builder: (context, state) => const QuickAnalysisScreen(),
+          ),
+          GoRoute(
+            path: Routes.aiAdvisorScreen,
+            builder: (context, state) => BlocProvider(
+              create: (context) => AiAdvisorCubit(),
+              child: const AiAdvisorScreen(),
+            ),
           ),
           GoRoute(
             path: Routes.settingsScreen,
